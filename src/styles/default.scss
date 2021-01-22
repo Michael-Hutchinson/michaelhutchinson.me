@@ -3,3 +3,24 @@
 html, body {
     font-family: $font;
 }
+
+footer {
+    padding: 10px 0 40px 0;
+    text-align: center;
+}
+
+/*---------------------------------------
+    0 Typorgraphy              
+-----------------------------------------*/
+
+h1, h2, h3, h4, h5, h6 {
+    color: $darkGrey;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+}
+
+p {
+    color: $lightGrey;
+    line-height: 25px;
+}
