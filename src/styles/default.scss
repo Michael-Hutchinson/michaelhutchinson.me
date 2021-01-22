@@ -2,11 +2,24 @@
 
 html, body {
     font-family: $font;
+    -webkit-font-smoothing: antialiased;
 }
 
-footer {
-    padding: 10px 0 40px 0;
-    text-align: center;
+/*---------------------------------------
+    0 General               
+-----------------------------------------*/
+
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+::-webkit-scrollbar{
+    width: 8px;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: $black;
 }
 
 /*---------------------------------------
@@ -23,4 +36,20 @@ h1, h2, h3, h4, h5, h6 {
 p {
     color: $lightGrey;
     line-height: 25px;
+}
+
+a {
+    color: #000;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+/*---------------------------------------
+    0 Footer              
+-----------------------------------------*/
+
+footer {
+    padding: 10px 0 40px 0;
+    text-align: center;
 }
