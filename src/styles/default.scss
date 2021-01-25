@@ -57,6 +57,10 @@ a {
     0 Navbar              
 -----------------------------------------*/
 
+header {
+  padding-bottom: 83px;
+}
+
 #nav-responsive {
   display: none;
 }
@@ -87,6 +91,7 @@ a {
 
 .sticky {
   position: fixed;
+  top: 0;
 }
 
 @media (max-width: 768px) {
