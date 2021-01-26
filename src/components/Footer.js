@@ -1,8 +1,16 @@
+import React from "react";
+import styled from "styled-components";
+
+const Bottom = styled.footer`
+  padding: 10px 0 40px 0;
+  text-align: center;
+`;
+
 function Footer() {
   return (
-    <footer>
+    <Bottom>
       <p>Copyright © Michael Hutchinson | {new Date().getFullYear()}</p>
-    </footer>
+    </Bottom>
   );
 }
 

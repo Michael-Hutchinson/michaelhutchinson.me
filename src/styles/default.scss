@@ -1,35 +1,9 @@
 @import "_config.scss";
 
-html,
-body {
-  font-family: $font;
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
-}
-
-/*---------------------------------------
-    0 General               
------------------------------------------*/
-
-* {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: $black;
-}
-
 /*---------------------------------------
     0 Typorgraphy              
 -----------------------------------------*/
 
-h1,
 h2,
 h3,
 h4,
@@ -47,7 +21,7 @@ p {
 }
 
 a {
-  color: #000;
+  color: black;
   -webkit-transition: 0.5s;
   transition: 0.5s;
   text-decoration: none;
@@ -57,24 +31,11 @@ a {
     0 Navbar              
 -----------------------------------------*/
 
-header {
-  padding-bottom: 83px;
-}
-
-#nav-responsive {
-  display: none;
-}
-
 .navbar {
-  background-color: $white;
-  width: 100%;
-  justify-content: space-between;
-  display: flex;
-  align-items: center;
   a {
     color: $lightGrey;
     &:hover {
-      color: $black;
+      color: black;
     }
   }
 }
@@ -89,26 +50,17 @@ header {
   }
 }
 
-.sticky {
-  position: fixed;
-  top: 0;
-}
-
 @media (max-width: 768px) {
-  .navbar {
-    box-shadow: 0 40px 100px rgb(0 0 0 / 20%);
     .nav-title,
     .nav-btn {
       padding: 15px;
     }
-}
   .nav-btn label {
-    cursor: pointer;
     span {
       display: block;
       width: 22px;
       height: 2px;
-      background-color: $black;
+      background-color: black;
     }
   }
   .icon + .icon {
@@ -117,7 +69,7 @@ header {
   .nav-links {
     position: absolute;
     width: 100%;
-    background-color: $white;
+    background-color: white;
     overflow-y: auto;
     top: 100%;
     text-align: center;
@@ -126,16 +78,4 @@ header {
     display: block;
     padding: 10px;
   }
-  #nav-responsive:not(:checked) ~ .nav-links {
-    display: none;
-  }
-}
-
-/*---------------------------------------
-    0 Footer              
------------------------------------------*/
-
-footer {
-    padding: 10px 0 40px 0;
-    text-align: center;
 }
