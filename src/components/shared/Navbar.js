@@ -14,12 +14,30 @@ const Nav = styled.nav`
   }
 `;
 
+const MobileLinks = styled.div`
+  a {
+    padding: 30px;
+  }
+  @media (max-width: 768px) {
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    overflow-y: auto;
+    top: 100%;
+    text-align: center;
+    a {
+      display: block;
+      padding: 10px;
+    }
+  }
+`;
+
 const Input = styled.input.attrs({
   type: "checkbox",
 })`
   display: none;
   @media (max-width: 768px) {
-    :not(:checked) ~ .nav-links {
+    :not(:checked) ~ ${MobileLinks} {
       display: none;
     }
   }
@@ -31,26 +49,56 @@ const Label = styled.label`
   }
 `;
 
+const Links = styled.a`
+  color: ${(props) => props.theme.empressGrey};
+  font-size: 14px;
+  &:hover {
+    color: black;
+  }
+`;
+
+const Icon = styled.span`
+  @media (max-width: 768px) {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: black;
+    + span {
+      margin-top: 4px;
+    }
+  }
+`;
+
+const Wrapper = styled.div`
+  padding: 30px;
+  a {
+    font-size: 20px;
+  }
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+`;
+
 function Navbar() {
   return (
     <Nav>
       <Input id="nav-responsive" />
-      <div className="nav-title">
-        <a href="#home">Michael Hutchinson</a>
-      </div>
-      <div className="nav-btn">
+      <Wrapper>
+        <Links href="#home">Michael Hutchinson</Links>
+      </Wrapper>
+      <Wrapper>
         <Label htmlFor="nav-responsive">
-          <span className="icon"></span>
-          <span className="icon"></span>
-          <span className="icon"></span>
+          <Icon></Icon>
+          <Icon></Icon>
+          <Icon></Icon>
         </Label>
-      </div>
-      <div className="nav-links">
-        <a href="#home">Home</a>
-        <a href="#about">About Me</a>
-        <a href="#work">My Work</a>
-        <a href="#contact">Contact</a>
-      </div>
+      </Wrapper>
+      <MobileLinks>
+        <Links href="#home">Home</Links>
+        <Links href="#about">About Me</Links>
+        <Links href="#work">My Work</Links>
+        <Links href="#contact">Contact</Links>
+      </MobileLinks>
     </Nav>
   );
 }
