@@ -53,7 +53,7 @@ const Links = styled.a`
   color: ${({ theme }) => theme.title};
   font-size: 14px;
   &:hover {
-    color: black;
+    color: ${({ theme }) => theme.title};
   }
 `;
 
@@ -62,7 +62,7 @@ const Icon = styled.span`
     display: block;
     width: 22px;
     height: 2px;
-    background-color: black;
+    background-color: ${({ theme }) => theme.title};
     + span {
       margin-top: 4px;
     }
