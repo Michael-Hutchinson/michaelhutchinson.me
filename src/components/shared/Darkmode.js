@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 export const Darkmode = () => {
   const [theme, setTheme] = useState("light"),
     [mountedComponent, setMountedComponent] = useState(false),
@@ -12,7 +13,13 @@ export const Darkmode = () => {
 
   useEffect(() => {
     const localTheme = window.localStorage.getItem("theme");
-    localTheme && setTheme(localTheme);
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches &&
+    !localTheme
+      ? setMode("dark")
+      : localTheme
+      ? setTheme(localTheme)
+      : setMode("light");
     setMountedComponent(true);
   }, []);
   return [theme, themeToggler, mountedComponent];
