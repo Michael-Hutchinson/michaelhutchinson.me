@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Nav = styled.nav`
-  background-color: white;
+  background-color: ${({ theme }) => theme.background};
   width: 100%;
   justify-content: space-between;
   display: flex;
@@ -21,7 +21,7 @@ const MobileLinks = styled.div`
   @media (max-width: 768px) {
     position: absolute;
     width: 100%;
-    background-color: white;
+    background-color: ${({ theme }) => theme.background};
     overflow-y: auto;
     top: 100%;
     text-align: center;
@@ -50,7 +50,7 @@ const Label = styled.label`
 `;
 
 const Links = styled.a`
-  color: ${(props) => props.theme.empressGrey};
+  color: ${({ theme }) => theme.title};
   font-size: 14px;
   &:hover {
     color: black;
