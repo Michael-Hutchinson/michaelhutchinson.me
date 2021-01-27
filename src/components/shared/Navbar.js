@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Nav = styled.nav`
   background-color: ${({ theme }) => theme.background};
@@ -33,7 +33,7 @@ const MobileLinks = styled.div`
 `;
 
 const Input = styled.input.attrs({
-  type: "checkbox",
+  type: 'checkbox',
 })`
   display: none;
   @media (max-width: 768px) {
@@ -82,22 +82,22 @@ const Wrapper = styled.div`
 function Navbar() {
   return (
     <Nav>
-      <Input id="nav-responsive" />
+      <Input id='nav-responsive' />
       <Wrapper>
-        <Links href="#home">Michael Hutchinson</Links>
+        <Links href='#home'>Michael Hutchinson</Links>
       </Wrapper>
       <Wrapper>
-        <Label htmlFor="nav-responsive">
+        <Label htmlFor='nav-responsive'>
           <Icon></Icon>
           <Icon></Icon>
           <Icon></Icon>
         </Label>
       </Wrapper>
       <MobileLinks>
-        <Links href="#home">Home</Links>
-        <Links href="#about">About Me</Links>
-        <Links href="#work">My Work</Links>
-        <Links href="#contact">Contact</Links>
+        <Links href='#home'>Home</Links>
+        <Links href='#about'>About Me</Links>
+        <Links href='#work'>My Work</Links>
+        <Links href='#contact'>Contact</Links>
       </MobileLinks>
     </Nav>
   );

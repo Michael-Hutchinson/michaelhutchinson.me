@@ -1,6 +1,6 @@
-import React from "react";
-import { func, string } from "prop-types";
-import styled from "styled-components";
+import React from 'react';
+import { func, string } from 'prop-types';
+import styled from 'styled-components';
 
 const Button = styled.button`
   background: red;
