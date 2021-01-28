@@ -2,6 +2,7 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import Header from './components/Header';
 import Home from './components/Home';
+import About from './components/About';
 import Footer from './components/Footer';
 import Toggle from './components/shared/Toggle';
 import GlobalStyle from './styles/globalStyles';
@@ -18,6 +19,7 @@ function App() {
       <Toggle theme={theme} toggleTheme={themeToggler} />
       <Header />
       <Home />
+      <About />
       <Footer />
     </ThemeProvider>
   );
