@@ -1,5 +1,6 @@
 import React from 'react';
 import Typed from 'react-typed';
+import Button from './shared/Button';
 
 const introText = [
   `I am a creative designer and web developer based in Manchester.`,
@@ -12,6 +13,7 @@ function Home() {
       <h1>
         <Typed strings={introText} typeSpeed={60} />
       </h1>
+      <Button />
     </section>
   );
 }

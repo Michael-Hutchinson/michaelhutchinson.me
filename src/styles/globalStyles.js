@@ -7,7 +7,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: "Karla", sans-serif;
     margin: 0;
     background: ${({ theme }) => theme.background};
-    transition: all 0.50s linear;
   }
   * {
     box-sizing: border-box;
@@ -36,8 +35,11 @@ const GlobalStyle = createGlobalStyle`
   }
   a {
     color: ${({ theme }) => theme.title};
-    transition: 0.5s;
     text-decoration: none;
+  }
+  section {
+    max-width: 75%;
+    margin: 0 auto;
   }
 `;
 

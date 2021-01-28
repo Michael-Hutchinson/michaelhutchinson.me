@@ -2,17 +2,17 @@ import React from 'react';
 import { func } from 'prop-types';
 import styled from 'styled-components';
 
-const Button = styled.button`
+const Button = styled.a`
   background: red;
   border: 2px solid red;
   color: black;
-  border-radius: 30px;
   cursor: pointer;
-  font-size:0.8rem;
-  padding: 0.6rem;
-  z-index: 999;
   position: absolute;
-  }
+  right: 22px;
+  bottom: 22px;
+  z-index: 10;
+  outline: 0;
+}
 `;
 
 function Toggle({ toggleTheme }) {
