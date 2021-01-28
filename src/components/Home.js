@@ -7,7 +7,7 @@ const introText = [
 
 function Home() {
   return (
-    <section id='home'>
+    <section id="home">
       <h5>hey there, this is my portfolio website.</h5>
       <h1>
         <Typed strings={introText} typeSpeed={60} />

@@ -82,22 +82,22 @@ const Wrapper = styled.div`
 function Navbar() {
   return (
     <Nav>
-      <Input id='nav-responsive' />
+      <Input id="nav-responsive" />
       <Wrapper>
-        <Links href='#home'>Michael Hutchinson</Links>
+        <Links href="#home">Michael Hutchinson</Links>
       </Wrapper>
       <Wrapper>
-        <Label htmlFor='nav-responsive'>
-          <Icon></Icon>
-          <Icon></Icon>
-          <Icon></Icon>
+        <Label htmlFor="nav-responsive">
+          <Icon> </Icon>
+          <Icon> </Icon>
+          <Icon> </Icon>
         </Label>
       </Wrapper>
       <MobileLinks>
-        <Links href='#home'>Home</Links>
-        <Links href='#about'>About Me</Links>
-        <Links href='#work'>My Work</Links>
-        <Links href='#contact'>Contact</Links>
+        <Links href="#home">Home</Links>
+        <Links href="#about">About Me</Links>
+        <Links href="#work">My Work</Links>
+        <Links href="#contact">Contact</Links>
       </MobileLinks>
     </Nav>
   );

@@ -9,7 +9,7 @@ const Bottom = styled.footer`
 function Footer() {
   return (
     <Bottom>
-      <p>Copyright © Michael Hutchinson | {new Date().getFullYear()}</p>
+      <p>Copyright © Michael Hutchinson | 2021</p>
     </Bottom>
   );
 }
