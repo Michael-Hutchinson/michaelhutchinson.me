@@ -3,6 +3,8 @@ import { ThemeProvider } from 'styled-components';
 import Header from './components/Header';
 import Home from './components/Home';
 import About from './components/About';
+import Work from './components/Work';
+import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Toggle from './components/shared/Toggle';
 import GlobalStyle from './styles/globalStyles';
@@ -20,6 +22,8 @@ function App() {
       <Header />
       <Home />
       <About />
+      <Work />
+      <Contact />
       <Footer />
     </ThemeProvider>
   );
