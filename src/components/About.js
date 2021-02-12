@@ -1,4 +1,5 @@
 import React from 'react';
+import Social from './shared/Social';
 import wording from '../data/wording.json';
 
 function About() {
@@ -8,6 +9,7 @@ function About() {
       <h2>{wording[1].h2}</h2>
       <p>{wording[1].p1}</p>
       <p>{wording[1].p2}</p>
+      <Social />
     </section>
   );
 }
