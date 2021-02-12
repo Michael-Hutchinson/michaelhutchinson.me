@@ -16,7 +16,7 @@ const Cta = styled.button`
 `;
 
 function Button() {
-  return <Cta>Click Me &gt;</Cta>;
+  return <Cta>Learn More &gt;</Cta>;
 }
 
 export default Button;
