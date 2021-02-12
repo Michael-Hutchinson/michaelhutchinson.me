@@ -64,18 +64,6 @@ const Links = styled.a`
   }
 `;
 
-// const Icon = styled.span`
-//   @media (max-width: 768px) {
-//     display: block;
-//     width: 22px;
-//     height: 2px;
-//     background-color: ${({ theme }) => theme.title};
-//     + span {
-//       margin-top: 4px;
-//     }
-//   }
-// `;
-
 const Wrapper = styled.div`
   padding: 30px;
   a {
