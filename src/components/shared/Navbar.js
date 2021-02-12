@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FaBars } from 'react-icons/fa';
 
 const Nav = styled.nav`
   background-color: ${({ theme }) => theme.background};
@@ -44,8 +45,14 @@ const Input = styled.input.attrs({
 `;
 
 const Label = styled.label`
-  @media (max-width: 768px) {
-    cursor: pointer;
+  svg {
+    display: none;
+      @media (max-width: 768px) {
+        cursor: pointer;
+        display: block;
+        color: ${({ theme }) => theme.title};
+      }
+    }
   }
 `;
 
@@ -57,17 +64,17 @@ const Links = styled.a`
   }
 `;
 
-const Icon = styled.span`
-  @media (max-width: 768px) {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background-color: ${({ theme }) => theme.title};
-    + span {
-      margin-top: 4px;
-    }
-  }
-`;
+// const Icon = styled.span`
+//   @media (max-width: 768px) {
+//     display: block;
+//     width: 22px;
+//     height: 2px;
+//     background-color: ${({ theme }) => theme.title};
+//     + span {
+//       margin-top: 4px;
+//     }
+//   }
+// `;
 
 const Wrapper = styled.div`
   padding: 30px;
@@ -88,9 +95,7 @@ function Navbar() {
       </Wrapper>
       <Wrapper>
         <Label htmlFor="nav-responsive">
-          <Icon> </Icon>
-          <Icon> </Icon>
-          <Icon> </Icon>
+          <FaBars />
         </Label>
       </Wrapper>
       <MobileLinks>
