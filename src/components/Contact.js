@@ -1,11 +1,11 @@
 import React from 'react';
-import wording from '../data/wording.json';
+import config from '../data/config.json';
 
 function Contact() {
   return (
     <section id="contact">
-      <h5>{wording[3].title}</h5>
-      <h3>{wording[3].h3}</h3>
+      <h5>{config.sections.contact.title}</h5>
+      <h3>{config.sections.contact.h3}</h3>
     </section>
   );
 }
