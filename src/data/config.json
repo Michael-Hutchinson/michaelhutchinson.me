@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "home": {
+      "title": "hey there, this is my portfolio website.",
+      "h1": ["I am a creative designer and web developer based in Manchester."],
+      "url": "/#home"
+    },
+    "about": {
+      "title": "about me",
+      "h2": "My name is Michael Hutchinson. A web designer and web developer based in Manchester.",
+      "p": [
+        "Experienced Web Developer with a history of working in the IT industry. Skilled in Web Design & Development including HTML, CSS & Javascript. Strong UX portfolio with a Masters degree in Information Technology from Leeds University.",
+        "If you want to know more just email me at michael-hutchinson@hotmail.co.uk or use the contact form at the bottom of the page."
+      ],
+      "url": "/#about"
+    },
+    "work": {
+      "title": "recent work",
+      "h3": "I design and build websites for clients. More work avaliable on request.",
+      "url": "/#work"
+    },
+    "contact": {
+      "title": "contact me",
+      "h3": "If you have any questions or want to know more, please use the contact form below.",
+      "url": "/#contact"
+    },
+    "footer": {
+      "p": "Copyright © Michael Hutchinson | 2021"
+    }
+  },
+  "socialMedia": {
+    "github": {
+      "url": "https://github.com/iTsHutchy"
+    },
+    "twitter": {
+      "url": "https://www.twitter.com/itshutchy2"
+    },
+    "linkedin": {
+      "url": "https://www.linkedin.com/in/mhutchinson4"
+    }
+  }
+}
