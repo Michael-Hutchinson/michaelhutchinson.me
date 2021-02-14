@@ -10,7 +10,8 @@ const Nav = styled.nav`
   position: fixed;
   top: 0;
   z-index: 99;
-  @media (max-width: 768px) {
+  counter-reset: item -1;
+  @media (max-width: 48rem) {
     box-shadow: 0 40px 100px rgb(0 0 0 / 20%);
   }
 `;
@@ -18,8 +19,17 @@ const Nav = styled.nav`
 const MobileLinks = styled.div`
   a {
     padding: 30px;
+    counter-increment: item 1;
+  :before {
+    content: "0" counter(item) ".";
+    margin-right: 5px;
+    color: var(--green);
+    font-size: var(--fz-xxs);
+    text-align: right;
+}
   }
-  @media (max-width: 768px) {
+  }
+  @media (max-width: 48rem) {
     position: absolute;
     width: 100%;
     background-color: ${({ theme }) => theme.background};
@@ -37,7 +47,7 @@ const Input = styled.input.attrs({
   type: 'checkbox',
 })`
   display: none;
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     :not(:checked) ~ ${MobileLinks} {
       display: none;
     }
@@ -47,7 +57,7 @@ const Input = styled.input.attrs({
 const Label = styled.label`
   svg {
     display: none;
-      @media (max-width: 768px) {
+      @media (max-width: 48rem) {
         cursor: pointer;
         display: block;
         color: ${({ theme }) => theme.title};
@@ -69,7 +79,7 @@ const Wrapper = styled.div`
   a {
     font-size: 20px;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     padding: 15px;
   }
 `;
