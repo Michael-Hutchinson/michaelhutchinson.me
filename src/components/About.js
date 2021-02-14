@@ -1,5 +1,4 @@
 import React from 'react';
-import Social from './shared/Social';
 import config from '../data/config.json';
 
 function About() {
@@ -9,7 +8,6 @@ function About() {
       <h2>{config.sections.about.h2}</h2>
       <p>{config.sections.about.p[0]}</p>
       <p>{config.sections.about.p[1]}</p>
-      <Social />
     </section>
   );
 }
