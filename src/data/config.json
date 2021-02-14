@@ -1,8 +1,10 @@
 {
   "sections": {
     "home": {
-      "title": "hey there, this is my portfolio website.",
-      "h1": ["I am a creative designer and web developer based in Manchester."],
+      "title": "Hi, my name is",
+      "h1": ["Michael Hutchinson."],
+      "h2": "I like to <code> things for the web.",
+      "p": "A design-minded front-end web developer based in Manchester.",
       "url": "/#home"
     },
     "about": {

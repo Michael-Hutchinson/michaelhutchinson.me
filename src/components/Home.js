@@ -10,6 +10,8 @@ function Home() {
       <h1>
         <Typed strings={config.sections.home.h1} typeSpeed={60} />
       </h1>
+      <h2>{config.sections.home.h2}</h2>
+      <p>{config.sections.home.p}</p>
       <Button />
     </section>
   );
