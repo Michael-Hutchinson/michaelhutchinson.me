@@ -1,39 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaArrowRight } from 'react-icons/fa';
 
 const Cta = styled.button`
-  background-color: ${({ theme }) => theme.buttonBg};
-  color: ${({ theme }) => theme.buttonText};
-  letter-spacing: 1.6px;
-  padding: 14px 25px;
-  border-radius: 100px;
+  background-color: transparent;
+  color: ${({ theme }) => theme.link};
+  letter-spacing: 0.1rem;
+  padding: 0.875rem 1.563rem;
+  border-radius: 0.25rem;
   outline: 0;
   text-transform: uppercase;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: 1px solid ${({ theme }) => theme.link};
   font-family: 'Karla', sans-serif;
-  transition: all ease-in-out 0.4s;
-  svg {
-    margin-left: 10px;
-    vertical-align: top;
-  }
+  transition: all ease-in-out 0.2s;
   :hover {
-    transform: scale(1.1);
-    svg {
-      transition: all ease-in-out 0.4s;
-      transform: rotate(90deg);
-    }
+    background-color: ${({ theme }) => theme.shadow};
   }
 `;
 
 function Button() {
-  return (
-    <Cta href="#about">
-      Learn More
-      <FaArrowRight />
-    </Cta>
-  );
+  return <Cta href="#about">Learn More</Cta>;
 }
 
 export default Button;
