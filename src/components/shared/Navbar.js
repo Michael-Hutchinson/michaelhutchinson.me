@@ -23,9 +23,9 @@ const MobileLinks = styled.div`
   :before {
     content: "0" counter(item) ".";
     margin-right: 5px;
-    color: var(--green);
-    font-size: var(--fz-xxs);
+    color: ${({ theme }) => theme.link};
     text-align: right;
+    font-family: var(--font-links);
 }
   }
   }
