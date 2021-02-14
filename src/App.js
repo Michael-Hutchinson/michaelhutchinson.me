@@ -5,6 +5,8 @@ import Home from './components/Home';
 import About from './components/About';
 import Work from './components/Work';
 import Contact from './components/Contact';
+import Social from './components/shared/Social';
+import Email from './components/shared/Email';
 import Footer from './components/Footer';
 import Toggle from './components/shared/Toggle';
 import GlobalStyle from './styles/globalStyles';
@@ -24,6 +26,8 @@ function App() {
       <About />
       <Work />
       <Contact />
+      <Social />
+      <Email />
       <Footer />
     </ThemeProvider>
   );

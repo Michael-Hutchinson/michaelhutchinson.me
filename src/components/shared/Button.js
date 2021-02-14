@@ -10,8 +10,8 @@ const Cta = styled.button`
   outline: 0;
   text-transform: uppercase;
   cursor: pointer;
-  border: 1px solid ${({ theme }) => theme.link};
-  font-family: 'Karla', sans-serif;
+  border: 0.063rem solid ${({ theme }) => theme.link};
+  font-family: var(--font-main);
   transition: all ease-in-out 0.2s;
   :hover {
     background-color: ${({ theme }) => theme.shadow};
