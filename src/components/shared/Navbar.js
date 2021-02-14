@@ -9,6 +9,7 @@ const Nav = styled.nav`
   align-items: center;
   position: fixed;
   top: 0;
+  z-index: 99;
   @media (max-width: 768px) {
     box-shadow: 0 40px 100px rgb(0 0 0 / 20%);
   }
