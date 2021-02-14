@@ -2,27 +2,27 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  position: fixed;
+  align-items: center;
   bottom: 0;
-  right: 1.25rem;
-  z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 0;
-  padding: 0;
   list-style: none;
+  margin: 0;
+  position: fixed;
+  padding: 0;
+  right: 1.25rem;
+  z-index: 10;
   &:after {
-    content: '';
-    width: 0.063rem;
-    height: 6.25rem;
     background-color: ${({ theme }) => theme.text};
+    content: '';
+    height: 6.25rem;
+    width: 0.063rem;
   }
   a {
-    writing-mode: vertical-rl;
-    margin-bottom: 1.25rem;
     font-size: 0.75rem;
     font-family: var(--font-links);
+    margin-bottom: 1.25rem;
+    writing-mode: vertical-rl;
     :hover {
       text-decoration: underline;
     }

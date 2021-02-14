@@ -4,37 +4,37 @@ import styled from 'styled-components';
 import config from '../../data/config.json';
 
 const Wrapper = styled.div`
-  position: fixed;
   bottom: 0;
-  left: 20px;
+  left: 1.25rem;
+  position: fixed;
   z-index: 10;
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     display: none;
   }
 `;
 
 const Icon = styled.ul`
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  list-style: none;
   margin: 0;
   padding: 0;
-  list-style: none;
   &:after {
-    content: '';
-    width: 1px;
-    height: 100px;
     background-color: ${({ theme }) => theme.text};
+    content: '';
+    height: 6.25rem;
+    width: 0.063rem;
   }
   li {
     &:last-of-type {
-      margin-bottom: 20px;
+      margin-bottom: 1.25rem;
     }
     a {
-      padding: 10px;
-      display: flex;
-      transition: all ease-in-out 0.4s;
       color: ${({ theme }) => theme.link};
+      display: flex;
+      padding: 0.625rem;
+      transition: all ease-in-out 0.4s;
       &:hover {
         transform: scale(1.5);
       }
