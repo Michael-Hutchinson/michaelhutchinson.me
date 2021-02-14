@@ -58,6 +58,9 @@ const GlobalStyle = createGlobalStyle`
     max-width: 80%;
     padding: 100px 0px;
   }
+  #tsparticles {
+    position: fixed;
+  }
 `;
 
 export default GlobalStyle;

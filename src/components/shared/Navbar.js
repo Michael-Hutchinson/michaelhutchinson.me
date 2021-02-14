@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 
 const Nav = styled.nav`
-  background-color: ${({ theme }) => theme.background};
   width: 100%;
   justify-content: space-between;
   display: flex;
