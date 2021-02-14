@@ -13,6 +13,7 @@ const Cta = styled.a`
   letter-spacing: 0.1rem;
   outline: 0;
   padding: 0.875rem 1.563rem;
+  position: relative;
   text-transform: uppercase;
   transition: all ease-in-out 0.2s;
   :hover {
