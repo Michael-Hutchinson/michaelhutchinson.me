@@ -4,7 +4,10 @@ import Particles from 'react-particles-js';
 import Navbar from './shared/Navbar';
 
 const Top = styled.header`
-  padding-bottom: 83px;
+  display: flex;
+  height: 5.188rem;
+  z-index: 15;
+  padding: 0 2.5rem;
 `;
 
 function Header() {
