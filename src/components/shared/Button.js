@@ -22,13 +22,9 @@ const Cta = styled.a`
   }
 `;
 
-function Button(props, { toggleTheme }) {
+function Button(props) {
   const { buttonText, links } = props;
-  return (
-    <Cta onClick={toggleTheme} href={links}>
-      {buttonText}
-    </Cta>
-  );
+  return <Cta href={links}>{buttonText}</Cta>;
 }
 
 Button.propTypes = {
