@@ -7,12 +7,12 @@ import Toggle from './Toggle';
 
 const Nav = styled.nav`
   align-items: center;
-  width: 100%;
-  justify-content: space-between;
-  display: flex;
-  top: 0;
-  z-index: 99;
   counter-reset: item -1;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  z-index: 99;
 `;
 
 const MobileLinks = styled.div`
@@ -26,6 +26,7 @@ const MobileLinks = styled.div`
     &:last-of-type {
       :before {
         content '';
+        margin-right: 0;
       }
     }
   :before {
@@ -83,29 +84,19 @@ const Links = styled.a`
   }
 `;
 
-const Wrapper = styled.div`
-  padding: 30px;
-  a {
-    font-size: 20px;
-  }
-  @media (max-width: 48rem) {
-    padding: 15px;
-  }
-`;
-
 function Navbar(props) {
   const { currentTheme, toggleTheme } = props;
   return (
     <Nav>
       <Input id="nav-responsive" />
-      <Wrapper>
+      <div>
         <Toggle currentTheme={currentTheme} toggleTheme={toggleTheme} />
-      </Wrapper>
-      <Wrapper>
+      </div>
+      <div>
         <Label htmlFor="nav-responsive">
           <FaBars />
         </Label>
-      </Wrapper>
+      </div>
       <MobileLinks>
         <Links href="#home">Home</Links>
         <Links href="#about">About Me</Links>
