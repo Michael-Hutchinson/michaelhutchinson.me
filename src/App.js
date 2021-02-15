@@ -8,7 +8,6 @@ import Contact from './components/Contact';
 import Social from './components/shared/Social';
 import Email from './components/shared/Email';
 import Footer from './components/Footer';
-import Toggle from './components/shared/Toggle';
 import GlobalStyle from './styles/globalStyles';
 import Darkmode from './components/shared/Darkmode';
 import { lightTheme, darkTheme } from './styles/theme';
@@ -20,8 +19,7 @@ function App() {
   return (
     <ThemeProvider theme={themeMode}>
       <GlobalStyle />
-      <Toggle theme={theme} toggleTheme={themeToggler} />
-      <Header />
+      <Header theme={theme} toggleTheme={themeToggler} />
       <Home />
       <About />
       <Work />

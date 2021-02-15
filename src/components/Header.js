@@ -1,5 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
+import React from 'react';
+import { func, string } from 'prop-types';
 import Particles from 'react-particles-js';
 import Navbar from './shared/Navbar';
 
@@ -10,10 +11,11 @@ const Top = styled.header`
   padding: 0 2.5rem;
 `;
 
-function Header() {
+function Header(props) {
+  const { theme, toggleTheme } = props;
   return (
     <Top>
-      <Navbar />
+      <Navbar currentTheme={theme} toggleTheme={toggleTheme} />
       <Particles
         width="100vw"
         height="100vh"
@@ -72,5 +74,10 @@ function Header() {
     </Top>
   );
 }
+
+Header.propTypes = {
+  theme: string.isRequired,
+  toggleTheme: func.isRequired,
+};
 
 export default Header;

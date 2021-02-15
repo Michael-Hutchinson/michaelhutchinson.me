@@ -1,7 +1,9 @@
 import React from 'react';
+import { func, string } from 'prop-types';
 import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import Button from './Button';
+import Toggle from './Toggle';
 
 const Nav = styled.nav`
   align-items: center;
@@ -91,12 +93,13 @@ const Wrapper = styled.div`
   }
 `;
 
-function Navbar() {
+function Navbar(props) {
+  const { currentTheme, toggleTheme } = props;
   return (
     <Nav>
       <Input id="nav-responsive" />
       <Wrapper>
-        <Links href="#home">MH</Links>
+        <Toggle currentTheme={currentTheme} toggleTheme={toggleTheme} />
       </Wrapper>
       <Wrapper>
         <Label htmlFor="nav-responsive">
@@ -113,5 +116,10 @@ function Navbar() {
     </Nav>
   );
 }
+
+Navbar.propTypes = {
+  currentTheme: string.isRequired,
+  toggleTheme: func.isRequired,
+};
 
 export default Navbar;
