@@ -1,28 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
+import Button from './Button';
 
 const Nav = styled.nav`
+  align-items: center;
   width: 100%;
   justify-content: space-between;
   display: flex;
-  align-items: center;
-  position: fixed;
   top: 0;
   z-index: 99;
   counter-reset: item -1;
-  @media (max-width: 48rem) {
-    box-shadow: 0 40px 100px rgb(0 0 0 / 20%);
-  }
 `;
 
 const MobileLinks = styled.div`
+  display: flex;
   a {
-    padding: 30px;
     counter-increment: item 1;
+    padding: 0.625rem;
+    :hover {
+      color: ${({ theme }) => theme.link};
+    }
+    &:last-of-type {
+      :before {
+        content '';
+      }
+    }
   :before {
     content: "0" counter(item) ".";
-    margin-right: 5px;
+    margin-right: 0.313rem;
     color: ${({ theme }) => theme.link};
     text-align: right;
     font-family: var(--font-links);
@@ -30,12 +36,13 @@ const MobileLinks = styled.div`
   }
   }
   @media (max-width: 48rem) {
-    position: absolute;
-    width: 100%;
     background-color: ${({ theme }) => theme.background};
+    flex-direction: column;
     overflow-y: auto;
-    top: 100%;
+    position: absolute;
     text-align: center;
+    top: 100%;
+    width: 100%;
     a {
       display: block;
       padding: 10px;
@@ -68,7 +75,7 @@ const Label = styled.label`
 
 const Links = styled.a`
   color: ${({ theme }) => theme.title};
-  font-size: 14px;
+  font-size: 0.875rem;
   &:hover {
     color: ${({ theme }) => theme.title};
   }
@@ -89,7 +96,7 @@ function Navbar() {
     <Nav>
       <Input id="nav-responsive" />
       <Wrapper>
-        <Links href="#home">Michael Hutchinson</Links>
+        <Links href="#home">MH</Links>
       </Wrapper>
       <Wrapper>
         <Label htmlFor="nav-responsive">
@@ -101,6 +108,7 @@ function Navbar() {
         <Links href="#about">About Me</Links>
         <Links href="#work">My Work</Links>
         <Links href="#contact">Contact</Links>
+        <Button links="CV Link Here" buttonText="Download My CV" />
       </MobileLinks>
     </Nav>
   );
