@@ -1,4 +1,5 @@
 import React from 'react';
+import { string } from 'prop-types';
 import styled from 'styled-components';
 
 const Cta = styled.a`
@@ -21,8 +22,18 @@ const Cta = styled.a`
   }
 `;
 
-function Button() {
-  return <Cta href="#about">Learn More</Cta>;
+function Button(props, { toggleTheme }) {
+  const { buttonText, links } = props;
+  return (
+    <Cta onClick={toggleTheme} href={links}>
+      {buttonText}
+    </Cta>
+  );
 }
+
+Button.propTypes = {
+  buttonText: string.isRequired,
+  links: string.isRequired,
+};
 
 export default Button;

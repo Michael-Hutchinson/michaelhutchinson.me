@@ -12,7 +12,7 @@ function Home() {
       </h1>
       <h2>{config.sections.home.h2}</h2>
       <p>{config.sections.home.p}</p>
-      <Button />
+      <Button links="#about" buttonText="Learn more" />
     </section>
   );
 }
