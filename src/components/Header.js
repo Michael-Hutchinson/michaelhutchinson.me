@@ -5,10 +5,14 @@ import Particles from 'react-particles-js';
 import Navbar from './shared/Navbar';
 
 const Top = styled.header`
+  align-items: center;
   display: flex;
   height: 5.188rem;
-  z-index: 15;
+  justify-content: space-between;
   padding: 0 2.5rem;
+  position: fixed;
+  width: 100%;
+  z-index: 15;
 `;
 
 function Header(props) {
