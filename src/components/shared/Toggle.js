@@ -1,7 +1,23 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import React, { useEffect, useState } from 'react';
 import { func } from 'prop-types';
+import { FiSun, FiMoon } from 'react-icons/fi';
+import styled from 'styled-components';
 import Switch from 'react-switch';
 import Darkmode from './Darkmode';
+
+const LightIcon = styled.div`
+  align-items: center;
+  display: flex;
+  font-size: 15px;
+  height: 100%;
+  justify-content: center;
+  padding-right: 3px;
+`;
+
+const DarkIcon = styled(LightIcon)`
+  padding-right: 0;
+`;
 
 function Toggle(props) {
   const [themeToggler] = Darkmode();
@@ -17,7 +33,22 @@ function Toggle(props) {
     setChecked(nextChecked);
     props.toggleTheme();
   };
-  return <Switch onChange={handleChange} checked={checked} />;
+  return (
+    <Switch
+      onChange={handleChange}
+      checked={checked}
+      uncheckedIcon={
+        <LightIcon>
+          <FiSun />
+        </LightIcon>
+      }
+      checkedIcon={
+        <DarkIcon>
+          <FiMoon />
+        </DarkIcon>
+      }
+    />
+  );
 }
 
 Toggle.propTypes = {
