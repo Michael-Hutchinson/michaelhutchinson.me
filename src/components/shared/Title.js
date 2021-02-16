@@ -7,12 +7,12 @@ const SubTitle = styled.h2`
   display: flex;
   align-items: center;
   margin: 0.625rem 0 2.5rem;
-  font-size: clamp(1.625, 5vw, 2);
+  font-size: clamp(1.625rem, 5vw, 2rem);
   :before {
     position: relative;
     counter-increment: section 1;
     content: '0' counter(section) '.';
-    margin-right: 0.625;
+    margin-right: 0.625rem;
     color: var(--gold);
     font-family: var(--font-links);
     font-size: clamp(1rem, 3vw, 1.25rem);
