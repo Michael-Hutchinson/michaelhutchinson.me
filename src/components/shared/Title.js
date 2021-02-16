@@ -13,7 +13,7 @@ const SubTitle = styled.h2`
     counter-increment: section 1;
     content: '0' counter(section) '.';
     margin-right: 0.625rem;
-    color: var(--gold);
+    color: ${({ theme }) => theme.link};
     font-family: var(--font-links);
     font-size: clamp(1rem, 3vw, 1.25rem);
     bottom: -0.188rem;
