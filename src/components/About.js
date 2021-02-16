@@ -1,13 +1,21 @@
 import React from 'react';
 import config from '../data/config.json';
 
+const aboutWording = config.sections.about.p;
+const techList = config.sections.about.list;
+
 function About() {
   return (
     <section id="about">
       <h5>{config.sections.about.title}</h5>
-      <h2>{config.sections.about.h2}</h2>
-      <p>{config.sections.about.p[0]}</p>
-      <p>{config.sections.about.p[1]}</p>
+      {aboutWording.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
+      <ul>
+        {techList.map((list) => (
+          <li key={list}>{list}</li>
+        ))}
+      </ul>
     </section>
   );
 }
