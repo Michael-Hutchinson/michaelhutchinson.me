@@ -42,7 +42,6 @@ const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.title};
     font-weight: normal;
     line-height: normal;
-    letter-spacing: 0.5px;
   }
   p {
     color: ${({ theme }) => theme.text};
