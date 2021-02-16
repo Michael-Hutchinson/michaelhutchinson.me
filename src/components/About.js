@@ -1,5 +1,6 @@
 import React from 'react';
 import config from '../data/config.json';
+import Title from './shared/Title';
 
 const aboutWording = config.sections.about.p;
 const techList = config.sections.about.list;
@@ -7,7 +8,7 @@ const techList = config.sections.about.list;
 function About() {
   return (
     <section id="about">
-      <h5>{config.sections.about.title}</h5>
+      <Title titleText={config.sections.about.title} />
       {aboutWording.map((p) => (
         <p key={p}>{p}</p>
       ))}
