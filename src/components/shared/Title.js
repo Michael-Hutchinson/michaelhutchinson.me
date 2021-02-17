@@ -3,21 +3,13 @@ import { string } from 'prop-types';
 import styled from 'styled-components';
 
 const SubTitle = styled.h2`
-  color: ${({ theme }) => theme.title};
-  display: flex;
   align-items: center;
-  margin: 0.625rem 0 2.5rem;
+  color: ${({ theme }) => theme.link};
+  display: flex;
   font-size: clamp(1.625rem, 5vw, 2rem);
-  :before {
-    position: relative;
-    counter-increment: section 1;
-    content: '0' counter(section) '.';
-    margin-right: 0.625rem;
-    color: ${({ theme }) => theme.link};
-    font-family: var(--font-links);
-    font-size: clamp(1rem, 3vw, 1.25rem);
-    bottom: -0.188rem;
-  }
+  font-family: var(--font-links);
+  margin: 0.625rem 0 2.5rem;
+  white-space: nowrap;
   :after {
     content: '';
     display: block;
@@ -26,6 +18,9 @@ const SubTitle = styled.h2`
     height: 0.063rem;
     margin-left: 1.25rem;
     background-color: ${({ theme }) => theme.text};
+    @media (max-width: 48rem) {
+      width: 100%;
+    }
   }
 `;
 
