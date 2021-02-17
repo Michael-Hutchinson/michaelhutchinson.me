@@ -26,12 +26,12 @@
       "url": "/#about"
     },
     "work": {
-      "title": "recent work",
+      "title": "Recent work",
       "h3": "I design and build websites for clients. More work avaliable on request.",
       "url": "/#work"
     },
     "contact": {
-      "title": "contact me",
+      "title": "Contact me",
       "h3": "If you have any questions or want to know more, please use the contact form below.",
       "url": "/#contact"
     },
