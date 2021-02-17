@@ -7,6 +7,9 @@ const Wrap = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-gap: 3.125rem;
+  @media (max-width: 48rem) {
+    display: block;
+  }
 `;
 
 const ListItems = styled.ul`
