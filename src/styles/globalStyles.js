@@ -19,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
   html,
   body {
     background: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
     font-family: var(--font-main);
     margin: 0;
     scroll-behavior: smooth;
