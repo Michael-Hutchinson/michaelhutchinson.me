@@ -28,8 +28,8 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   ::-webkit-scrollbar {
-    height: 5px;
-    width: 5px;
+    height: 0.313rem;
+    width: 0.313rem;
   }
   ::-webkit-scrollbar-thumb {
     background: ${({ theme }) => theme.title};
@@ -46,16 +46,17 @@ const GlobalStyle = createGlobalStyle`
   }
   p {
     color: ${({ theme }) => theme.text};
-    line-height: 25px;
+    line-height: 1.563rem;
+    margin: 0 0 0.938rem;
   }
   a {
     color: ${({ theme }) => theme.link};
     text-decoration: none;
   }
   section {
-    margin: 0px auto;
+    margin: 0 auto;
     max-width: 80%;
-    padding: 100px 0px;
+    padding: 6.25rem 0;
   }
   #tsparticles {
     position: fixed;

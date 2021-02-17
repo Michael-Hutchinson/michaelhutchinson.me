@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import config from '../data/config.json';
 import Title from './shared/Title';
+import logo from '../images/me.png';
 
 const Wrap = styled.div`
   display: grid;
@@ -34,6 +35,10 @@ const ListItems = styled.ul`
   }
 `;
 
+const Logo = styled.img`
+  width: 100%;
+`;
+
 const aboutWording = config.sections.about.p;
 const techList = config.sections.about.list;
 
@@ -53,7 +58,7 @@ function About() {
           </ListItems>
         </div>
         <div>
-          <p>Image will go here when I find one</p>
+          <Logo src={logo} alt="me" />
         </div>
       </Wrap>
     </section>
