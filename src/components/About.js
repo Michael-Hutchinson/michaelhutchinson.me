@@ -38,8 +38,8 @@ const ListItems = styled.ul`
 const Logo = styled.img`
   width: 100%;
   border: 1px solid ${({ theme }) => theme.link};
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 0.25rem;
+  padding: 0.313rem;
 `;
 
 const aboutWording = config.sections.about.p;
