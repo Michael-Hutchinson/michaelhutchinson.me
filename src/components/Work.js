@@ -8,6 +8,9 @@ const ImageWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 1.25rem;
+  @media (max-width: 48rem) {
+    display: block;
+  }
 `;
 
 const Image = styled.img`
