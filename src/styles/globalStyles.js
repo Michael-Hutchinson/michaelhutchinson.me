@@ -34,6 +34,10 @@ const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-thumb {
     background: ${({ theme }) => theme.title};
   }
+  ::placeholder {
+    color: ${({ theme }) => theme.link};
+    font-family: var(--font-links);
+  }
   h1,
   h2,
   h3,
