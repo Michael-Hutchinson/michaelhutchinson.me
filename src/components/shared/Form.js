@@ -24,7 +24,7 @@ const InputFields = styled.input`
   font-size: 0.75rem;
   height: 3.125rem;
   margin-bottom: 0.625rem;
-  padding: 6px 0.75rem;
+  padding: 0.375rem 0.75rem;
   transition: all ease-in-out 0.2s;
   width: 100%;
   :focus {

@@ -48,7 +48,7 @@ const MobileLinks = styled.div`
     width: 100%;
     a {
       display: block;
-      padding: 10px;
+      padding: 0.625rem;
     }
   }
 `;

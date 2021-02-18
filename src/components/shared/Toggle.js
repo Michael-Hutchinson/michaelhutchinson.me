@@ -9,10 +9,10 @@ import Darkmode from './Darkmode';
 const LightIcon = styled.div`
   align-items: center;
   display: flex;
-  font-size: 15px;
+  font-size: 0.938rem;
   height: 100%;
   justify-content: center;
-  padding-right: 3px;
+  padding-right: 0.188rem;
 `;
 
 const DarkIcon = styled(LightIcon)`

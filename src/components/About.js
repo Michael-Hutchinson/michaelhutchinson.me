@@ -15,7 +15,7 @@ const Wrap = styled.div`
 
 const ListItems = styled.ul`
   display: grid;
-  grid-template-columns: repeat(2, minmax(140px, 200px));
+  grid-template-columns: repeat(2, minmax(8.75rem, 12.5rem));
   list-style: none;
   margin: 1.25rem 0 0 0;
   overflow: hidden;
@@ -37,7 +37,7 @@ const ListItems = styled.ul`
 
 const Logo = styled.img`
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.link};
+  border: 0.063rem solid ${({ theme }) => theme.link};
   border-radius: 0.25rem;
   padding: 0.313rem;
 `;

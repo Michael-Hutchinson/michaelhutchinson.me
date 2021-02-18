@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import config from '../data/config.json';
 
 const Bottom = styled.footer`
-  padding: 10px 0 40px 0;
+  padding: 0.625rem 0 2.5rem 0;
   text-align: center;
 `;
 
