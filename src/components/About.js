@@ -37,6 +37,9 @@ const ListItems = styled.ul`
 
 const Logo = styled.img`
   width: 100%;
+  border: 1px solid ${({ theme }) => theme.link};
+  border-radius: 4px;
+  padding: 5px;
 `;
 
 const aboutWording = config.sections.about.p;
