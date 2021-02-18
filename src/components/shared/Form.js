@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import styled from 'styled-components';
 import emailjs from 'emailjs-com';
@@ -66,21 +65,12 @@ function Form() {
   function sendEmail(e) {
     e.preventDefault();
 
-    emailjs
-      .sendForm(
-        'service_mcixsss',
-        'template_tjcmx0d',
-        e.target,
-        'user_sT5IC7cV94BXANfidUr3y'
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
+    emailjs.sendForm(
+      'service_mcixsss',
+      'template_tjcmx0d',
+      e.target,
+      'user_sT5IC7cV94BXANfidUr3y'
+    );
     e.target.reset();
   }
 
