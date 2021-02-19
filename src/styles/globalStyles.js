@@ -57,13 +57,19 @@ const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.link};
     text-decoration: none;
   }
+  main {
+    padding: 0 9.375rem;
+    @media (max-width: 48rem) {
+      padding: 0 3.125rem;
+    }
+  }
   section {
     align-items: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: 0 auto;
-    max-width: 80%;
+    max-width: 62.5rem;
     min-height: 100vh;
     padding: 6.25rem 0;
   }

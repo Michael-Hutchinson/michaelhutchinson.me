@@ -76,13 +76,15 @@ function App() {
         }}
       />
       <Header theme={theme} toggleTheme={themeToggler} />
-      <Home />
-      <About />
-      <Work />
-      <Contact />
-      <Social />
-      <Email />
-      <Footer />
+      <main>
+        <Home />
+        <About />
+        <Work />
+        <Contact />
+        <Social />
+        <Email />
+        <Footer />
+      </main>
     </ThemeProvider>
   );
 }
