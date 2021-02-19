@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   }
   a {
     font-size: 0.75rem;
-    font-family: var(--font-links);
+    font-family: var(--font-mono);
     margin-bottom: 1.25rem;
     writing-mode: vertical-rl;
     :hover {

@@ -24,7 +24,7 @@ const ListItems = styled.ul`
     position: relative;
     margin-bottom: 0.625rem;
     padding-left: 1.25rem;
-    font-family: var(--font-links);
+    font-family: var(--font-mono);
     font-size: 0.813rem;
     &:before {
       color: ${({ theme }) => theme.link};

@@ -6,7 +6,7 @@ import config from '../data/config.json';
 
 const Name = styled.h5`
   color: ${({ theme }) => theme.link};
-  font-family: var(--font-links);
+  font-family: var(--font-mono);
   margin: 0 0 0 0.25rem;
   font-size: 0.875rem;
 `;

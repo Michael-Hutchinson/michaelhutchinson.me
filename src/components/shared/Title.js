@@ -7,7 +7,7 @@ const SubTitle = styled.h2`
   color: ${({ theme }) => theme.link};
   display: flex;
   font-size: clamp(1.625rem, 5vw, 2rem);
-  font-family: var(--font-links);
+  font-family: var(--font-mono);
   margin: 0.625rem 0 2.5rem;
   white-space: nowrap;
   :after {

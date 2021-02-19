@@ -5,8 +5,8 @@ const GlobalStyle = createGlobalStyle`
   :root {
     --black: #000000;
     --black-shadow: rgba(0, 0, 0, 0.1);
-    --font-main: "Karla", sans-serif;
-    --font-links: "SF Mono", monospace;
+    --font-sans: "Karla", sans-serif;
+    --font-mono: "Roboto Mono", monospace;
     --gold: #E3AE4A;
     --gold-shadow: rgba(227, 174, 74, 0.1);
     --light-navy: #233554;
@@ -20,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text};
-    font-family: var(--font-main);
+    font-family: var(--font-sans);
     margin: 0;
     scroll-behavior: smooth;
   }
@@ -36,7 +36,7 @@ const GlobalStyle = createGlobalStyle`
   }
   ::placeholder {
     color: ${({ theme }) => theme.link};
-    font-family: var(--font-links);
+    font-family: var(--font-mono);
   }
   h1,
   h2,

@@ -9,7 +9,7 @@ const Cta = styled.a`
   color: ${({ theme }) => theme.link};
   cursor: pointer;
   display: inline-flex;
-  font-family: var(--font-main);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   letter-spacing: 0.1rem;
   outline: 0;

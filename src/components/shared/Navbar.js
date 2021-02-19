@@ -35,7 +35,7 @@ const MobileLinks = styled.div`
     margin-right: 0.313rem;
     color: ${({ theme }) => theme.link};
     text-align: right;
-    font-family: var(--font-links);
+    font-family: var(--font-mono);
 }
   }
   }

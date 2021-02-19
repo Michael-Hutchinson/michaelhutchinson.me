@@ -49,7 +49,7 @@ const SendButton = styled.input`
   color: ${({ theme }) => theme.link};
   cursor: pointer;
   display: flex;
-  font-family: var(--font-main);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   letter-spacing: 0.1rem;
   margin: 0 0 0 auto;
