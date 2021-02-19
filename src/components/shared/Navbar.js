@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import Button from './Button';
 import Toggle from './Toggle';
+import cv from '../../data/cv.pdf';
 
 const Nav = styled.nav`
   align-items: center;
@@ -102,7 +103,7 @@ function Navbar(props) {
         <Links href="#about">About Me</Links>
         <Links href="#work">My Work</Links>
         <Links href="#contact">Contact</Links>
-        <Button links="CV Link Here" buttonText="Download My CV" />
+        <Button links={cv} buttonText="Download My CV" />
       </MobileLinks>
     </Nav>
   );
