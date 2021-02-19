@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import emailjs from 'emailjs-com';
 
@@ -62,16 +63,34 @@ const SendButton = styled.input`
 `;
 
 function Form() {
+  const [sent, setSent] = useState(null);
   function sendEmail(e) {
     e.preventDefault();
 
-    emailjs.sendForm(
-      'service_mcixsss',
-      'template_tjcmx0d',
-      e.target,
-      'user_sT5IC7cV94BXANfidUr3y'
-    );
+    emailjs
+      .sendForm(
+        'service_mcixsss',
+        'template_tjcmx0d',
+        e.target,
+        'user_sT5IC7cV94BXANfidUr3y'
+      )
+      .then(
+        () => {
+          setSent(true);
+        },
+        () => {
+          setSent(false);
+        }
+      );
     e.target.reset();
+  }
+
+  let successMessage = '';
+
+  if (sent) {
+    successMessage = 'Email sent';
+  } else if (sent === false) {
+    successMessage = 'There was a problem sending your email';
   }
 
   return (
@@ -88,6 +107,7 @@ function Form() {
       </Fields>
       <MessageBox name="message" placeholder="Message" rows="8" required />
       <SendButton type="submit" value="Send message" />
+      <p>{successMessage}</p>
     </Contact>
   );
 }
