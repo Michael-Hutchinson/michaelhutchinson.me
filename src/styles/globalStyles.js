@@ -58,8 +58,13 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
   }
   section {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin: 0 auto;
     max-width: 80%;
+    min-height: 100vh;
     padding: 6.25rem 0;
   }
   #tsparticles {
