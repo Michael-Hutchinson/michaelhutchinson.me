@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import emailjs from 'emailjs-com';
+import config from '../../data/config.json';
 
 const Contact = styled.form`
   position: relative;
@@ -88,9 +89,9 @@ function Form() {
   let successMessage = '';
 
   if (sent) {
-    successMessage = 'Email sent';
+    successMessage = `${config.contactForm.successMessage}`;
   } else if (sent === false) {
-    successMessage = 'There was a problem sending your email';
+    successMessage = `${config.contactForm.errorMessage}`;
   }
 
   return (

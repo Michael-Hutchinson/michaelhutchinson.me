@@ -49,5 +49,9 @@
     "linkedin": {
       "url": "https://www.linkedin.com/in/mhutchinson4"
     }
+  },
+  "contactForm": {
+    "successMessage": "The email was sent sucessfully!",
+    "errorMessage": "There was a problem sending your email!"
   }
 }
