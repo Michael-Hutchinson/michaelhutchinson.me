@@ -76,6 +76,11 @@ const GlobalStyle = createGlobalStyle`
   #tsparticles {
     position: fixed;
   }
+  .navBackground {
+    background: ${({ theme }) => theme.background};
+    box-shadow:0 40px 100px rgba(0,0,0,.2);
+    transition: all ease-in-out 0.5s;
+  }
 `;
 
 export default GlobalStyle;
