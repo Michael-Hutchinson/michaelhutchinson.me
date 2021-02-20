@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import Button from './Button';
 import Toggle from './Toggle';
-import cv from '../../data/cv.pdf';
+import cv from '../../data/MH-CV.jpg';
 
 const Nav = styled.nav`
   align-items: center;
