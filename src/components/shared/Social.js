@@ -9,7 +9,8 @@ const Wrapper = styled.div`
   position: fixed;
   z-index: 10;
   @media (max-width: 48rem) {
-    display: none;
+    position: relative;
+    left: 0;
   }
 `;
 
@@ -40,6 +41,18 @@ const Icon = styled.ul`
       }
     }
   }
+  @media (max-width: 48rem) {
+    flex-direction: row;
+    justify-content: center;
+    li {
+      &:last-of-type {
+        margin-bottom: 0;
+      }  
+    }
+    &:after {
+      height: initial;
+      width: initial;
+    }
 `;
 
 function Social() {
