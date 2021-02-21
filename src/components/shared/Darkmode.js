@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 function Darkmode() {
   const [theme, setTheme] = useState('light');
-  const [mountedComponent, setMountedComponent] = useState(false);
 
   const setMode = (mode) => {
     window.localStorage.setItem('theme', mode);
@@ -31,10 +30,8 @@ function Darkmode() {
     } else {
       setMode('light');
     }
-
-    setMountedComponent(true);
   });
-  return [theme, themeToggler, mountedComponent];
+  return [theme, themeToggler];
 }
 
 export default Darkmode;

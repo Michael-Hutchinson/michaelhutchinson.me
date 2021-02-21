@@ -14,9 +14,8 @@ import Darkmode from './components/shared/Darkmode';
 import { lightTheme, darkTheme } from './styles/theme';
 
 function App() {
-  const [theme, themeToggler, mountedComponent] = Darkmode();
+  const [theme, themeToggler] = Darkmode();
   const themeMode = theme === 'light' ? lightTheme : darkTheme;
-  if (!mountedComponent) return <div />;
   return (
     <ThemeProvider theme={themeMode}>
       <GlobalStyle />
