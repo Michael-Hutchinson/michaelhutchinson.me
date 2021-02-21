@@ -11,7 +11,7 @@ const Top = styled.header`
   padding: 0 2.5rem;
   position: fixed;
   width: 100%;
-  z-index: 15;
+  z-index: 100;
 `;
 
 function Header(props) {
