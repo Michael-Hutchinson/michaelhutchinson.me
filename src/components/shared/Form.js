@@ -6,7 +6,7 @@ import config from '../../data/config.json';
 const Contact = styled.form`
   position: relative;
   width: 100%;
-  z-index: 99;
+  z-index: 19;
 `;
 
 const Fields = styled.div`

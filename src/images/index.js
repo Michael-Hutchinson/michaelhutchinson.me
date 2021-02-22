@@ -7,12 +7,12 @@ import portfolio from './work/portfolio-work.png';
 import runner from './work/runner-work.png';
 
 const images = [
-  [aetc, 'AETC'],
-  [betting, 'Betting'],
-  [leeds, 'Leeds'],
-  [lscb, 'lscb'],
-  [morality, 'Morality'],
-  [portfolio, 'Portfolio'],
-  [runner, 'Runner'],
+  [aetc, 'AETC tablet application'],
+  [betting, 'Betting website'],
+  [leeds, 'Leeds tourism website'],
+  [lscb, 'LSCB local authority website'],
+  [morality, 'Morality eSports'],
+  [portfolio, 'Old Portfolio'],
+  [runner, 'Running website'],
 ];
 export default images;
