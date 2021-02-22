@@ -81,6 +81,12 @@ const GlobalStyle = createGlobalStyle`
     box-shadow:0 40px 100px rgba(0,0,0,.2);
     transition: all ease-in-out 0.5s;
   }
+  .modalImage {
+    width: 100%;
+    border: 0.063rem solid ${({ theme }) => theme.link};
+    border-radius: 0.25rem;
+    padding: 0.313rem;
+  }
 `;
 
 export default GlobalStyle;
