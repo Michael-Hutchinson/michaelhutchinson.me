@@ -26,7 +26,7 @@ function Work() {
             className="modalImage"
             key={img.id}
             small={img[0]}
-            large={img[0]}
+            large={img[2]}
             alt={img[1]}
           />
         ))}
