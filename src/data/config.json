@@ -5,10 +5,11 @@
       "h1": ["Michael Hutchinson."],
       "h2": "I like to <code> things for the web.",
       "p": "A design-minded front-end web developer based in Manchester.",
-      "url": "/#home"
+      "url": "/#home",
+      "nav": "Home"
     },
     "about": {
-      "title": "About me",
+      "title": "A little more about me",
       "p": [
         "Experienced Web Developer with a history of working in the IT industry. Skilled in Web Design & Development including HTML, CSS & Javascript.",
         "Strong UX portfolio with a Master’s degree in Information Technology from Leeds University.",
@@ -23,17 +24,20 @@
         "Cypress",
         "XML & JSON"
       ],
-      "url": "/#about"
+      "url": "/#about",
+      "nav": "About me"
     },
     "work": {
       "title": "Projects i've built",
       "h3": "I design and build websites for clients. More work avaliable on request.",
-      "url": "/#work"
+      "url": "/#work",
+      "nav": "My work"
     },
     "contact": {
       "title": "Get in touch",
       "h3": "If you have any questions or want to know more, please use the contact form below.",
-      "url": "/#contact"
+      "url": "/#contact",
+      "nav": "Contact"
     },
     "footer": {
       "p": "Copyright © Michael Hutchinson | 2021"

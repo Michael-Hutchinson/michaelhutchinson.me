@@ -5,6 +5,7 @@ import { FaBars } from 'react-icons/fa';
 import Button from './Button';
 import Toggle from './Toggle';
 import cv from '../../data/MH-CV.jpg';
+import config from '../../data/config.json';
 
 const Nav = styled.nav`
   align-items: center;
@@ -99,10 +100,13 @@ function Navbar(props) {
         </Label>
       </div>
       <MobileLinks>
-        <Links href="#home">Home</Links>
-        <Links href="#about">About Me</Links>
-        <Links href="#work">My Work</Links>
-        <Links href="#contact">Contact</Links>
+        {Object.values(config.sections).map((link) =>
+          link.url ? (
+            <Links key={link.id} href={link.url}>
+              {link.nav}
+            </Links>
+          ) : null
+        )}
         <Button links={cv} buttonText="Download My CV" />
       </MobileLinks>
     </Nav>
