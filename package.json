@@ -7,6 +7,7 @@
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
     "emailjs-com": "^2.6.4",
+    "eslint-plugin-jest": "^24.1.5",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -45,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "canvas": "^2.6.1",
     "eslint": "^7.18.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^7.2.0",
@@ -53,6 +55,8 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1"
+    "jest-canvas-mock": "^2.3.1",
+    "prettier": "^2.2.1",
+    "react-test-renderer": "^17.0.1"
   }
 }
