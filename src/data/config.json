@@ -1,6 +1,7 @@
 {
   "sections": {
     "home": {
+      "id": "1",
       "title": "Hi, my name is",
       "h1": ["Michael Hutchinson."],
       "h2": "I like to <code> things for the web.",
@@ -9,6 +10,7 @@
       "nav": "Home"
     },
     "about": {
+      "id": "2",
       "title": "A little more about me",
       "p": [
         "Experienced Web Developer with a history of working in the IT industry. Skilled in Web Design & Development including HTML, CSS & Javascript.",
@@ -28,12 +30,14 @@
       "nav": "About me"
     },
     "work": {
+      "id": "3",
       "title": "Projects i've built",
       "h3": "I design and build websites for clients. More work avaliable on request.",
       "url": "/#work",
       "nav": "My work"
     },
     "contact": {
+      "id": "4",
       "title": "Get in touch",
       "h3": "If you have any questions or want to know more, please use the contact form below.",
       "url": "/#contact",

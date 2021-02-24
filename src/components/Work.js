@@ -34,7 +34,7 @@ function Work() {
             className="modalImage"
             onClick={toggleModal}
             onKeyPress={toggleModal}
-            key={img.id}
+            key={img[0]}
             src={img[0]}
             alt={img[1]}
           />

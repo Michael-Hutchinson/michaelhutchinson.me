@@ -63,7 +63,7 @@ function Modal(props) {
   return (
     <Wrapper>
       <ModalOpen>
-        <ModalButton onClick={toggleModal} value="Close" />
+        <ModalButton onClick={toggleModal} defaultValue="Close" />
         <ModalImage src={image} alt={alt} />
       </ModalOpen>
     </Wrapper>

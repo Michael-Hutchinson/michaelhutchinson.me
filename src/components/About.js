@@ -52,11 +52,11 @@ function About() {
       <Wrap>
         <div>
           {aboutWording.map((p) => (
-            <p key={p.id}>{p}</p>
+            <p key={p}>{p}</p>
           ))}
           <ListItems>
-            {techList.map((list) => (
-              <li key={list.id}>{list}</li>
+            {techList.forEach((list) => (
+              <li key={list}>{list}</li>
             ))}
           </ListItems>
         </div>
