@@ -55,7 +55,7 @@ function About() {
             <p key={p}>{p}</p>
           ))}
           <ListItems>
-            {techList.forEach((list) => (
+            {techList.map((list) => (
               <li key={list}>{list}</li>
             ))}
           </ListItems>
