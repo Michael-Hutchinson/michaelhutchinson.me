@@ -26,16 +26,14 @@ const Text = styled.p`
   margin: 1.25rem 0 3.125rem;
 `;
 
-function Home() {
-  return (
-    <section id="home">
-      <Name>{config.sections.home.title}</Name>
-      <Title>{config.sections.home.h1}</Title>
-      <SubTitle>{config.sections.home.h2}</SubTitle>
-      <Text>{config.sections.home.p}</Text>
-      <Button links="#about" buttonText="Learn more" />
-    </section>
-  );
-}
+const Home: React.FunctionComponent = () => (
+  <section id="home">
+    <Name>{config.sections.home.title}</Name>
+    <Title>{config.sections.home.h1}</Title>
+    <SubTitle>{config.sections.home.h2}</SubTitle>
+    <Text>{config.sections.home.p}</Text>
+    <Button links="#about" buttonText="Learn more" />
+  </section>
+);
 
 export default Home;
