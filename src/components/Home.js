@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Typed from 'react-typed';
 import Button from './shared/Button';
 import config from '../data/config.json';
 
@@ -31,9 +30,7 @@ function Home() {
   return (
     <section id="home">
       <Name>{config.sections.home.title}</Name>
-      <Title>
-        <Typed strings={config.sections.home.h1} typeSpeed={60} />
-      </Title>
+      <Title>{config.sections.home.h1}</Title>
       <SubTitle>{config.sections.home.h2}</SubTitle>
       <Text>{config.sections.home.p}</Text>
       <Button links="#about" buttonText="Learn more" />
