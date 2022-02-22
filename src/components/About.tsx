@@ -45,27 +45,25 @@ const Logo = styled.img`
 const aboutWording = config.sections.about.p;
 const techList = config.sections.about.list;
 
-function About() {
-  return (
-    <section id="about">
-      <Title titleText={config.sections.about.title} />
-      <Wrap>
-        <div>
-          {aboutWording.map((p) => (
-            <p key={p}>{p}</p>
+const About: React.FunctionComponent = () => (
+  <section id="about">
+    <Title titleText={config.sections.about.title} />
+    <Wrap>
+      <div>
+        {aboutWording.map((p) => (
+          <p key={p}>{p}</p>
+        ))}
+        <ListItems>
+          {techList.map((list) => (
+            <li key={list}>{list}</li>
           ))}
-          <ListItems>
-            {techList.map((list) => (
-              <li key={list}>{list}</li>
-            ))}
-          </ListItems>
-        </div>
-        <div>
-          <Logo src={logo} alt="me" />
-        </div>
-      </Wrap>
-    </section>
-  );
-}
+        </ListItems>
+      </div>
+      <div>
+        <Logo src={logo} alt="me" />
+      </div>
+    </Wrap>
+  </section>
+);
 
 export default About;
