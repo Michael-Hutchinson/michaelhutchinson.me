@@ -1,5 +1,4 @@
 import React from 'react';
-import { string } from 'prop-types';
 import styled from 'styled-components';
 
 const SubTitle = styled.h2`
@@ -24,13 +23,12 @@ const SubTitle = styled.h2`
   }
 `;
 
-function Title(props) {
-  const { titleText } = props;
-  return <SubTitle>{titleText}</SubTitle>;
+interface ITitleProps {
+  titleText: string;
 }
 
-Title.propTypes = {
-  titleText: string.isRequired,
-};
+const Title: React.FunctionComponent<ITitleProps> = ({ titleText }) => (
+  <SubTitle>{titleText}</SubTitle>
+);
 
 export default Title;
