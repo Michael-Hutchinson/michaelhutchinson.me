@@ -8,13 +8,11 @@ const Bottom = styled.footer`
   text-align: center;
 `;
 
-function Footer() {
-  return (
-    <Bottom>
-      <p>{config.sections.footer.p}</p>
-      <Social />
-    </Bottom>
-  );
-}
+const Footer: React.FunctionComponent = () => (
+  <Bottom>
+    <p>{config.sections.footer.p}</p>
+    <Social />
+  </Bottom>
+);
 
 export default Footer;

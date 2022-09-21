@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Typed from 'react-typed';
 import Button from './shared/Button';
 import config from '../data/config.json';
 
@@ -27,18 +26,14 @@ const Text = styled.p`
   margin: 1.25rem 0 3.125rem;
 `;
 
-function Home() {
-  return (
-    <section id="home">
-      <Name>{config.sections.home.title}</Name>
-      <Title>
-        <Typed strings={config.sections.home.h1} typeSpeed={60} />
-      </Title>
-      <SubTitle>{config.sections.home.h2}</SubTitle>
-      <Text>{config.sections.home.p}</Text>
-      <Button links="#about" buttonText="Learn more" />
-    </section>
-  );
-}
+const Home: React.FunctionComponent = () => (
+  <section id="home">
+    <Name>{config.sections.home.title}</Name>
+    <Title>{config.sections.home.h1}</Title>
+    <SubTitle>{config.sections.home.h2}</SubTitle>
+    <Text>{config.sections.home.p}</Text>
+    <Button links="#about" buttonText="Learn more" />
+  </section>
+);
 
 export default Home;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { string } from 'prop-types';
 import styled from 'styled-components';
 
 const Cta = styled.a`
@@ -22,14 +21,14 @@ const Cta = styled.a`
   }
 `;
 
-function Button(props) {
-  const { buttonText, links } = props;
-  return <Cta href={links}>{buttonText}</Cta>;
+interface IButtonProps {
+  buttonText: string;
+  links: string;
 }
 
-Button.propTypes = {
-  buttonText: string.isRequired,
-  links: string.isRequired,
-};
+const Button: React.FunctionComponent<IButtonProps> = ({
+  buttonText,
+  links,
+}) => <Cta href={links}>{buttonText}</Cta>;
 
 export default Button;
