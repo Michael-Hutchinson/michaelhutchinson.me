@@ -1,6 +1,6 @@
 # https://michaelhutchinson.me
 
-My portfolio website build using ReactJS.
+My portfolio website build using ReactJS and Styled Components.
 
 ## How to Launch the Web App
 
