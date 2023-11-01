@@ -63,35 +63,28 @@ const SendButton = styled.input`
 `;
 
 const Form = () => {
-  const [sent, setSent] = useState(null);
+  const [message, setMessage] = useState('');
+
   const sendEmail = (e) => {
     e.preventDefault();
 
     emailjs
       .sendForm(
-        'service_mcixsss',
+        'service_n4cgb86',
         'template_tjcmx0d',
         e.target,
         'user_sT5IC7cV94BXANfidUr3y'
       )
       .then(
         () => {
-          setSent(true);
+          setMessage(config.contactForm.successMessage);
         },
         () => {
-          setSent(false);
+          setMessage(config.contactForm.errorMessage);
         }
       );
     e.target.reset();
   };
-
-  let successMessage = '';
-
-  if (sent) {
-    successMessage = `${config.contactForm.successMessage}`;
-  } else {
-    successMessage = `${config.contactForm.errorMessage}`;
-  }
 
   return (
     <Contact className="contact-form" onSubmit={sendEmail}>
@@ -107,7 +100,7 @@ const Form = () => {
       </Fields>
       <MessageBox name="message" placeholder="Message" rows="8" required />
       <SendButton type="submit" value="Send message" />
-      <p>{successMessage}</p>
+      <p>{message}</p>
     </Contact>
   );
 };
