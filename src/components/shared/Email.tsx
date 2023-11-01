@@ -32,14 +32,12 @@ const Wrapper = styled.div`
   }
 `;
 
-function Email() {
-  return (
-    <Wrapper>
-      <a href="mailto:michael-hutchinson@hotmail.co.uk">
-        michael-hutchinson@hotmail.co.uk
-      </a>
-    </Wrapper>
-  );
-}
+const Email = () => (
+  <Wrapper>
+    <a href="mailto:michael-hutchinson@hotmail.co.uk">
+      michael-hutchinson@hotmail.co.uk
+    </a>
+  </Wrapper>
+);
 
 export default Email;
