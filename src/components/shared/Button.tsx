@@ -21,14 +21,13 @@ const Cta = styled.a`
   }
 `;
 
-interface IButtonProps {
+interface ButtonProps {
   buttonText: string;
   links: string;
 }
 
-const Button: React.FunctionComponent<IButtonProps> = ({
-  buttonText,
-  links,
-}) => <Cta href={links}>{buttonText}</Cta>;
+const Button = ({ buttonText, links }: ButtonProps) => (
+  <Cta href={links}>{buttonText}</Cta>
+);
 
 export default Button;

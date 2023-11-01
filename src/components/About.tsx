@@ -45,7 +45,7 @@ const Logo = styled.img`
 const aboutWording = config.sections.about.p;
 const techList = config.sections.about.list;
 
-const About: React.FunctionComponent = () => (
+const About = () => (
   <section id="about">
     <Title titleText={config.sections.about.title} />
     <Wrap>

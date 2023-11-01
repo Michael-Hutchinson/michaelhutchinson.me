@@ -3,7 +3,7 @@ import config from '../data/config.json';
 import Title from './shared/Title';
 import Form from './shared/Form';
 
-const Contact: React.FunctionComponent = () => (
+const Contact = () => (
   <section id="contact">
     <Title titleText={config.sections.contact.title} />
     <h3>{config.sections.contact.h3}</h3>

@@ -26,7 +26,7 @@ const Text = styled.p`
   margin: 1.25rem 0 3.125rem;
 `;
 
-const Home: React.FunctionComponent = () => (
+const Home = () => (
   <section id="home">
     <Name>{config.sections.home.title}</Name>
     <Title>{config.sections.home.h1}</Title>

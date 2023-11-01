@@ -23,12 +23,10 @@ const SubTitle = styled.h2`
   }
 `;
 
-interface ITitleProps {
+interface TitleProps {
   titleText: string;
 }
 
-const Title: React.FunctionComponent<ITitleProps> = ({ titleText }) => (
-  <SubTitle>{titleText}</SubTitle>
-);
+const Title = ({ titleText }: TitleProps) => <SubTitle>{titleText}</SubTitle>;
 
 export default Title;
