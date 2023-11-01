@@ -21,10 +21,10 @@
       "list": [
         "Javascript (ES6+)",
         "React",
-        "Node.js",
-        "HTML & (S)CSS",
+        "Typescript",
+        "GraphQL",
         "Cypress",
-        "XML & JSON"
+        "React Testing Library"
       ],
       "url": "/#about",
       "nav": "About me"

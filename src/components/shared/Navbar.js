@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import Button from './Button';
 import Toggle from './Toggle';
-import cv from '../../data/MH-CV.jpg';
+import cv from '../../data/MH-CV.png';
 import config from '../../data/config.json';
 
 const Nav = styled.nav`
