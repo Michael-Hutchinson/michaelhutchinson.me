@@ -17,10 +17,16 @@ const ImageWrap = styled.div`
 
 const Work = () => {
   const [modal, setModal] = useState(false);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState('');
 
-  const toggleModal = (e) => {
-    setImage(e.target.alt);
+  const toggleModal = (
+    e:
+      | React.MouseEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    const target = e.target as HTMLInputElement;
+
+    setImage(target.alt);
     setModal(!modal);
   };
 
