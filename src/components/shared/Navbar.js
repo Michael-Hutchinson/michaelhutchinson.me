@@ -86,7 +86,7 @@ const Links = styled.a`
   }
 `;
 
-function Navbar(props) {
+const Navbar = (props) => {
   const { currentTheme, toggleTheme } = props;
   return (
     <Nav>
@@ -111,7 +111,7 @@ function Navbar(props) {
       </MobileLinks>
     </Nav>
   );
-}
+};
 
 Navbar.propTypes = {
   currentTheme: string.isRequired,

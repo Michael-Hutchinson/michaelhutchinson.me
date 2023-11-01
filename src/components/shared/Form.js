@@ -62,9 +62,9 @@ const SendButton = styled.input`
   }
 `;
 
-function Form() {
+const Form = () => {
   const [sent, setSent] = useState(null);
-  function sendEmail(e) {
+  const sendEmail = (e) => {
     e.preventDefault();
 
     emailjs
@@ -83,13 +83,13 @@ function Form() {
         }
       );
     e.target.reset();
-  }
+  };
 
   let successMessage = '';
 
   if (sent) {
     successMessage = `${config.contactForm.successMessage}`;
-  } else if (sent === false) {
+  } else {
     successMessage = `${config.contactForm.errorMessage}`;
   }
 
@@ -110,6 +110,6 @@ function Form() {
       <p>{successMessage}</p>
     </Contact>
   );
-}
+};
 
 export default Form;

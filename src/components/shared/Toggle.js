@@ -20,7 +20,7 @@ const DarkIcon = styled(LightIcon)`
   padding-right: 0;
 `;
 
-function Toggle(props) {
+const Toggle = ({ toggleTheme }) => {
   const [themeToggler] = Darkmode();
   const [checked, setChecked] = useState(false);
   useEffect(() => {
@@ -32,7 +32,7 @@ function Toggle(props) {
   });
   const handleChange = (nextChecked) => {
     setChecked(nextChecked);
-    props.toggleTheme();
+    toggleTheme();
   };
   return (
     <Switch
@@ -50,7 +50,7 @@ function Toggle(props) {
       }
     />
   );
-}
+};
 
 Toggle.propTypes = {
   toggleTheme: func,

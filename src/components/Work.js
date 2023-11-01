@@ -15,14 +15,15 @@ const ImageWrap = styled.div`
   }
 `;
 
-function Work() {
+const Work = () => {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState();
 
-  function toggleModal(e) {
+  const toggleModal = (e) => {
     setImage(e.target.alt);
     setModal(!modal);
-  }
+  };
+
   return (
     <section id="work">
       <Title titleText={config.sections.work.title} />
@@ -43,6 +44,6 @@ function Work() {
       {modal ? <Modal alt={image} toggleModal={toggleModal} /> : null}
     </section>
   );
-}
+};
 
 export default Work;

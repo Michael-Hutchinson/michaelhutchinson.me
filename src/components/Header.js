@@ -14,7 +14,7 @@ const Top = styled.header`
   z-index: 20;
 `;
 
-function Header(props) {
+const Header = (props) => {
   const [scroll, setScroll] = useState(false);
 
   const handleScroll = () => {
@@ -41,7 +41,7 @@ function Header(props) {
       <Navbar currentTheme={theme} toggleTheme={toggleTheme} />
     </Top>
   );
-}
+};
 
 Header.propTypes = {
   theme: string.isRequired,

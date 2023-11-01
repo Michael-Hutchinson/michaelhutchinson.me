@@ -55,40 +55,38 @@ const Icon = styled.ul`
     }
 `;
 
-function Social() {
-  return (
-    <Wrapper>
-      <Icon>
-        <li>
-          <a
-            href={config.socialMedia.twitter.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaTwitter />
-          </a>
-        </li>
-        <li>
-          <a
-            href={config.socialMedia.github.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaGithub />
-          </a>
-        </li>
-        <li>
-          <a
-            href={config.socialMedia.linkedin.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaLinkedinIn />
-          </a>
-        </li>
-      </Icon>
-    </Wrapper>
-  );
-}
+const Social = () => (
+  <Wrapper>
+    <Icon>
+      <li>
+        <a
+          href={config.socialMedia.twitter.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaTwitter />
+        </a>
+      </li>
+      <li>
+        <a
+          href={config.socialMedia.github.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaGithub />
+        </a>
+      </li>
+      <li>
+        <a
+          href={config.socialMedia.linkedin.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaLinkedinIn />
+        </a>
+      </li>
+    </Icon>
+  </Wrapper>
+);
 
 export default Social;

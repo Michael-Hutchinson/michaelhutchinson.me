@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-function Darkmode() {
+const Darkmode = () => {
   const [theme, setTheme] = useState('light');
 
   const setMode = (mode) => {
@@ -20,8 +20,7 @@ function Darkmode() {
     const localTheme = window.localStorage.getItem('theme');
 
     if (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches &&
+      window.matchMedia?.('(prefers-color-scheme: dark)')?.matches &&
       !localTheme
     ) {
       setMode('dark');
@@ -32,6 +31,6 @@ function Darkmode() {
     }
   });
   return [theme, themeToggler];
-}
+};
 
 export default Darkmode;

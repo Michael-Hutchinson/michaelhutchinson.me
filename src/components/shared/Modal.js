@@ -48,7 +48,7 @@ const ModalButton = styled.input`
   }
 `;
 
-function Modal(props) {
+const Modal = (props) => {
   const { alt, toggleModal } = props;
   const [image, setImage] = useState();
   useEffect(() => {
@@ -68,7 +68,7 @@ function Modal(props) {
       </ModalOpen>
     </Wrapper>
   );
-}
+};
 
 Modal.propTypes = {
   alt: string.isRequired,
