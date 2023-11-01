@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import styled from 'styled-components';
 import emailjs from 'emailjs-com';
 import config from '../../data/config.json';
@@ -65,14 +65,15 @@ const SendButton = styled.input`
 const Form = () => {
   const [message, setMessage] = useState('');
 
-  const sendEmail = (e) => {
+  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
+    const target = e.target as HTMLFormElement;
     e.preventDefault();
 
     emailjs
       .sendForm(
         'service_n4cgb86',
         'template_tjcmx0d',
-        e.target,
+        target,
         'user_sT5IC7cV94BXANfidUr3y'
       )
       .then(
@@ -83,7 +84,7 @@ const Form = () => {
           setMessage(config.contactForm.errorMessage);
         }
       );
-    e.target.reset();
+    target.reset();
   };
 
   return (
@@ -98,7 +99,7 @@ const Form = () => {
           required
         />
       </Fields>
-      <MessageBox name="message" placeholder="Message" rows="8" required />
+      <MessageBox name="message" placeholder="Message" required />
       <SendButton type="submit" value="Send message" />
       <p>{message}</p>
     </Contact>
