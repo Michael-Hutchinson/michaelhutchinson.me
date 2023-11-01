@@ -1,5 +1,4 @@
 import React from 'react';
-import { func, string } from 'prop-types';
 import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import Button from './Button';
@@ -86,36 +85,35 @@ const Links = styled.a`
   }
 `;
 
-const Navbar = (props) => {
-  const { currentTheme, toggleTheme } = props;
-  return (
-    <Nav>
-      <Input id="nav-responsive" />
-      <div>
-        <Toggle currentTheme={currentTheme} toggleTheme={toggleTheme} />
-      </div>
-      <div>
-        <Label htmlFor="nav-responsive">
-          <FaBars />
-        </Label>
-      </div>
-      <MobileLinks>
-        {Object.values(config.sections).map((link) =>
-          link.url ? (
-            <Links key={link.id} href={link.url}>
+interface NavbarProps {
+  toggleTheme: () => void;
+}
+
+const Navbar = ({ toggleTheme }: NavbarProps) => (
+  <Nav>
+    <Input id="nav-responsive" />
+    <div>
+      <Toggle toggleTheme={toggleTheme} />
+    </div>
+    <div>
+      <Label htmlFor="nav-responsive">
+        <FaBars />
+      </Label>
+    </div>
+    <MobileLinks>
+      {Object.values(config.sections).map((link, index) => {
+        if ('url' in link) {
+          return link.url ? (
+            <Links key={index} href={link.url}>
               {link.nav}
             </Links>
-          ) : null
-        )}
-        <Button links={cv} buttonText="Download My CV" />
-      </MobileLinks>
-    </Nav>
-  );
-};
-
-Navbar.propTypes = {
-  currentTheme: string.isRequired,
-  toggleTheme: func.isRequired,
-};
+          ) : null;
+        }
+        return null;
+      })}
+      <Button links={cv} buttonText="Download My CV" />
+    </MobileLinks>
+  </Nav>
+);
 
 export default Navbar;
