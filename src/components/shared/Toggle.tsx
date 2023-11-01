@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useEffect, useState } from 'react';
-import { func } from 'prop-types';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import styled from 'styled-components';
 import Switch from 'react-switch';
@@ -20,7 +19,11 @@ const DarkIcon = styled(LightIcon)`
   padding-right: 0;
 `;
 
-const Toggle = ({ toggleTheme }) => {
+interface ToggleProps {
+  toggleTheme: () => void;
+}
+
+const Toggle = ({ toggleTheme }: ToggleProps) => {
   const [themeToggler] = Darkmode();
   const [checked, setChecked] = useState(false);
   useEffect(() => {
@@ -30,7 +33,7 @@ const Toggle = ({ toggleTheme }) => {
       setChecked(true);
     }
   });
-  const handleChange = (nextChecked) => {
+  const handleChange = (nextChecked: boolean) => {
     setChecked(nextChecked);
     toggleTheme();
   };
@@ -50,14 +53,6 @@ const Toggle = ({ toggleTheme }) => {
       }
     />
   );
-};
-
-Toggle.propTypes = {
-  toggleTheme: func,
-};
-
-Toggle.defaultProps = {
-  toggleTheme: func,
 };
 
 export default Toggle;
