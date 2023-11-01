@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { func, string } from 'prop-types';
 import Navbar from './shared/Navbar';
 
 const Top = styled.header`
@@ -14,7 +13,11 @@ const Top = styled.header`
   z-index: 20;
 `;
 
-const Header = (props) => {
+interface HeaderProps {
+  toggleTheme: () => void;
+}
+
+const Header = ({ toggleTheme }: HeaderProps) => {
   const [scroll, setScroll] = useState(false);
 
   const handleScroll = () => {
@@ -35,17 +38,11 @@ const Header = (props) => {
     navClass.push('navBackground');
   }
 
-  const { theme, toggleTheme } = props;
   return (
     <Top className={navClass.join()}>
-      <Navbar currentTheme={theme} toggleTheme={toggleTheme} />
+      <Navbar toggleTheme={toggleTheme} />
     </Top>
   );
-};
-
-Header.propTypes = {
-  theme: string.isRequired,
-  toggleTheme: func.isRequired,
 };
 
 export default Header;
