@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ThemeProvider } from 'styled-components';
 import Particles from 'react-tsparticles';
+import { loadSlim } from 'tsparticles-slim';
 import Header from './components/Header';
 import Home from './components/Home';
 import About from './components/About';
@@ -16,9 +17,14 @@ const App = () => {
   const [theme, themeToggler] = Darkmode();
   const themeMode = theme === 'light' ? lightTheme : darkTheme;
 
+  const particlesInit = useCallback(async (engine) => {
+    await loadSlim(engine);
+  }, []);
+
   return (
     <ThemeProvider theme={themeMode}>
       <Particles
+        init={particlesInit}
         id="tsparticles"
         options={{
           fpsLimit: 120,
