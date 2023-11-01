@@ -48,17 +48,24 @@ const ModalButton = styled.input`
   }
 `;
 
-const Modal = (props) => {
-  const { alt, toggleModal } = props;
-  const [image, setImage] = useState();
+interface ModalProps {
+  alt: string;
+  toggleModal: (
+    e:
+      | React.MouseEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>
+  ) => void;
+}
+
+const Modal = ({ alt, toggleModal }: ModalProps) => {
+  const [image, setImage] = useState('');
+
   useEffect(() => {
-    if (toggleModal) {
-      images.forEach((img) => {
-        if (alt === img[1]) {
-          setImage(img[2]);
-        }
-      });
-    }
+    images.forEach((img) => {
+      if (alt === img[1]) {
+        setImage(img[2]);
+      }
+    });
   });
   return (
     <Wrapper>
