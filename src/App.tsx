@@ -88,7 +88,7 @@ const App = () => {
         }}
       />
       <GlobalStyle />
-      <Header theme={theme} toggleTheme={themeToggler} />
+      <Header toggleTheme={themeToggler} />
       <main>
         <Home />
         <About />
