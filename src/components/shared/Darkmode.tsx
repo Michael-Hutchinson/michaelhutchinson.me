@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const Darkmode = () => {
+const Darkmode = (): [string, () => void] => {
   const [theme, setTheme] = useState('light');
 
   const setMode = (mode: 'light' | 'dark') => {
