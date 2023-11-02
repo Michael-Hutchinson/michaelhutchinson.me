@@ -1,7 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import Particles from 'react-tsparticles';
-import { loadSlim } from 'tsparticles-slim';
 import Header from './components/Header';
 import Home from './components/Home';
 import About from './components/About';
@@ -11,83 +9,17 @@ import Email from './components/shared/Email';
 import Footer from './components/Footer';
 import GlobalStyle from './styles/globalStyles';
 import Darkmode from './hooks/Darkmode';
+import Particle from './components/Particles/Particles';
 import { lightTheme, darkTheme } from './styles/theme';
 
 const App = () => {
   const [theme, themeToggler] = Darkmode();
   const themeMode = theme === 'light' ? lightTheme : darkTheme;
 
-  const particlesInit = useCallback(async (engine) => {
-    await loadSlim(engine);
-  }, []);
-
   return (
     <ThemeProvider theme={themeMode}>
-      <Particles
-        init={particlesInit}
-        id="tsparticles"
-        options={{
-          fpsLimit: 120,
-          interactivity: {
-            events: {
-              onhover: {
-                enable: true,
-                mode: 'bubble',
-              },
-              onclick: {
-                enable: true,
-                mode: 'repulse',
-              },
-            },
-            modes: {
-              bubble: {
-                distance: 250,
-                duration: 2,
-                size: 0,
-                opacity: 0,
-              },
-              repulse: {
-                distance: 400,
-                duration: 4,
-              },
-            },
-          },
-          particles: {
-            move: {
-              direction: 'none',
-              enable: true,
-              outModes: {
-                default: 'bounce',
-              },
-              random: true,
-              speed: 6,
-              straight: false,
-            },
-            number: {
-              value: 160,
-              density: {
-                enable: false,
-              },
-            },
-            opacity: {
-              value: 0.5,
-            },
-            shape: {
-              type: 'circle',
-            },
-            size: {
-              value: 3,
-              random: true,
-              anim: {
-                speed: 4,
-                size_min: 0.3,
-              },
-            },
-          },
-          detectRetina: true,
-        }}
-      />
       <GlobalStyle />
+      <Particle />
       <Header toggleTheme={themeToggler} />
       <main>
         <Home />
