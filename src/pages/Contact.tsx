@@ -1,7 +1,7 @@
 import React from 'react';
 import config from '../data/config.json';
-import Title from './shared/Title';
-import Form from './shared/Form';
+import Title from '../components/Title/Title';
+import Form from '../components/Form/Form';
 
 const Contact = () => (
   <section id="contact">

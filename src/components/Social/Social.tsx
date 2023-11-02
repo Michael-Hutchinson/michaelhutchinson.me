@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaTwitter, FaGithub, FaLinkedinIn } from 'react-icons/fa';
+import { FaGithub, FaLinkedinIn } from 'react-icons/fa';
 import styled from 'styled-components';
 import config from '../../data/config.json';
 
@@ -58,15 +58,6 @@ const Icon = styled.ul`
 const Social = () => (
   <Wrapper>
     <Icon>
-      <li>
-        <a
-          href={config.socialMedia.twitter.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaTwitter />
-        </a>
-      </li>
       <li>
         <a
           href={config.socialMedia.github.url}

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from './shared/Button';
+import Button from '../components/Button/Button';
 import config from '../data/config.json';
 
 const Name = styled.h5`

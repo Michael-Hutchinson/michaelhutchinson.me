@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import config from '../data/config.json';
-import Title from './shared/Title';
+import Title from '../components/Title/Title';
 import images from '../images';
-import Modal from './shared/Modal';
+import Modal from '../components/Modal/Modal';
 
 const ImageWrap = styled.div`
   display: grid;

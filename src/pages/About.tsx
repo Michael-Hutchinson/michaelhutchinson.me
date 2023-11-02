@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import config from '../data/config.json';
-import Title from './shared/Title';
+import Title from '../components/Title/Title';
 import logo from '../images/me.png';
 
 const Wrap = styled.div`

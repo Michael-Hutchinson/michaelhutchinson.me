@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import config from '../data/config.json';
-import Social from './shared/Social';
+import config from '../../data/config.json';
+import Social from '../Social/Social';
 
 const Bottom = styled.footer`
   padding: 0.625rem 0 2.5rem 0;
