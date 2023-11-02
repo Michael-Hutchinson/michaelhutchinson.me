@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import styled from 'styled-components';
 import Switch from 'react-switch';
-import Darkmode from './Darkmode';
+import Darkmode from '../../hooks/Darkmode';
 
 const LightIcon = styled.div`
   align-items: center;

@@ -10,7 +10,7 @@ import Contact from './components/Contact';
 import Email from './components/shared/Email';
 import Footer from './components/Footer';
 import GlobalStyle from './styles/globalStyles';
-import Darkmode from './components/shared/Darkmode';
+import Darkmode from './hooks/Darkmode';
 import { lightTheme, darkTheme } from './styles/theme';
 
 const App = () => {
