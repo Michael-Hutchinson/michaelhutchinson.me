@@ -10,7 +10,6 @@ describe('Form', () => {
   it('Renders Form and checks form fields', async () => {
     const { getByPlaceholderText } = render(<Form />);
 
-    // Check if form fields are present
     const nameField = getByPlaceholderText('Name');
     const emailField = getByPlaceholderText('Email');
     const subjectField = getByPlaceholderText('Subject');
@@ -36,7 +35,6 @@ describe('Form', () => {
     const user = userEvent.setup();
     const { getByPlaceholderText } = render(<Form />);
 
-    // Check if form fields are empty
     const nameField = getByPlaceholderText('Name');
     const emailField = getByPlaceholderText('Email');
     const subjectField = getByPlaceholderText('Subject');
@@ -71,7 +69,6 @@ describe('Form', () => {
     const user = userEvent.setup();
     const { getByPlaceholderText } = render(<Form />);
 
-    // Check if form fields are empty
     const nameField = getByPlaceholderText('Name');
     const emailField = getByPlaceholderText('Email');
     const subjectField = getByPlaceholderText('Subject');
