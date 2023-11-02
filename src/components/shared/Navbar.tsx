@@ -101,10 +101,10 @@ const Navbar = ({ toggleTheme }: NavbarProps) => (
       </Label>
     </div>
     <MobileLinks>
-      {Object.values(config.sections).map((link, index) => {
+      {Object.values(config.sections).map((link) => {
         if ('url' in link) {
           return link.url ? (
-            <Links key={index} href={link.url}>
+            <Links key={link.id} href={link.url}>
               {link.nav}
             </Links>
           ) : null;
