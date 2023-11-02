@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import config from '../data/config.json';
 import Title from '../components/Title/Title';
 import images from '../images';
@@ -21,10 +22,10 @@ const Work = () => {
 
   const toggleModal = (
     e:
-      | React.MouseEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLImageElement | HTMLInputElement>
+      | React.KeyboardEvent<HTMLImageElement | HTMLInputElement>
   ) => {
-    const target = e.target as HTMLInputElement;
+    const target = e.currentTarget;
 
     setImage(target.alt);
     setModal(!modal);
@@ -36,8 +37,7 @@ const Work = () => {
       <h3>{config.sections.work.h3}</h3>
       <ImageWrap>
         {images.map((img) => (
-          <input
-            type="image"
+          <LazyLoadImage
             className="modalImage"
             onClick={toggleModal}
             onKeyPress={toggleModal}

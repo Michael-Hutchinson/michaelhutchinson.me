@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import config from '../data/config.json';
 import Title from '../components/Title/Title';
 import logo from '../images/me.png';
@@ -35,7 +36,7 @@ const ListItems = styled.ul`
   }
 `;
 
-const Logo = styled.img`
+const Logo = styled(LazyLoadImage)`
   width: 100%;
   border: 0.063rem solid ${({ theme }) => theme.link};
   border-radius: 0.25rem;
