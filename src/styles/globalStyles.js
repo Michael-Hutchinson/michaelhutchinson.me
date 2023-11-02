@@ -86,6 +86,7 @@ const GlobalStyle = createGlobalStyle`
     border: 0.063rem solid ${({ theme }) => theme.link};
     border-radius: 0.25rem;
     padding: 0.313rem;
+    cursor: pointer;
   }
 `;
 
