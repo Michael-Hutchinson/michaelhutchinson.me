@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import styled from 'styled-components';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 import config from '../../data/config.json';
 
 const Contact = styled.form`

@@ -1,10 +1,10 @@
 import React from 'react';
-import emailjs, { EmailJSResponseStatus } from 'emailjs-com';
+import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import { render, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Form from './Form';
 
-jest.mock('emailjs-com');
+jest.mock('@emailjs/browser');
 
 describe('Form', () => {
   it('Renders Form and checks form fields', async () => {
