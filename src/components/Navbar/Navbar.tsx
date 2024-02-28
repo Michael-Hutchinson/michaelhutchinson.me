@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FaBars } from 'react-icons/fa';
 import Button from '../Button/Button';
 import Toggle from '../Toggle/Toggle';
-import cv from '../../data/MH-CV.pdf';
+import cv from '../../data/CV.pdf';
 import config from '../../data/config.json';
 
 const Nav = styled.nav`
