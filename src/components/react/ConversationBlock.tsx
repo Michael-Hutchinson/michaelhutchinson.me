@@ -72,7 +72,7 @@ export default function ConversationBlock({
           {cmd.displayText}
           {phase === PHASE.TYPING && !cmd.isDone && (
             <span
-              className="inline-block w-2 h-[1.0625rem] align-text-bottom ml-px"
+              className="inline-block w-2 h-4.5 align-text-bottom ml-px"
               style={{ background: 'var(--color-accent)', animation: 'blink 1s step-end infinite' }}
             />
           )}

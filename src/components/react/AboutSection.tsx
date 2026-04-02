@@ -76,7 +76,7 @@ export default function AboutSection() {
                   {dailyTech.map((tech, i) => (
                     <span
                       key={tech}
-                      className={`px-2 py-0.5 border border-transparent rounded text-[0.6875rem] hover:border-[rgba(177,151,252,0.2)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+                      className={`px-2 py-0.5 border border-transparent rounded text-[0.6875rem] hover:border-border-hover transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
                       style={{ background: 'color-mix(in srgb, var(--color-accent) 8%, transparent)', color: 'var(--color-accent)', transitionDelay: `${0.5 + i * 0.03}s` }}
                     >
                       {tech}
