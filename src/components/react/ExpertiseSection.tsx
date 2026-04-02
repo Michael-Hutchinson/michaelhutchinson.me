@@ -72,18 +72,19 @@ export default function ExpertiseSection() {
                 `}
                 style={{ transitionDelay: `${0.15 + i * 0.1}s` }}
                 onMouseMove={handleMouseMove}
+                role="article"
               >
                 {/* Mouse-tracking glow */}
-                <div data-glow className="absolute inset-0 pointer-events-none z-[1] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div data-glow className="absolute inset-0 pointer-events-none z-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Top shimmer accent */}
                 <div
-                  className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_2s_linear_infinite] transition-opacity duration-300 z-[2]"
+                  className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_2s_linear_infinite] transition-opacity duration-300 z-2"
                   style={{ background: area.accent, backgroundSize: '200% 100%' }}
                 />
 
                 {/* Header */}
-                <div className="flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide relative z-[2]">
+                <div className="flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide relative z-2">
                   <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={badgeStyles[area.variant]}>
                     {area.badge}
                   </span>
@@ -91,7 +92,7 @@ export default function ExpertiseSection() {
                 </div>
 
                 {/* Body */}
-                <div className="p-5 relative z-[2]">
+                <div className="p-5 relative z-2">
                   <h3 className="text-[1.0625rem] font-semibold mb-2.5 font-sans text-text">{area.title}</h3>
                   <p className="text-[0.8125rem] text-text-secondary leading-relaxed mb-4">{area.description}</p>
                   <div className="flex flex-wrap gap-1.5">

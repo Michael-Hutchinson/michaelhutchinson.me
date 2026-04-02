@@ -19,7 +19,7 @@ export default function Footer() {
         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)' }}>
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-accent-green)', boxShadow: '0 0 6px rgba(105,219,124,0.4)' }} />
           claude-opus-4.6
-        </span>
+        </span>{' '}
         <span className="hidden sm:inline" style={{ color: 'var(--color-border)' }}>|</span>
         <a href="mailto:michael-hutchinson@hotmail.co.uk" className="hidden sm:inline hover:text-text transition-colors">michael-hutchinson@hotmail.co.uk</a>
       </div>

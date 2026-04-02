@@ -57,7 +57,7 @@ export default function HeroTerminal() {
   const thinkingExiting = phase === PHASE.THINKING_EXIT;
 
   return (
-    <div className="relative max-w-[52rem] animate-[terminal-enter_0.8s_cubic-bezier(0.16,1,0.3,1)_0.15s_both]">
+    <div className="relative max-w-208 animate-[terminal-enter_0.8s_cubic-bezier(0.16,1,0.3,1)_0.15s_both]">
       {/* Rotating gradient border */}
       <div
         className="absolute -inset-px rounded-lg opacity-60 hover:opacity-100 transition-opacity duration-300"
@@ -113,8 +113,7 @@ export default function HeroTerminal() {
               <span className="w-[5px] h-[5px] rounded-full bg-accent animate-[dot-bounce_1.2s_ease-in-out_infinite]" />
               <span className="w-[5px] h-[5px] rounded-full bg-accent animate-[dot-bounce_1.2s_ease-in-out_infinite_0.15s]" />
               <span className="w-[5px] h-[5px] rounded-full bg-accent animate-[dot-bounce_1.2s_ease-in-out_infinite_0.3s]" />
-            </span>
-            Searching files...
+            </span>{' '}Searching files...
           </div>
 
           {/* Name + role output */}
@@ -164,8 +163,7 @@ export default function HeroTerminal() {
               ))}
               <span className={`text-text-muted transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2.5'}`} style={{ transitionDelay: '0.28s' }}>status:</span>
               <span className={`text-text transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2.5'}`} style={{ transitionDelay: '0.28s' }}>
-                <span className="inline-block w-[7px] h-[7px] rounded-full bg-accent-green shadow-[0_0_8px_rgba(105,219,124,0.4)] mr-1.5 align-middle" />
-                Open to opportunities
+                <span className="inline-block w-[7px] h-[7px] rounded-full bg-accent-green shadow-[0_0_8px_rgba(105,219,124,0.4)] mr-1.5 align-middle" />{' '}Open to opportunities
               </span>
             </div>
           </div>

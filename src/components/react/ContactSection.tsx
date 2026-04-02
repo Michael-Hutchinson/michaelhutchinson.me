@@ -29,8 +29,7 @@ export default function ContactSection() {
               style={staggerStyle(0, 0.15)}
             >
               <div className="flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted">
-                <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent-2) 10%, transparent)', color: 'var(--color-accent-2)' }}>Edit</span>
-                ~/contact/new-message.yml
+                <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent-2) 10%, transparent)', color: 'var(--color-accent-2)' }}>Edit</span>{' '}~/contact/new-message.yml
               </div>
               <div className="p-5">
                 <ContactForm />
