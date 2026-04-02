@@ -1,0 +1,97 @@
+---
+title: "My Claude Code Setup for Full-Stack Development"
+description: "The exact Claude Code workflow I use daily as a Staff Engineer — from CLAUDE.md configuration to hooks, custom slash commands, and the prompting patterns that actually work."
+date: "2026-04-20"
+tags: ["Claude Code", "Tooling", "Workflow"]
+published: false
+---
+
+I get asked about my Claude Code setup constantly. Rather than repeating myself in Slack threads, here is the full picture — the configuration, the workflows, and the habits that make it work day-to-day as my primary development tool.
+
+## Why Claude Code
+
+I have tried most of the AI coding tools at this point. Copilot, Cursor, Cody, various chat wrappers. Claude Code won out for a few reasons: it operates in my terminal where I already live, it has genuine agentic capabilities (reading files, running commands, editing code across multiple files), and the `CLAUDE.md` system gives me fine-grained control over its behaviour without leaving my repo.
+
+The deciding factor was how well it handles *multi-file changes*. Most AI tools are great at single-file edits. Claude Code can reason across an entire feature — models, API routes, frontend components, tests — in a single session. For full-stack work, that matters enormously.
+
+## CLAUDE.md: the foundation
+
+The `CLAUDE.md` file is the single most important piece of your Claude Code setup. It sits in your project root and gives Claude persistent context about your codebase, conventions, and preferences. Think of it as onboarding documentation, but for your AI pair programmer.
+
+Here is what goes in mine:
+
+**Project architecture.** A concise description of the tech stack, directory structure, and how the pieces fit together. Not a novel — just enough that Claude understands where things live. Something like: "Next.js 14 app router, Drizzle ORM with Postgres, tRPC for API layer, Tailwind for styling. Feature code lives in `src/features/`, shared components in `src/components/ui/`."
+
+**Conventions and patterns.** This is where you encode your team's opinions. Naming conventions, file organisation rules, preferred patterns. I include things like: "Use `server actions` for mutations, not API routes. All database queries go through the repository pattern in `src/lib/db/`. Error handling uses `Result` types, never thrown exceptions in business logic."
+
+**Commands and workflows.** The exact commands for running tests (`pnpm test`), linting (`pnpm lint --fix`), building (`pnpm build`), and deploying. Claude Code uses these when it needs to verify its work.
+
+**What does not go in.** Anything that changes frequently, anything overly verbose, and anything that duplicates what Claude can read from your actual code. Do not paste your entire API schema in there. Do not write paragraphs about obvious things. Keep it under 200 lines. If your `CLAUDE.md` is longer than your README, trim it.
+
+I also use the tiered approach: a root `CLAUDE.md` for project-wide context, and smaller `.claude/` scoped files in subdirectories for feature-specific guidance. The frontend team's conventions are different from the infrastructure code, and the configuration should reflect that.
+
+## Hooks: automating the guardrails
+
+Claude Code hooks let you run scripts at specific points in the workflow. These are configured in your `.claude/settings.json` and they run automatically — Claude does not decide whether to skip them.
+
+My essential hooks:
+
+**Pre-commit validation.** Before any commit, I run the linter and type checker. This catches the moments where Claude generates code that is syntactically correct but violates a project-specific ESLint rule or has a type mismatch it did not notice. The hook runs `pnpm lint --fix && pnpm tsc --noEmit` and blocks the commit if either fails.
+
+**Post-edit formatting.** After Claude edits files, Prettier runs automatically on the changed files. This eliminates the "Claude used different formatting" problem entirely. No more bikeshedding about semicolons with your AI.
+
+**Test runner on change.** For test files, I have a hook that runs the relevant test suite after edits. Claude gets immediate feedback about whether its changes broke something, and it can self-correct without me intervening.
+
+The pattern here is simple: use hooks to enforce the standards you would enforce in code review. Catch problems at edit time, not PR time.
+
+## Prompting patterns that actually work
+
+After hundreds of hours with Claude Code, these are the patterns that consistently produce good results:
+
+**Start with context, then intent, then constraints.** Bad: "Add a search feature." Good: "We have a products table with 50k rows, already indexed on `name` and `category`. Add full-text search to the existing `GET /api/products` endpoint. Use the Postgres `tsvector` approach we use in the orders service. Keep the response shape the same — just add a `q` query param."
+
+**Reference existing code explicitly.** "Follow the same pattern as `src/features/orders/actions.ts`" is worth a hundred words of description. Claude Code will read that file and match the patterns. This is the single most effective prompting technique I use.
+
+**Break large tasks into checkpoints.** Instead of "build the entire user dashboard," I go step by step: "First, create the data fetching layer for user stats. Use the repository pattern from `src/lib/db/`. I will review before we move to the UI." This gives you natural review points and prevents Claude from going too far down a wrong path.
+
+**State what you do not want.** "Do not add any new dependencies. Do not modify the existing API contract. Do not refactor unrelated code." Negative constraints are surprisingly effective at keeping the output focused.
+
+## Task-specific workflows
+
+**Greenfield features.** I start by describing the feature in plain English, pointing to similar existing features for patterns, and letting Claude scaffold the full vertical slice — database schema, repository, API route, frontend component, and tests. I review the scaffold, then iterate on specifics.
+
+**Debugging.** This is where Claude Code genuinely shines. I paste the error, point it at the relevant files, and say "investigate." It reads the code, forms hypotheses, checks related files, and usually identifies the root cause faster than I would. For production issues, I pipe in the relevant logs and let it correlate.
+
+**Refactoring.** Perfect AI task. "Migrate all uses of the old `UserService` class to the new `userRepository` pattern. Here is the mapping between old methods and new functions." Claude handles the mechanical work across dozens of files while I review the diffs.
+
+**Code review.** I use Claude Code to get a first-pass review before requesting human review. "Review the changes in the last commit. Focus on error handling, edge cases, and anything that violates the patterns in CLAUDE.md." It catches real issues — missing null checks, inconsistent error handling, forgotten loading states.
+
+## MCP server integration
+
+This is the setup that surprises people. I run MCP servers that connect Claude Code to our internal tooling — Jira for ticket context, our deployment platform for service status, and our internal documentation wiki. When I say "pick up PROJ-1234," Claude reads the ticket, understands the requirements, checks the relevant service's current state, and starts working with full context.
+
+The setup lives in `.claude/settings.json` under `mcpServers`. Each server is a small process that exposes tools Claude can call. The investment in setting these up pays back immediately — it eliminates the copy-paste-context dance that slows down every AI interaction.
+
+## When to drive vs when to delegate
+
+This is the judgment call that takes practice. My rules of thumb:
+
+**Let Claude drive** when the task is well-defined, has clear patterns to follow, and involves more typing than thinking. CRUD features, test writing, boilerplate, migrations, documentation.
+
+**Take over** when the task requires architectural decisions, involves ambiguous requirements, or touches code where a subtle mistake has outsized consequences. Security-critical paths, data migration logic, performance-sensitive code.
+
+**Pair actively** when you are exploring a solution space. Use Claude Code as a thinking partner — describe the problem, ask for options, discuss tradeoffs. This is surprisingly effective for design work.
+
+## Tips for getting the most out of it
+
+**Keep your CLAUDE.md current.** Treat it like living documentation. When you establish a new pattern, add it. When you deprecate an approach, remove it. Stale instructions cause stale output.
+
+**Use `git diff` as your review tool.** After every Claude Code session, review the diff before committing. This is your quality gate. Reading diffs is faster than reading code from scratch, and it is where you will catch the occasional mistake.
+
+**Do not fight the tool.** If Claude Code keeps doing something you do not want, the problem is usually in your instructions, not in the model. Improve your `CLAUDE.md` or your prompt before assuming the tool is broken.
+
+**Invest in your MCP setup.** Every manual context-gathering step you automate away makes the entire workflow faster. The first MCP server takes a couple of hours. After that, each new one takes minutes.
+
+**Run Claude Code in your actual environment.** Not a sandbox, not a container — your real dev environment with your real tools. It needs access to your test runner, your linter, your database. The closer its environment matches yours, the better its output.
+
+Six months into using Claude Code as my primary development tool, I cannot imagine going back. The setup described here took time to dial in, but the compound returns are real. If you are on the fence, start with the `CLAUDE.md` file and one good hook. The rest will follow naturally.

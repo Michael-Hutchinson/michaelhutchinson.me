@@ -1,0 +1,103 @@
+---
+title: "The Staff Engineer's Guide to Evaluating AI Tools"
+description: "A practical framework for cutting through AI hype — how to evaluate tools, measure real impact, and avoid the trap of adopting everything that ships."
+date: "2026-04-14"
+tags: ["AI", "Staff Engineer", "Strategy"]
+published: false
+---
+
+Every week there's a new AI tool that's going to "revolutionise your workflow." Every week, someone on the team wants to try it. And every week, the actual work still needs to get done.
+
+As a Staff Engineer, I've spent the last year as the unofficial AI tool gatekeeper for multiple teams. I've evaluated dozens of tools, sat through countless demos, and watched the hype cycle chew through engineering time like nothing else. Most tools don't survive contact with a real codebase. The ones that do earn their place by being genuinely useful, not by having the best landing page.
+
+Here's the framework I use to separate signal from noise.
+
+## The problem nobody talks about
+
+The bottleneck in AI adoption isn't finding tools. It's the opportunity cost of evaluating them.
+
+Every tool evaluation costs real engineering hours. Setting up authentication, learning the interface, adapting it to your stack, figuring out if the demo-quality output holds up on your actual messy production code. Multiply that by the rate new tools ship and you've got a serious time sink disguised as "staying current."
+
+The engineers who try everything finish nothing. The teams that adopt every shiny tool end up with a fragmented workflow and half a dozen abandoned integrations cluttering their stack. You need a filter, and you need it before you spin up the free trial.
+
+## The evaluation framework
+
+I use three lenses for every AI tool that crosses my desk. In order of importance:
+
+### 1. Integration cost
+
+Not capability. Integration cost comes first. The most powerful tool in the world is useless if it takes two weeks to wire into your workflow and requires everyone to change how they work.
+
+Questions I ask: Does it work with our existing editor, CI, and deployment setup? Does it require a new context switch or does it meet engineers where they already are? What breaks if the tool goes down or the API changes?
+
+If the integration cost is high, the tool needs to be proportionally transformative to justify it. Most aren't.
+
+### 2. Measurable impact
+
+"It feels faster" is not a metric. Before any evaluation, I define what we're measuring: cycle time on PRs, bug escape rate, time spent on boilerplate, lines of test coverage added per sprint. Pick one or two metrics that matter for the specific problem the tool claims to solve.
+
+Then measure. With the tool, and without it. On real work, not toy examples.
+
+I've seen tools that look incredible in demos but deliver single-digit percentage improvements on actual codebases. I've also seen unglamorous tools that quietly shave 30% off code review time. The numbers rarely match the marketing.
+
+### 3. Raw capability
+
+Yes, capability matters. But it's third on the list for a reason. A tool with 90% of the capability of the market leader but half the integration cost and better measurability wins every time. Engineers optimise for the wrong thing when they chase the "best" model or the "most features." What you want is the best tool *for your specific workflow and constraints.*
+
+## Red flags that scream hype
+
+After enough evaluations, patterns emerge. Here's what makes me immediately skeptical:
+
+**Demo-only workflows.** If every example is a greenfield todo app or a standalone script, run. Real engineering involves legacy code, complex dependencies, and organisational constraints. If the tool can't show me results on a messy, real-world codebase, it probably doesn't have any.
+
+**Vague metrics.** "10x developer productivity" means nothing. Productivity at what? Measured how? Over what timeframe? If the vendor can't give you specific, reproducible benchmarks, they don't have them.
+
+**Constant pivots.** If the tool was a code completion engine last month, an autonomous agent this month, and will be an "AI platform" next month, the team is chasing trends rather than solving a specific problem well.
+
+**No escape hatch.** Tools that want to own your entire workflow, require proprietary formats, or make it painful to leave are optimising for lock-in, not for your productivity.
+
+## What actually matters: workflow integration over raw power
+
+The single most important insight from a year of evaluations: **the tools that stick are the ones that disappear into existing workflows.**
+
+Engineers don't want a new thing to learn. They want the thing they already do to work better. The AI tools that survived on my teams are the ones that operate inside the editor, inside the terminal, inside the PR review flow. They reduce friction rather than add a new step.
+
+Claude Code works for me because it lives in the terminal where I already am. It doesn't ask me to context-switch to a browser, paste code into a chat window, and then paste the result back. That sounds like a small thing. It's not. It's the entire difference between a tool that gets used daily and one that gets used once during setup.
+
+## How to run a proper evaluation
+
+Here's the process I enforce:
+
+**Time-box it.** Two weeks maximum. If a tool can't demonstrate value in two weeks of real use, it won't demonstrate value in two months. You'll just spend longer rationalising the sunk cost.
+
+**Pick a specific use case.** Not "general productivity." Something concrete: "reduce time to write integration tests for our payment service" or "speed up code review turnaround for the mobile team."
+
+**Assign one owner.** Not the whole team. One engineer uses it seriously for the evaluation period and reports back with data. Whole-team rollouts before validation are how you end up with tools nobody uses but everyone pays for.
+
+**Measure honestly.** Include setup time, learning curve, and workflow disruption in the cost. A tool that saves 20 minutes per day but took 3 days to configure doesn't break even for months. Be honest about whether the time savings are real or just perceived.
+
+**Kill it if it doesn't work.** This is the hardest part. Engineers get attached to tools. Sunk cost is real. If the data says it's not worth it, move on. There will be another tool next week anyway.
+
+## The tools that survived
+
+After a year of evaluation, my team's AI stack is remarkably small:
+
+- **Claude Code** for daily development and complex problem-solving. Survived because it integrates into terminal workflows with zero friction.
+- **AI-powered code review in CI** via custom agents. Survived because it runs automatically and catches real issues without adding process.
+- **MCP-connected tools** for internal system access. Survived because they let AI work with our actual infrastructure instead of operating in a vacuum.
+
+That's it. Three categories. We evaluated over thirty tools to get here. The rest either didn't integrate cleanly, didn't move the metrics, or created more work than they saved.
+
+## When to build vs buy
+
+Sometimes the right tool doesn't exist. When a team has a specific enough workflow, building a custom integration often beats buying a general-purpose tool.
+
+My rule of thumb: **buy when the problem is generic, build when the problem is specific to your organisation.** Code completion is generic — buy it. Connecting AI to your internal deployment system with its specific quirks and permissions model — build it.
+
+Building also gives you control. No vendor pivots, no surprise pricing changes, no dependency on someone else's roadmap. For critical workflow tools, that control is worth the upfront investment.
+
+## The bottom line
+
+The AI tools landscape will keep moving fast. New products will keep shipping. The hype cycle will keep cycling. Your job as a Staff Engineer isn't to evaluate everything — it's to build a framework that lets you evaluate efficiently and adopt deliberately.
+
+Be skeptical by default. Measure everything. Optimise for workflow integration over raw capability. And remember that the best AI tool is the one your team actually uses every day, not the one with the most impressive demo.

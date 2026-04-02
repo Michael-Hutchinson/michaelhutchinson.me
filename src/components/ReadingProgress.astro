@@ -1,0 +1,43 @@
+<!-- Reading progress bar + back to top button -->
+<div id="reading-progress" class="fixed top-0 left-0 right-0 h-[2px] z-[200] pointer-events-none">
+  <div id="progress-bar" class="h-full w-0 transition-[width] duration-100" style="background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3));"></div>
+</div>
+
+<button
+  id="back-to-top"
+  aria-label="Back to top"
+  class="fixed bottom-16 right-6 w-9 h-9 rounded-md border border-border flex items-center justify-center text-text-muted opacity-0 translate-y-4 pointer-events-none transition-all duration-200 hover:border-border-hover hover:text-text z-50"
+  style="background: var(--color-bg-card);"
+>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+</button>
+
+<script>
+  const bar = document.getElementById('progress-bar');
+  const btn = document.getElementById('back-to-top');
+  const article = document.querySelector('article');
+
+  if (bar && btn && article) {
+    const update = () => {
+      const rect = article.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      const progress = Math.min(100, Math.max(0, (-rect.top / total) * 100));
+      bar.style.width = `${progress}%`;
+
+      if (window.scrollY > 400) {
+        btn.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+        btn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      } else {
+        btn.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+        btn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      }
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+</script>

@@ -3,17 +3,56 @@ import { getCollection, render } from 'astro:content';
 import BlogLayout from '../../layouts/BlogLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map((post) => ({
+  const allPosts = (await getCollection('blog'))
+    .filter((p) => p.data.published)
+    .sort((a, b) => new Date(a.data.date).valueOf() - new Date(b.data.date).valueOf());
+
+  return allPosts.map((post, i) => ({
     params: { id: post.id },
-    props: { post },
+    props: {
+      post,
+      allPosts,
+      prevPost: allPosts[i - 1] ? { id: allPosts[i - 1].id, title: allPosts[i - 1].data.title } : null,
+      nextPost: allPosts[i + 1] ? { id: allPosts[i + 1].id, title: allPosts[i + 1].data.title } : null,
+    },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, allPosts, prevPost, nextPost } = Astro.props;
+const { Content, headings } = await render(post);
+
+// Reading time
+const words = post.body?.split(/\s+/).length || 0;
+const readingTime = Math.max(1, Math.ceil(words / 250));
+
+// Related posts: score by shared tags, exclude self, take top 3
+const related = allPosts
+  .filter((p: typeof post) => p.id !== post.id)
+  .map((p: typeof post) => ({
+    id: p.id,
+    title: p.data.title,
+    description: p.data.description,
+    date: p.data.date,
+    tags: p.data.tags,
+    score: p.data.tags.filter((t: string) => post.data.tags.includes(t)).length,
+  }))
+  .filter((p: { score: number }) => p.score > 0)
+  .sort((a: { score: number }, b: { score: number }) => b.score - a.score)
+  .slice(0, 3);
 ---
 
-<BlogLayout title={post.data.title} description={post.data.description} date={post.data.date}>
+<BlogLayout
+  title={post.data.title}
+  description={post.data.description}
+  date={post.data.date}
+  tags={post.data.tags}
+  readingTime={readingTime}
+  headings={headings}
+  prevPost={prevPost}
+  nextPost={nextPost}
+  relatedPosts={related}
+  url={Astro.url.href}
+  ogImage={`/og/${post.id}.png`}
+>
   <Content />
 </BlogLayout>

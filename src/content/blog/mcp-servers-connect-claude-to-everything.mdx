@@ -1,0 +1,89 @@
+---
+title: "How I Use MCP Servers to Connect Claude to Everything"
+description: "A practical guide to building MCP servers that connect Claude Code to your internal tools, databases, and APIs — and why it's a game-changer for engineering teams."
+date: "2026-04-05"
+tags: ["MCP", "Claude Code", "Tooling"]
+published: false
+---
+
+If you've used Claude Code for more than a week, you've probably hit the wall: it's brilliant at reasoning about code, but it can't see your production metrics, query your internal APIs, or trigger a deployment. It's working blind.
+
+MCP servers fix that. I've been building and running them for months now, and at this point I consider them non-negotiable infrastructure for any engineering team using AI tooling seriously.
+
+## MCP in thirty seconds
+
+Model Context Protocol is a standard for giving AI models structured access to external tools and data. You write a server that exposes capabilities — `query_database`, `get_deploy_status`, `search_logs` — and Claude can call them mid-conversation. It's function calling, but with a proper protocol, discoverability, and a clean separation between the model and your systems.
+
+I'm not going to walk through the spec. The docs are good. What I want to talk about is what happens when you actually commit to building these out for your team.
+
+## What I've connected (and why)
+
+### Internal APIs
+
+We have a handful of internal services — user lookup, feature flag management, service registry — that engineers query constantly during debugging. Before MCP, that meant switching to a browser, finding the right admin panel, copy-pasting IDs around. Now I ask Claude to look up a user by email and it calls `internal_api_user_lookup` directly. The context stays in the conversation. The debugging flow never breaks.
+
+### Databases (read-only)
+
+This was the single biggest productivity unlock. I built an MCP server that exposes read-only access to our staging and analytics databases. Claude can write and execute SQL in context — "show me the order volume for merchant X over the last 30 days" just works. It sees the schema, writes the query, runs it, and reasons about the results. What used to be a five-minute context switch is now a five-second tool call.
+
+### Deployment and CI/CD
+
+Our deploy pipeline exposes status via an API. Wrapping that in an MCP server means Claude can answer "is the latest release deployed to production?" or "what failed in the last CI run?" without me leaving my terminal. I also built a `trigger_staging_deploy` tool for non-production environments. It's gated behind confirmation, but it means I can go from code change to deployed-on-staging without switching tools.
+
+### Monitoring and observability
+
+This one is underrated. Connecting Datadog, PagerDuty, or whatever your stack uses means Claude can pull recent alerts, check error rates, and correlate issues with recent deploys. When I'm investigating an incident, having Claude say "error rate for `payment-service` spiked 40 minutes ago, which aligns with deploy `v2.14.3`" is genuinely useful context that would have taken me several clicks and tabs to assemble.
+
+## How to think about what to expose
+
+Not everything should be an MCP tool. I use a simple framework:
+
+- **High frequency, low complexity** — If engineers do it multiple times a day and it's mostly lookup or status-checking, wrap it. User lookups, log searches, deploy status, feature flag checks.
+- **Context-preserving** — If the action's value comes from staying in the current conversation flow (like querying a database mid-debugging), it's a strong candidate.
+- **Automatable but not automated** — Things that are too nuanced for a cron job but too tedious to do manually. Generating a migration script based on the current schema diff, for example.
+
+Things I deliberately don't expose: anything that mutates production data without a separate approval flow, anything involving secrets rotation, anything where the blast radius of a mistake is high and the undo cost is higher.
+
+## Security is not optional
+
+Let me be direct: if you're connecting AI to internal systems and you're not thinking hard about security, stop and think harder.
+
+Here's what I enforce:
+
+- **Read-only by default.** Every MCP server starts read-only. Write access is opt-in, scoped, and logged.
+- **Least privilege everywhere.** The database MCP server connects with a role that can `SELECT` on specific tables. Not `*`. Not even close.
+- **Audit logging on every call.** Every tool invocation gets logged with the user, timestamp, parameters, and response summary. This isn't optional — it's how you maintain trust with your security team.
+- **No secrets in tool responses.** MCP servers should sanitize responses. If a user record includes an API key hash, strip it before returning.
+- **Environment gating.** Production access gets a different approval bar than staging. I run separate MCP server configs per environment, and production-touching tools require explicit opt-in in the Claude Code config.
+
+The goal is to make the security posture so obviously solid that your infosec team becomes an ally, not a blocker.
+
+## The compound effect
+
+Here's what's hard to convey until you've lived it: the value of MCP servers compounds.
+
+One server is convenient. Five servers connected to your core systems means Claude has a mental model of your infrastructure that's genuinely useful. It can correlate a customer complaint with a database record, a recent deploy, and an error spike — in a single conversation. That kind of cross-system reasoning used to require an experienced engineer with a dozen tabs open. Now it requires a well-connected Claude session.
+
+The team effect is even more powerful. Junior engineers with access to these MCP tools can investigate issues with the effectiveness of someone who's been on the team for a year. The tools encode institutional knowledge about where to look, what to query, and how systems connect. That's leverage you can't get from documentation alone.
+
+## Getting started: practical advice
+
+If you're sold and want to build your first MCP server, here's what I'd recommend:
+
+1. **Start with the read-only database server.** It has the highest immediate ROI. Use a connection-pooled read replica, lock down the role permissions, and expose `query` and `list_tables` tools. You'll use it within the hour.
+
+2. **Use the official SDKs.** The `@modelcontextprotocol/sdk` (TypeScript) and `mcp` (Python) packages handle the protocol boilerplate. Your job is just defining tools and implementing handlers.
+
+3. **Keep tools small and focused.** `get_deploy_status` is better than `deploy_manager` with fifteen parameters. Claude works better with specific, well-named tools. Think Unix philosophy.
+
+4. **Write good tool descriptions.** Claude reads them to decide when and how to use the tool. A vague description means poor tool selection. Be precise about what the tool does, what parameters it expects, and what it returns.
+
+5. **Test with real workflows.** Don't build MCP servers in isolation. Pick an actual debugging session or investigation you did last week and rebuild it with MCP tools available. That tells you immediately what's missing and what's unnecessary.
+
+6. **Version your MCP servers like any other service.** They deserve CI, tests, and code review. They're infrastructure now, not scripts.
+
+## Where this is going
+
+MCP is still early, but the trajectory is clear. The teams that build strong connective tissue between their AI tools and their internal systems will move meaningfully faster than those that don't. It's not about replacing engineers — it's about giving every engineer on the team an assistant that actually understands your stack.
+
+I've gone from skeptic to evangelist on this in six months. Build one MCP server, use it for a week, and I suspect you will too.

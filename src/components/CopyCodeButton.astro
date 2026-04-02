@@ -1,0 +1,57 @@
+<!-- Attaches copy buttons to all <pre> code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('article pre').forEach((pre) => {
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'relative';
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+
+      const btn = document.createElement('button');
+      btn.textContent = 'copy';
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy code');
+      wrapper.appendChild(btn);
+
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code')?.textContent || pre.textContent || '';
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.15s ease;
+  }
+  div:hover > .copy-btn {
+    opacity: 1;
+  }
+  .copy-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-hover);
+  }
+  .copy-btn.copied {
+    color: var(--color-accent-green);
+    opacity: 1;
+  }
+</style>

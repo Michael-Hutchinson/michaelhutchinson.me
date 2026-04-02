@@ -1,38 +1,236 @@
 ---
 import Layout from './Layout.astro';
+import CopyCodeButton from '../components/CopyCodeButton.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import ShareLinks from '../components/react/ShareLinks.tsx';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface PostLink {
+  id: string;
+  title: string;
+}
+
+interface RelatedPost {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+}
 
 interface Props {
   title: string;
   description: string;
   date: string;
+  tags?: string[];
+  readingTime?: number;
+  headings?: Heading[];
+  prevPost?: PostLink | null;
+  nextPost?: PostLink | null;
+  relatedPosts?: RelatedPost[];
+  url?: string;
+  ogImage?: string;
 }
 
-const { title, description, date } = Astro.props;
+const {
+  title, description, date, tags = [], readingTime,
+  headings = [], prevPost, nextPost, relatedPosts = [],
+  url = '', ogImage
+} = Astro.props;
+
+const tocHeadings = headings.filter((h) => h.depth === 2);
+const isoDate = new Date(date).toISOString();
+const fullOgUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
+
+// JSON-LD structured data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: isoDate,
+  dateModified: isoDate,
+  author: {
+    '@type': 'Person',
+    name: 'Michael Hutchinson',
+    url: 'https://michael-hutchinson.me',
+    jobTitle: 'Staff Engineer',
+  },
+  ...(fullOgUrl ? { image: fullOgUrl } : {}),
+  publisher: {
+    '@type': 'Person',
+    name: 'Michael Hutchinson',
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url,
+  },
+  keywords: tags.join(', '),
+};
 ---
 
 <Layout title={`${title} — Michael Hutchinson`} description={description}>
+  <!-- JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <!-- OG Image override -->
+  {fullOgUrl && <meta property="og:image" content={fullOgUrl} slot="head" />}
+  {fullOgUrl && <meta name="twitter:image" content={fullOgUrl} slot="head" />}
+
+  <ReadingProgress />
+
   <article class="mx-auto max-w-3xl px-6 py-24 md:py-32">
-    <header class="mb-12">
-      <p class="font-mono text-sm text-accent mb-3">
-        <span class="font-bold" style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">❯</span> blog/{new Date(date).toISOString().split('T')[0]}
-      </p>
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-1.5 font-mono text-xs text-text-muted mb-8">
+      <a href="/" class="hover:text-text transition-colors">~</a>
+      <span>/</span>
+      <a href="/blog" class="hover:text-text transition-colors">blog</a>
+      <span>/</span>
+      <span class="text-text-secondary truncate max-w-[20rem]">{title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-10">
+      <div class="flex items-center gap-3 font-mono text-sm text-text-muted mb-4">
+        <span class="font-bold" style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">❯</span>
+        <span>blog/{new Date(date).toISOString().split('T')[0]}</span>
+        {readingTime && (
+          <span class="text-text-muted">· {readingTime} min read</span>
+        )}
+      </div>
       <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-text mb-4 font-sans">
         {title}
       </h1>
-      <p class="text-text-muted font-mono text-sm">
-        {new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-      </p>
+      <div class="flex flex-wrap items-center gap-3">
+        <p class="text-text-muted font-mono text-sm m-0">
+          {new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+        </p>
+        {tags.length > 0 && (
+          <div class="flex gap-1.5">
+            {tags.map((tag) => (
+              <span
+                class="px-2 py-0.5 rounded text-[0.6875rem] font-mono"
+                style={`background: color-mix(in srgb, var(--color-accent) 8%, transparent); color: var(--color-accent);`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </header>
+
+    <!-- Table of Contents -->
+    {tocHeadings.length > 2 && (
+      <nav class="mb-10 p-4 bg-bg-terminal border border-border rounded-lg">
+        <div class="flex items-center gap-2 mb-3 text-[0.6875rem] text-text-muted font-mono">
+          <span
+            class="px-1.5 py-0.5 rounded font-medium"
+            style="background: color-mix(in srgb, var(--color-accent) 10%, transparent); color: var(--color-accent);"
+          >
+            Read
+          </span>
+          table-of-contents
+        </div>
+        <ol class="list-none m-0 p-0 flex flex-col gap-1.5">
+          {tocHeadings.map((h, i) => (
+            <li>
+              <a
+                href={`#${h.slug}`}
+                class="flex items-baseline gap-2 text-sm text-text-secondary hover:text-text transition-colors"
+              >
+                <span class="text-text-muted font-mono text-xs shrink-0">{String(i + 1).padStart(2, '0')}.</span>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    <!-- Post content -->
     <div class="prose prose-purple max-w-none
-      prose-headings:font-sans prose-headings:text-text
+      prose-headings:font-sans prose-headings:text-text prose-headings:scroll-mt-20
       prose-p:text-text-secondary prose-p:leading-relaxed
       prose-strong:text-text
       prose-li:text-text-secondary
       prose-a:text-accent prose-a:no-underline hover:prose-a:underline
       prose-code:text-accent prose-code:bg-bg-terminal prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
       prose-pre:bg-bg-terminal prose-pre:border prose-pre:border-border prose-pre:rounded-lg
-      prose-h2:border-b prose-h2:border-border prose-h2:pb-2">
+      prose-h2:border-b prose-h2:border-border prose-h2:pb-2
+      prose-blockquote:border-accent prose-blockquote:text-text-secondary">
       <slot />
     </div>
+
+    <!-- Post footer -->
+    <div class="mt-12 pt-8 border-t border-border flex flex-col gap-8">
+      <!-- Share links -->
+      {url && <ShareLinks title={title} url={url} client:load />}
+
+      <!-- Related posts -->
+      {relatedPosts.length > 0 && (
+        <div>
+          <h3 class="text-sm font-mono text-text-muted mb-4">
+            <span style="color: var(--color-accent);">❯</span> related posts
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {relatedPosts.map((rp) => (
+              <a
+                href={`/blog/${rp.id}`}
+                class="group p-4 bg-bg-terminal border border-border rounded-lg transition-all duration-150 hover:border-border-hover hover:-translate-y-0.5"
+              >
+                <p class="text-xs font-mono text-text-muted mb-2">
+                  {new Date(rp.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                </p>
+                <p class="text-sm font-sans font-medium text-text group-hover:text-accent transition-colors mb-2 line-clamp-2">
+                  {rp.title}
+                </p>
+                <div class="flex flex-wrap gap-1">
+                  {rp.tags.slice(0, 2).map((tag) => (
+                    <span
+                      class="px-1.5 py-0.5 rounded text-[0.625rem] font-mono"
+                      style="background: color-mix(in srgb, var(--color-accent) 6%, transparent); color: var(--color-accent);"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Prev / Next navigation -->
+      {(prevPost || nextPost) && (
+        <nav class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {prevPost ? (
+            <a
+              href={`/blog/${prevPost.id}`}
+              class="group p-4 bg-bg-terminal border border-border rounded-lg transition-all duration-150 hover:border-border-hover hover:-translate-y-0.5"
+            >
+              <span class="text-xs font-mono text-text-muted mb-1.5 block">← previous</span>
+              <span class="text-sm font-sans font-medium text-text group-hover:text-accent transition-colors">{prevPost.title}</span>
+            </a>
+          ) : <div />}
+          {nextPost ? (
+            <a
+              href={`/blog/${nextPost.id}`}
+              class="group p-4 bg-bg-terminal border border-border rounded-lg transition-all duration-150 hover:border-border-hover hover:-translate-y-0.5 sm:text-right"
+            >
+              <span class="text-xs font-mono text-text-muted mb-1.5 block">next →</span>
+              <span class="text-sm font-sans font-medium text-text group-hover:text-accent transition-colors">{nextPost.title}</span>
+            </a>
+          ) : <div />}
+        </nav>
+      )}
+    </div>
   </article>
+
+  <CopyCodeButton />
 </Layout>
