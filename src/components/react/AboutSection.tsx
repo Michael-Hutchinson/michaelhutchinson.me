@@ -29,12 +29,10 @@ export default function AboutSection() {
           {/* Bio paragraphs — staggered */}
           {bios.map((content, i) => (
             <p
-              key={i}
+              key={`bio-${i}`}
               className={`text-[0.9375rem] leading-relaxed text-text-secondary mb-3.5 ${stagger(visible, i)}`}
               style={staggerStyle(i, 0.05)}
-            >
-              {content}
-            </p>
+            >{content}</p>
           ))}
 
           {/* Cards grid — staggered after bio */}
@@ -45,8 +43,7 @@ export default function AboutSection() {
               style={staggerStyle(0, 0.35)}
             >
               <div className="flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide">
-                <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)' }}>Read</span>
-                ~/about/profile.yml
+                <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)' }}>Read</span>{' '}~/about/profile.yml
               </div>
               <div className="p-4">
                 {stats.map((row, i) => (
@@ -68,8 +65,7 @@ export default function AboutSection() {
               style={staggerStyle(1, 0.35)}
             >
               <div className="flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide">
-                <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)' }}>Read</span>
-                ~/about/stack.json
+                <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)' }}>Read</span>{' '}~/about/stack.json
               </div>
               <div className="p-4">
                 <div className="flex flex-wrap gap-1.5">

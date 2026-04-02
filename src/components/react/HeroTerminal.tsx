@@ -95,7 +95,7 @@ export default function HeroTerminal() {
             <span className="text-text">
               {cmd1.displayText}
               {!cmd1.isDone && phase === PHASE.TYPING_CMD1 && (
-                <span className="inline-block w-2 h-[1.0625rem] bg-accent align-text-bottom ml-px animate-[blink_1s_step-end_infinite]" />
+                <span className="inline-block w-2 h-4.5 bg-accent align-text-bottom ml-px animate-[blink_1s_step-end_infinite]" />
               )}
             </span>
           </div>
@@ -146,7 +146,7 @@ export default function HeroTerminal() {
               <span className="text-text">
                 {cmd2.displayText}
                 {phase === PHASE.TYPING_CMD2 && !cmd2.isDone && (
-                  <span className="inline-block w-2 h-[1.0625rem] bg-accent align-text-bottom ml-px animate-[blink_1s_step-end_infinite]" />
+                  <span className="inline-block w-2 h-4.5 bg-accent align-text-bottom ml-px animate-[blink_1s_step-end_infinite]" />
                 )}
               </span>
             </div>
@@ -173,7 +173,7 @@ export default function HeroTerminal() {
           {/* Idle cursor */}
           <div className={`flex items-center gap-2.5 mt-5 text-[0.9375rem] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.IDLE ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1.5'}`}>
             <span className="font-bold text-base select-none" style={gradientStyle}>❯</span>
-            <span className="inline-block w-2 h-[1.0625rem] bg-accent animate-[blink_1s_step-end_infinite]" />
+            <span className="inline-block w-2 h-4.5 bg-accent animate-[blink_1s_step-end_infinite]" />
           </div>
         </div>
       </div>
