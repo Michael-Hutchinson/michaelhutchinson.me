@@ -62,7 +62,7 @@ export default function ExpertiseSection() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {areas.map((area, i) => (
-              <div
+              <article
                 key={area.title}
                 className={`
                   group relative bg-bg-terminal border border-border rounded-lg overflow-hidden cursor-default
@@ -72,7 +72,6 @@ export default function ExpertiseSection() {
                 `}
                 style={{ transitionDelay: `${0.15 + i * 0.1}s` }}
                 onMouseMove={handleMouseMove}
-                role="article"
               >
                 {/* Mouse-tracking glow */}
                 <div data-glow className="absolute inset-0 pointer-events-none z-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -103,7 +102,7 @@ export default function ExpertiseSection() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </>

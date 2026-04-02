@@ -17,8 +17,7 @@ export default function Footer() {
     <footer className="sticky bottom-0 border-t border-border backdrop-blur-sm px-4 md:px-10 py-1.5 flex items-center justify-between font-mono text-[0.6875rem] text-text-muted z-50 whitespace-nowrap overflow-x-auto" style={{ background: 'color-mix(in srgb, var(--color-bg) 90%, transparent)' }}>
       <div className="flex items-center gap-2 md:gap-3 shrink-0">
         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)' }}>
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-accent-green)', boxShadow: '0 0 6px rgba(105,219,124,0.4)' }} />
-          claude-opus-4.6
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-accent-green)', boxShadow: '0 0 6px rgba(105,219,124,0.4)' }} />{' '}claude-opus-4.6
         </span>{' '}
         <span className="hidden sm:inline" style={{ color: 'var(--color-border)' }}>|</span>
         <a href="mailto:michael-hutchinson@hotmail.co.uk" className="hidden sm:inline hover:text-text transition-colors">michael-hutchinson@hotmail.co.uk</a>
