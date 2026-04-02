@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+);
+---
+
+<Layout
+  title="Blog — Michael Hutchinson"
+  description="Thoughts on AI-powered engineering, technical leadership, and building great software."
+>
+  <div class="mx-auto max-w-3xl px-6 py-24 md:py-32">
+    <div class="flex items-baseline gap-2.5 text-[0.9375rem] mb-8">
+      <span class="font-bold text-base select-none" style="background: linear-gradient(135deg, #b197fc, #da77f2, #ffa07a); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">❯</span>
+      <span class="text-text">ls ~/blog/</span>
+    </div>
+
+    {posts.length === 0 ? (
+      <div class="bg-bg-terminal border border-border rounded-lg p-8 text-center">
+        <p class="text-text-muted font-mono text-sm mb-2">No posts yet.</p>
+        <p class="text-text-muted font-mono text-xs">Check back soon — first post incoming.</p>
+      </div>
+    ) : (
+      <div class="flex flex-col gap-4">
+        {posts.map((post) => (
+          <a
+            href={`/blog/${post.id}`}
+            class="group bg-bg-terminal border border-border rounded-lg p-5 transition-all duration-150 hover:border-border-hover hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(177,151,252,0.06)]"
+          >
+            <div class="flex items-center gap-2 text-[0.6875rem] text-text-muted font-mono mb-2">
+              <span class="px-1.5 py-0.5 bg-accent/10 rounded text-accent font-medium">Read</span>
+              {new Date(post.data.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+            </div>
+            <h2 class="text-lg font-semibold font-sans text-text group-hover:text-accent transition-colors mb-1.5">
+              {post.data.title}
+            </h2>
+            <p class="text-sm text-text-secondary leading-relaxed">{post.data.description}</p>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</Layout>

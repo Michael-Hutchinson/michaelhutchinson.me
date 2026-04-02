@@ -1,0 +1,205 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --color-bg: #1a1a2e;
+  --color-bg-secondary: #16162a;
+  --color-bg-terminal: #12121f;
+  --color-bg-card: #1e1e36;
+  --color-bg-elevated: #252542;
+
+  --color-text: #e8e8f0;
+  --color-text-secondary: #8b8ba7;
+  --color-text-muted: #5a5a7a;
+
+  --color-accent: #b197fc;
+  --color-accent-2: #da77f2;
+  --color-accent-3: #ffa07a;
+  --color-accent-green: #69db7c;
+  --color-accent-cyan: #66d9e8;
+
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(177, 151, 252, 0.2);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-bg text-text;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  /* Theme transition class */
+  html.theme-transition * {
+    transition-duration: 0.4s !important;
+    transition-timing-function: ease !important;
+  }
+
+  ::selection {
+    background: rgba(177, 151, 252, 0.3);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(177, 151, 252, 0.15);
+    border-radius: 3px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  /* Noise texture */
+  main::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.02;
+    pointer-events: none;
+    z-index: 1000;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+}
+
+/* Light theme overrides */
+[data-theme="light"] {
+  --color-bg: #f8f7f4;
+  --color-bg-secondary: #f0efe9;
+  --color-bg-terminal: #ffffff;
+  --color-bg-card: #f3f2ed;
+  --color-bg-elevated: #eae9e3;
+  --color-text: #1c1917;
+  --color-text-secondary: #44403c;
+  --color-text-muted: #78716c;
+  --color-accent: #7c3aed;
+  --color-accent-2: #a855f7;
+  --color-accent-3: #e87461;
+  --color-accent-green: #16a34a;
+  --color-accent-cyan: #0891b2;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-hover: rgba(124, 58, 237, 0.3);
+}
+
+/* Light mode: card shadows for depth */
+[data-theme="light"] .bg-bg-terminal {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+/* Light mode: reduce noise overlay */
+[data-theme="light"] main::before {
+  opacity: 0.008;
+}
+
+/* Light mode: scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.15);
+}
+
+/* Light mode: selection */
+[data-theme="light"] ::selection {
+  background: rgba(124, 58, 237, 0.2);
+}
+
+/* Light mode: hero mesh uses darker tones */
+[data-theme="light"] .hero-mesh {
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(124,58,237,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 20%, rgba(168,85,247,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(232,116,97,0.04) 0%, transparent 50%) !important;
+}
+
+/* Section dividers */
+section + section::before {
+  content: '';
+  display: block;
+  width: 100%;
+  max-width: 12rem;
+  height: 1px;
+  margin: 0 auto 3rem;
+  background: linear-gradient(90deg, transparent, var(--color-accent) 30%, var(--color-accent-2) 50%, var(--color-accent-3) 70%, transparent);
+  opacity: 0.2;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3));
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-chevron {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3));
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.3; }
+  40% { transform: translateY(-6px); opacity: 1; }
+}
+
+@keyframes terminal-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes border-rotate {
+  from { --border-angle: 0deg; }
+  to { --border-angle: 360deg; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes thinking-enter {
+  from { opacity: 0; transform: translateX(-8px); max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
+  to { opacity: 1; transform: translateX(0); max-height: 60px; }
+}
+
+@keyframes thinking-exit {
+  from { opacity: 1; max-height: 60px; }
+  to { opacity: 0; max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
+}
+
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}

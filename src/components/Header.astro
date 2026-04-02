@@ -1,0 +1,23 @@
+---
+import Nav from './react/Nav.tsx';
+---
+
+<header id="site-header" class="fixed top-0 w-full z-50 h-14 flex items-center px-6 md:px-10 transition-all duration-300 border-b border-transparent">
+  <Nav client:load />
+</header>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (window.scrollY > 20) {
+      header?.classList.add('backdrop-blur-md');
+      header!.style.backgroundColor = isLight ? 'rgba(250, 250, 250, 0.9)' : 'rgba(26, 26, 46, 0.9)';
+      header!.style.borderColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.06)';
+    } else {
+      header?.classList.remove('backdrop-blur-md');
+      header!.style.backgroundColor = 'transparent';
+      header!.style.borderColor = 'transparent';
+    }
+  }, { passive: true });
+</script>
