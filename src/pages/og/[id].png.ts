@@ -82,9 +82,8 @@ export async function GET({ props }: APIContext) {
   });
 
   const pngBuffer = await sharp(new Uint8Array(Buffer.from(svg))).png().toBuffer();
-  const body = new Uint8Array(pngBuffer.buffer, pngBuffer.byteOffset, pngBuffer.byteLength);
 
-  return new Response(body, {
+  return new Response(pngBuffer as unknown as BodyInit, {
     headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=31536000, immutable' },
   });
 }
