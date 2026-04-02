@@ -1,6 +1,6 @@
 import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
-import satori, { type SatoriNode } from 'satori';
+import satori from 'satori';
 import sharp from 'sharp';
 
 export async function getStaticPaths() {
@@ -22,19 +22,11 @@ export async function GET({ props }: APIContext) {
     'https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.woff'
   ).then((r) => r.arrayBuffer());
 
-  const node: SatoriNode = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- satori accepts plain objects as ReactNode-like structures
+  const node = {
     type: 'div',
     props: {
-      style: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        width: '1200px',
-        height: '630px',
-        background: '#1a1a2e',
-        padding: '60px 70px',
-        fontFamily: 'Inter',
-      },
+      style: { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '1200px', height: '630px', background: '#1a1a2e', padding: '60px 70px', fontFamily: 'Inter' },
       children: [
         {
           type: 'div',
@@ -51,23 +43,14 @@ export async function GET({ props }: APIContext) {
           props: {
             style: { display: 'flex', flexDirection: 'column', gap: '20px', flex: 1, justifyContent: 'center' },
             children: [
-              {
-                type: 'div',
-                props: {
-                  style: { fontSize: '56px', fontWeight: 700, color: '#e8e8f0', lineHeight: 1.15, letterSpacing: '-0.03em' },
-                  children: title,
-                },
-              },
+              { type: 'div', props: { style: { fontSize: '56px', fontWeight: 700, color: '#e8e8f0', lineHeight: 1.15, letterSpacing: '-0.03em' }, children: title } },
               {
                 type: 'div',
                 props: {
                   style: { display: 'flex', gap: '8px' },
                   children: tags.map((tag: string) => ({
                     type: 'span',
-                    props: {
-                      style: { fontFamily: 'JetBrains Mono', fontSize: '14px', color: '#b197fc', background: 'rgba(177,151,252,0.1)', padding: '4px 12px', borderRadius: '6px' },
-                      children: tag,
-                    },
+                    props: { style: { fontFamily: 'JetBrains Mono', fontSize: '14px', color: '#b197fc', background: 'rgba(177,151,252,0.1)', padding: '4px 12px', borderRadius: '6px' }, children: tag },
                   })),
                 },
               },
@@ -86,7 +69,8 @@ export async function GET({ props }: APIContext) {
         },
       ],
     },
-  };
+  // biome-ignore lint: satori accepts vdom-like objects
+  } as unknown as React.ReactNode;
 
   const svg = await satori(node, {
     width: 1200,
@@ -97,7 +81,7 @@ export async function GET({ props }: APIContext) {
     ],
   });
 
-  const png = await sharp(Buffer.from(svg, 'utf-8')).png().toBuffer();
+  const png = await sharp(new Uint8Array(Buffer.from(svg))).png().toBuffer();
 
   return new Response(png, {
     headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=31536000, immutable' },
