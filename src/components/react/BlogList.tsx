@@ -16,7 +16,7 @@ interface BlogListProps {
 
 const POSTS_PER_PAGE = 5;
 
-export default function BlogList({ posts }: BlogListProps) {
+export default function BlogList({ posts }: Readonly<BlogListProps>) {
   const [search, setSearch] = useState('');
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [page, setPage] = useState(1);
@@ -25,7 +25,7 @@ export default function BlogList({ posts }: BlogListProps) {
   const allTags = useMemo(() => {
     const tags = new Set<string>();
     posts.forEach((p) => p.tags.forEach((t) => tags.add(t)));
-    return Array.from(tags).sort();
+    return Array.from(tags).sort((a, b) => a.localeCompare(b));
   }, [posts]);
 
   // Filtered posts
@@ -196,7 +196,7 @@ export default function BlogList({ posts }: BlogListProps) {
 
       {/* Result count */}
       <p className="text-center text-text-muted font-mono text-xs mt-4">
-        {filtered.length} post{filtered.length !== 1 ? 's' : ''}{activeTag ? ` tagged "${activeTag}"` : ''}{search ? ` matching "${search}"` : ''}
+        {filtered.length} post{filtered.length === 1 ? '' : 's'}{activeTag ? ` tagged "${activeTag}"` : ''}{search ? ` matching "${search}"` : ''}
       </p>
     </div>
   );

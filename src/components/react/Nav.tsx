@@ -13,7 +13,7 @@ export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     if (typeof document !== 'undefined') {
-      return document.documentElement.getAttribute('data-theme') || 'dark';
+      return document.documentElement.dataset.theme || 'dark';
     }
     return 'dark';
   });
@@ -23,7 +23,7 @@ export default function Nav() {
     setTimeout(() => document.documentElement.classList.remove('theme-transition'), 500);
 
     const next = theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
+    document.documentElement.dataset.theme = next;
     localStorage.setItem('theme', next);
     setTheme(next);
   };

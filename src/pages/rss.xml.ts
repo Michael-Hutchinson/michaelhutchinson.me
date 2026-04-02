@@ -10,7 +10,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: 'Michael Hutchinson — Blog',
     description: 'Thoughts on AI-powered engineering, technical leadership, and building great software.',
-    site: context.site!,
+    site: context.site ?? new URL('https://michael-hutchinson.me'),
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,

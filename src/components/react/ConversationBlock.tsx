@@ -57,9 +57,9 @@ export default function ConversationBlock({
     return () => clearTimeout(id);
   }, [phase, thinkingDuration]);
 
-  const thinkingState =
-    phase === PHASE.THINKING ? 'entering' :
-    phase === PHASE.THINKING_EXIT ? 'exiting' : 'hidden';
+  let thinkingState = 'hidden';
+  if (phase === PHASE.THINKING) thinkingState = 'entering';
+  else if (phase === PHASE.THINKING_EXIT) thinkingState = 'exiting';
 
   const showContent = phase >= PHASE.RESPONSE;
 

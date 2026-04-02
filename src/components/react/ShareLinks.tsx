@@ -12,7 +12,7 @@ const XIcon = () => (
   </svg>
 );
 
-export default function ShareLinks({ title, url }: ShareLinksProps) {
+export default function ShareLinks({ title, url }: Readonly<ShareLinksProps>) {
   const encodedTitle = encodeURIComponent(title);
   const encodedUrl = encodeURIComponent(url);
 
