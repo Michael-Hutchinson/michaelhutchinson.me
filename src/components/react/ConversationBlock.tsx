@@ -29,7 +29,7 @@ export default function ConversationBlock({
   thinkingDuration = 1200,
   autoStart = false,
   children,
-}: ConversationBlockProps) {
+}: Readonly<ConversationBlockProps>) {
   const { ref, inView } = useInView();
   const [phase, setPhase] = useState(autoStart ? PHASE.TYPING : PHASE.WAITING);
 

@@ -16,9 +16,9 @@ const stats = [
 ];
 
 const bios = [
-  <>I'm a <strong className="text-text font-medium">Staff Engineer</strong> with over a decade of experience building software across the full stack — from React frontends to cloud-native backends. I hold a <span style={{ color: 'var(--color-accent)' }}>Master's in IT from Leeds University</span>.</>,
-  <>Right now, I'm all-in on the intersection of <strong className="text-text font-medium">AI and software engineering</strong>. I use Claude Code, MCP servers, and custom AI agents every day to multiply team velocity and ship better software, faster.</>,
-  <>As a Staff Engineer, I operate across the entire organisation: defining technical strategy, mentoring engineers, driving architectural decisions, and <strong className="text-text font-medium">keeping my hands in the code every day</strong>.</>,
+  { key: 'experience', content: <>I'm a <strong className="text-text font-medium">Staff Engineer</strong> with over a decade of experience building software across the full stack — from React frontends to cloud-native backends. I hold a <span style={{ color: 'var(--color-accent)' }}>Master's in IT from Leeds University</span>.</> },
+  { key: 'ai-focus', content: <>Right now, I'm all-in on the intersection of <strong className="text-text font-medium">AI and software engineering</strong>. I use Claude Code, MCP servers, and custom AI agents every day to multiply team velocity and ship better software, faster.</> },
+  { key: 'staff-role', content: <>As a Staff Engineer, I operate across the entire organisation: defining technical strategy, mentoring engineers, driving architectural decisions, and <strong className="text-text font-medium">keeping my hands in the code every day</strong>.</> },
 ];
 
 export default function AboutSection() {
@@ -27,12 +27,12 @@ export default function AboutSection() {
       {(visible) => (
         <>
           {/* Bio paragraphs — staggered */}
-          {bios.map((content, i) => (
+          {bios.map((bio, i) => (
             <p
-              key={`bio-${i}`}
+              key={bio.key}
               className={`text-[0.9375rem] leading-relaxed text-text-secondary mb-3.5 ${stagger(visible, i)}`}
               style={staggerStyle(i, 0.05)}
-            >{content}</p>
+            >{bio.content}</p>
           ))}
 
           {/* Cards grid — staggered after bio */}
