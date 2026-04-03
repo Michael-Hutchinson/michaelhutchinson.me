@@ -1,5 +1,8 @@
 import React, { useCallback } from 'react';
-import ConversationBlock, { stagger, staggerStyle } from './ConversationBlock';
+import { motion } from 'framer-motion';
+import ConversationBlock, { staggerItem } from './ConversationBlock';
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 const areas = [
   {
@@ -40,7 +43,7 @@ const badgeStyles: Record<string, React.CSSProperties> = {
 };
 
 export default function ExpertiseSection() {
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const glow = card.querySelector('[data-glow]') as HTMLElement;
@@ -53,47 +56,43 @@ export default function ExpertiseSection() {
     <ConversationBlock prompt="what does Michael specialise in?" thinkingMessage="Analyzing codebase..." thinkingDuration={1200}>
       {(visible) => (
         <>
-          <p
-            className={`text-[0.9375rem] text-text-secondary mb-6 max-w-xl ${stagger(visible, 0)}`}
-            style={staggerStyle(0, 0.05)}
+          <motion.p
+            className="text-[0.9375rem] mb-6 max-w-xl"
+            style={{ color: 'var(--color-text-secondary)' }}
+            {...staggerItem(visible, 0, 0.05)}
           >
             Here are the areas where Michael focuses his energy — from AI integration to technical strategy:
-          </p>
+          </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {areas.map((area, i) => (
-              <article
+              <motion.article
                 key={area.title}
-                className={`
-                  group relative bg-bg-terminal border border-border rounded-lg overflow-hidden cursor-default
-                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
-                  hover:border-border-hover hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(177,151,252,0.08)]
-                  ${visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-5 scale-[0.96]'}
-                `}
-                style={{ transitionDelay: `${0.15 + i * 0.1}s` }}
+                className="group relative bg-bg-terminal border border-border rounded-lg overflow-hidden cursor-default hover:border-border-hover hover:shadow-[0_0_40px_rgba(177,151,252,0.08)]"
+                animate={visible
+                  ? { opacity: 1, y: 0, scale: 1 }
+                  : { opacity: 0, y: 20, scale: 0.96 }
+                }
+                transition={{ duration: 0.5, ease, delay: 0.15 + i * 0.1 }}
+                whileHover={{ y: -4 }}
                 onMouseMove={handleMouseMove}
               >
-                {/* Mouse-tracking glow */}
                 <div data-glow className="absolute inset-0 pointer-events-none z-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                {/* Top shimmer accent */}
                 <div
                   className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_2s_linear_infinite] transition-opacity duration-300 z-2"
                   style={{ background: area.accent, backgroundSize: '200% 100%' }}
                 />
 
-                {/* Header */}
                 <div className="flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide relative z-2">
                   <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={badgeStyles[area.variant]}>
                     {area.badge}
-                  </span>
-                  {area.file}
+                  </span>{' '}{area.file}
                 </div>
 
-                {/* Body */}
                 <div className="p-5 relative z-2">
                   <h3 className="text-[1.0625rem] font-semibold mb-2.5 font-sans text-text">{area.title}</h3>
-                  <p className="text-[0.8125rem] text-text-secondary leading-relaxed mb-4">{area.description}</p>
+                  <p className="text-[0.8125rem] leading-relaxed mb-4" style={{ color: 'var(--color-text-secondary)' }}>{area.description}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {area.tags.map((tag) => (
                       <span key={tag} className="px-[7px] py-0.5 rounded text-[0.6875rem]" style={{ background: 'color-mix(in srgb, var(--color-accent) 8%, transparent)', color: 'var(--color-accent)' }}>
@@ -102,7 +101,7 @@ export default function ExpertiseSection() {
                     ))}
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </>

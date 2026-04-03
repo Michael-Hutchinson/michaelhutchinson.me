@@ -1,8 +1,11 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Mail, ArrowUpRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './icons';
-import ConversationBlock, { stagger, staggerStyle } from './ConversationBlock';
+import ConversationBlock, { staggerItem } from './ConversationBlock';
 import ContactForm from './ContactForm';
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 const links = [
   { href: 'mailto:michael-hutchinson@hotmail.co.uk', icon: () => <Mail size={16} />, label: 'michael-hutchinson@hotmail.co.uk' },
@@ -15,18 +18,19 @@ export default function ContactSection() {
     <ConversationBlock prompt="how can I get in touch?" thinkingMessage="Composing response..." thinkingDuration={1000}>
       {(visible) => (
         <>
-          <p
-            className={`text-[0.9375rem] text-text-secondary max-w-lg mb-8 leading-relaxed ${stagger(visible, 0)}`}
-            style={staggerStyle(0, 0.05)}
+          <motion.p
+            className="text-[0.9375rem] max-w-lg mb-8 leading-relaxed"
+            style={{ color: 'var(--color-text-secondary)' }}
+            {...staggerItem(visible, 0, 0.05)}
           >
             Whether you want to discuss a role, a project, or just talk shop about AI and engineering — I'd love to hear from you.
-          </p>
+          </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Form card */}
-            <div
-              className={`bg-bg-terminal border border-border rounded-lg overflow-hidden ${stagger(visible, 0)} ${visible ? 'scale-100' : 'scale-[0.97]'}`}
-              style={staggerStyle(0, 0.15)}
+            <motion.div
+              className="bg-bg-terminal border border-border rounded-lg overflow-hidden"
+              {...staggerItem(visible, 0, 0.15)}
             >
               <div className="flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted">
                 <span className="text-[0.625rem] px-1.5 py-0.5 rounded font-medium" style={{ background: 'color-mix(in srgb, var(--color-accent-2) 10%, transparent)', color: 'var(--color-accent-2)' }}>Edit</span>{' '}~/contact/new-message.yml
@@ -34,33 +38,33 @@ export default function ContactSection() {
               <div className="p-5">
                 <ContactForm />
               </div>
-            </div>
+            </motion.div>
 
             {/* Links */}
             <div className="flex flex-col gap-2.5">
-              <p
-                className={`text-[0.6875rem] text-text-muted uppercase tracking-wider mb-1 transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0'}`}
-                style={{ transitionDelay: '0.25s' }}
+              <motion.p
+                className="text-[0.6875rem] uppercase tracking-wider mb-1"
+                style={{ color: 'var(--color-text-muted)' }}
+                animate={visible ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.3, delay: 0.25 }}
               >
                 or connect directly
-              </p>
+              </motion.p>
               {links.map((link, i) => (
-                <a
+                <motion.a
                   key={link.href}
                   href={link.href}
                   {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className={`
-                    group flex items-center gap-2.5 px-3.5 py-3 bg-bg-terminal border border-border rounded-md text-[0.8125rem] text-text-secondary
-                    transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]
-                    hover:border-border-hover hover:text-text hover:translate-x-1
-                    ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-3'}
-                  `}
-                  style={{ transitionDelay: `${0.3 + i * 0.08}s` }}
+                  className="group flex items-center gap-2.5 px-3.5 py-3 bg-bg-terminal border border-border rounded-md text-[0.8125rem] hover:border-border-hover hover:text-text"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                  animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+                  transition={{ duration: 0.4, ease, delay: 0.3 + i * 0.08 }}
+                  whileHover={{ x: 4 }}
                 >
                   <span className="text-base shrink-0" style={{ color: 'var(--color-accent)' }}><link.icon /></span>
                   {link.label}
                   <ArrowUpRight size={14} className="ml-auto text-text-muted opacity-0 -translate-x-1 translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0" />
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>

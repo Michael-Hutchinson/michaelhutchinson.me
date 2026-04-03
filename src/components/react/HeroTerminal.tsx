@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import useTypingEffect from './hooks/useTypingEffect';
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 const gradientStyle: React.CSSProperties = {
   background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3))',
@@ -16,16 +19,13 @@ const nameGradientStyle: React.CSSProperties = {
 };
 
 const PHASE = {
-  TYPING_CMD1: 0, THINKING: 1, THINKING_EXIT: 2,
-  OUTPUT: 3, NAME_REVEAL: 4, TYPING_CMD2: 5, STATUS: 6, IDLE: 7,
+  TYPING_CMD1: 0, THINKING: 1, OUTPUT: 2,
+  TYPING_CMD2: 3, STATUS: 4, IDLE: 5,
 };
 
 const phaseDelays: Record<number, number> = {
   [PHASE.THINKING]: 1400,
-  [PHASE.THINKING_EXIT]: 350,
   [PHASE.OUTPUT]: 100,
-  [PHASE.NAME_REVEAL]: 800,
-  [PHASE.STATUS]: 600,
 };
 
 const statusRows = [
@@ -42,8 +42,14 @@ export default function HeroTerminal() {
   const cmd2 = useTypingEffect({ text: 'cat status.yml', speed: 55, delay: 200, enabled: phase >= PHASE.TYPING_CMD2 });
 
   useEffect(() => {
-    if (cmd1.isDone && phase === PHASE.TYPING_CMD1) setTimeout(() => setPhase(PHASE.THINKING), 250);
-    if (cmd2.isDone && phase === PHASE.TYPING_CMD2) setTimeout(() => setPhase(PHASE.STATUS), 350);
+    if (cmd1.isDone && phase === PHASE.TYPING_CMD1) {
+      const id = setTimeout(() => setPhase(PHASE.THINKING), 250);
+      return () => clearTimeout(id);
+    }
+    if (cmd2.isDone && phase === PHASE.TYPING_CMD2) {
+      const id = setTimeout(() => setPhase(PHASE.STATUS), 350);
+      return () => clearTimeout(id);
+    }
   }, [cmd1.isDone, cmd2.isDone, phase]);
 
   useEffect(() => {
@@ -53,11 +59,34 @@ export default function HeroTerminal() {
     return () => clearTimeout(id);
   }, [phase]);
 
-  const thinkingVisible = phase === PHASE.THINKING;
-  const thinkingExiting = phase === PHASE.THINKING_EXIT;
+  // OUTPUT → TYPING_CMD2 after name reveals
+  useEffect(() => {
+    if (phase === PHASE.OUTPUT) {
+      const id = setTimeout(() => setPhase(PHASE.TYPING_CMD2), 800);
+      return () => clearTimeout(id);
+    }
+    if (phase === PHASE.STATUS) {
+      const id = setTimeout(() => setPhase(PHASE.IDLE), 600);
+      return () => clearTimeout(id);
+    }
+  }, [phase]);
+
+  const Cursor = () => (
+    <motion.span
+      className="inline-block w-2 h-4.5 align-text-bottom ml-px"
+      style={{ background: 'var(--color-accent)' }}
+      animate={{ opacity: [1, 0] }}
+      transition={{ duration: 1, repeat: Infinity, repeatType: 'loop', ease: 'steps(1)' }}
+    />
+  );
 
   return (
-    <div className="relative max-w-208 animate-[terminal-enter_0.8s_cubic-bezier(0.16,1,0.3,1)_0.15s_both]">
+    <motion.div
+      className="relative max-w-208"
+      initial={{ opacity: 0, y: 20, scale: 0.98, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      transition={{ duration: 0.8, ease, delay: 0.15 }}
+    >
       {/* Rotating gradient border */}
       <div
         className="absolute -inset-px rounded-lg opacity-60 hover:opacity-100 transition-opacity duration-300"
@@ -74,12 +103,15 @@ export default function HeroTerminal() {
       {/* Terminal */}
       <div className="relative z-10 bg-bg-terminal rounded-lg overflow-hidden">
         {/* Title bar */}
-        <div className="flex items-center gap-1.5 px-4 py-2.5 bg-bg-card border-b border-border">
+        <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-border" style={{ background: 'var(--color-bg-card)' }}>
           {['#ff5f57', '#ffbd2e', '#28c840'].map((color, i) => (
-            <span
+            <motion.span
               key={color}
-              className="w-3 h-3 rounded-full opacity-0 animate-[terminal-enter_0.3s_ease_forwards]"
-              style={{ background: color, animationDelay: `${0.9 + i * 0.08}s` }}
+              className="w-3 h-3 rounded-full"
+              style={{ background: color }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 0.7, y: 0 }}
+              transition={{ duration: 0.3, ease, delay: 0.9 + i * 0.08 }}
             />
           ))}
           <span className="text-[0.6875rem] text-text-muted mx-auto tracking-wide">
@@ -94,87 +126,134 @@ export default function HeroTerminal() {
             <span className="font-bold text-base select-none shrink-0" style={gradientStyle}>❯</span>
             <span className="text-text">
               {cmd1.displayText}
-              {!cmd1.isDone && phase === PHASE.TYPING_CMD1 && (
-                <span className="inline-block w-2 h-4.5 bg-accent align-text-bottom ml-px animate-[blink_1s_step-end_infinite]" />
-              )}
+              {!cmd1.isDone && phase === PHASE.TYPING_CMD1 && <Cursor />}
             </span>
           </div>
 
           {/* Thinking */}
-          <div className={`
-            items-center gap-2 px-4 py-3 my-3
-            bg-bg-card border border-border rounded-md
-            text-[0.8125rem] text-text-muted overflow-hidden
-            ${!thinkingVisible && !thinkingExiting ? 'hidden' : 'flex'}
-            ${thinkingVisible ? 'animate-[thinking-enter_0.35s_cubic-bezier(0.16,1,0.3,1)_forwards]' : ''}
-            ${thinkingExiting ? 'animate-[thinking-exit_0.25s_ease_forwards]' : ''}
-          `}>
-            <span className="inline-flex gap-1">
-              <span className="w-[5px] h-[5px] rounded-full bg-accent animate-[dot-bounce_1.2s_ease-in-out_infinite]" />
-              <span className="w-[5px] h-[5px] rounded-full bg-accent animate-[dot-bounce_1.2s_ease-in-out_infinite_0.15s]" />
-              <span className="w-[5px] h-[5px] rounded-full bg-accent animate-[dot-bounce_1.2s_ease-in-out_infinite_0.3s]" />
-            </span>{' '}Searching files...
-          </div>
+          <AnimatePresence>
+            {phase === PHASE.THINKING && (
+              <motion.div
+                initial={{ opacity: 0, x: -8, height: 0, marginTop: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, x: 0, height: 'auto', marginTop: 12, marginBottom: 12 }}
+                exit={{ opacity: 0, height: 0, marginTop: 0, marginBottom: 0 }}
+                transition={{ duration: 0.3, ease }}
+                className="flex items-center gap-2 px-4 py-3 rounded-md text-[0.8125rem] overflow-hidden"
+                style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
+              >
+                <span className="inline-flex gap-1">
+                  {[0, 0.15, 0.3].map((d) => (
+                    <motion.span
+                      key={d}
+                      className="w-[5px] h-[5px] rounded-full"
+                      style={{ background: 'var(--color-accent)' }}
+                      animate={{ y: [0, -6, 0], opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: d }}
+                    />
+                  ))}
+                </span>{' '}Searching files...
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Name + role output */}
-          <div className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.OUTPUT ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-            <h1
-              className={`
-                text-[clamp(2.25rem,6vw,3.75rem)] font-extrabold tracking-[-0.04em] mt-3 mb-1 font-sans
-                transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]
-                ${phase >= PHASE.NAME_REVEAL ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-2 blur-[3px]'}
-              `}
+          <motion.div
+            animate={phase >= PHASE.OUTPUT ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.5, ease }}
+          >
+            <motion.h1
+              className="text-[clamp(2.25rem,6vw,3.75rem)] font-extrabold tracking-[-0.04em] mt-3 mb-1 font-sans"
               style={nameGradientStyle}
+              animate={phase >= PHASE.OUTPUT
+                ? { opacity: 1, y: 0, filter: 'blur(0px)' }
+                : { opacity: 0, y: 8, filter: 'blur(3px)' }
+              }
+              transition={{ duration: 0.6, ease }}
             >
               Michael Hutchinson
-            </h1>
-            <p className={`
-              text-base text-text-secondary mb-4 leading-relaxed
-              transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] delay-150
-              ${phase >= PHASE.NAME_REVEAL ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1.5'}
-            `}>
-              Staff Engineer building AI-powered engineering cultures.<br />
+            </motion.h1>
+            <motion.p
+              className="text-base mb-4 leading-relaxed"
+              style={{ color: 'var(--color-text-secondary)' }}
+              animate={phase >= PHASE.OUTPUT ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+              transition={{ duration: 0.5, ease, delay: 0.15 }}
+            >
+              Staff Engineer building AI-powered engineering cultures.
+              <br />
               Based in Manchester, UK.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* cat status.yml command */}
-          {phase >= PHASE.TYPING_CMD2 && (
-            <div className="flex items-baseline gap-2.5 text-[0.9375rem] mb-1">
-              <span className="font-bold text-base select-none shrink-0" style={gradientStyle}>❯</span>
-              <span className="text-text">
-                {cmd2.displayText}
-                {phase === PHASE.TYPING_CMD2 && !cmd2.isDone && (
-                  <span className="inline-block w-2 h-4.5 bg-accent align-text-bottom ml-px animate-[blink_1s_step-end_infinite]" />
-                )}
-              </span>
-            </div>
-          )}
+          <AnimatePresence>
+            {phase >= PHASE.TYPING_CMD2 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                transition={{ duration: 0.3, ease }}
+                className="flex items-baseline gap-2.5 text-[0.9375rem] mb-1"
+              >
+                <span className="font-bold text-base select-none shrink-0" style={gradientStyle}>❯</span>
+                <span className="text-text">
+                  {cmd2.displayText}
+                  {phase === PHASE.TYPING_CMD2 && !cmd2.isDone && <Cursor />}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Status grid */}
-          <div className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-            <div className={`h-px bg-border my-4 origin-left transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'scale-x-100' : 'scale-x-0'}`} />
+          <motion.div
+            animate={phase >= PHASE.STATUS ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.5, ease }}
+          >
+            <motion.div
+              className="h-px my-4 origin-left"
+              style={{ background: 'var(--color-border)' }}
+              animate={{ scaleX: phase >= PHASE.STATUS ? 1 : 0 }}
+              transition={{ duration: 0.5, ease }}
+            />
             <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[0.8125rem]">
               {statusRows.map((row, i) => (
                 <React.Fragment key={row.key}>
-                  <span className={`text-text-muted transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2.5'}`} style={{ transitionDelay: `${i * 0.07}s` }}>{row.key}</span>
-                  <span className={`text-text transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2.5'}`} style={{ transitionDelay: `${i * 0.07}s` }}>{row.value}</span>
+                  <motion.span
+                    className="text-text-muted"
+                    animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ duration: 0.4, ease, delay: i * 0.07 }}
+                  >{row.key}</motion.span>
+                  <motion.span
+                    className="text-text"
+                    animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ duration: 0.4, ease, delay: i * 0.07 }}
+                  >{row.value}</motion.span>
                 </React.Fragment>
               ))}
-              <span className={`text-text-muted transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2.5'}`} style={{ transitionDelay: '0.28s' }}>status:</span>
-              <span className={`text-text transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.STATUS ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2.5'}`} style={{ transitionDelay: '0.28s' }}>
-                <span className="inline-block w-[7px] h-[7px] rounded-full bg-accent-green shadow-[0_0_8px_rgba(105,219,124,0.4)] mr-1.5 align-middle" />{' '}Open to opportunities
-              </span>
+              <motion.span
+                className="text-text-muted"
+                animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                transition={{ duration: 0.4, ease, delay: 0.28 }}
+              >status:</motion.span>
+              <motion.span
+                className="text-text"
+                animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                transition={{ duration: 0.4, ease, delay: 0.28 }}
+              >
+                <span className="inline-block w-[7px] h-[7px] rounded-full mr-1.5 align-middle" style={{ background: 'var(--color-accent-green)', boxShadow: '0 0 8px rgba(105,219,124,0.4)' }} />{' '}Open to opportunities
+              </motion.span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Idle cursor */}
-          <div className={`flex items-center gap-2.5 mt-5 text-[0.9375rem] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${phase >= PHASE.IDLE ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1.5'}`}>
+          <motion.div
+            className="flex items-center gap-2.5 mt-5 text-[0.9375rem]"
+            animate={phase >= PHASE.IDLE ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+            transition={{ duration: 0.4, ease }}
+          >
             <span className="font-bold text-base select-none" style={gradientStyle}>❯</span>
-            <span className="inline-block w-2 h-4.5 bg-accent animate-[blink_1s_step-end_infinite]" />
-          </div>
+            <Cursor />
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

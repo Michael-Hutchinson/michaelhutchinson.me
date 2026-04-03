@@ -1,6 +1,6 @@
-import React, { useEffect, useState, type ReactNode } from 'react';
+import React, { useEffect, useState, useRef, type ReactNode } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import useTypingEffect from './hooks/useTypingEffect';
-import useInView from './hooks/useInView';
 
 const chevronStyle: React.CSSProperties = {
   background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3))',
@@ -20,7 +20,7 @@ interface ConversationBlockProps {
   children: (visible: boolean) => ReactNode;
 }
 
-const PHASE = { WAITING: 0, TYPING: 1, THINKING: 2, THINKING_EXIT: 3, RESPONSE: 4 };
+const PHASE = { WAITING: 0, TYPING: 1, THINKING: 2, RESPONSE: 3 };
 
 export default function ConversationBlock({
   prompt,
@@ -30,7 +30,8 @@ export default function ConversationBlock({
   autoStart = false,
   children,
 }: Readonly<ConversationBlockProps>) {
-  const { ref, inView } = useInView();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-15% 0px' });
   const [phase, setPhase] = useState(autoStart ? PHASE.TYPING : PHASE.WAITING);
 
   const cmd = useTypingEffect({
@@ -40,26 +41,21 @@ export default function ConversationBlock({
     enabled: phase >= PHASE.TYPING,
   });
 
+  // Phase advancement
   useEffect(() => {
     if (inView && phase === PHASE.WAITING) setPhase(PHASE.TYPING);
-    if (cmd.isDone && phase === PHASE.TYPING)
-      setTimeout(() => setPhase(PHASE.THINKING), 300);
+    if (cmd.isDone && phase === PHASE.TYPING) {
+      const id = setTimeout(() => setPhase(PHASE.THINKING), 300);
+      return () => clearTimeout(id);
+    }
   }, [inView, cmd.isDone, phase]);
 
   useEffect(() => {
-    const delays: Record<number, number> = {
-      [PHASE.THINKING]: thinkingDuration,
-      [PHASE.THINKING_EXIT]: 300,
-    };
-    const delay = delays[phase];
-    if (delay == null) return;
-    const id = setTimeout(() => setPhase(phase + 1), delay);
-    return () => clearTimeout(id);
+    if (phase === PHASE.THINKING) {
+      const id = setTimeout(() => setPhase(PHASE.RESPONSE), thinkingDuration);
+      return () => clearTimeout(id);
+    }
   }, [phase, thinkingDuration]);
-
-  let thinkingState = 'hidden';
-  if (phase === PHASE.THINKING) thinkingState = 'entering';
-  else if (phase === PHASE.THINKING_EXIT) thinkingState = 'exiting';
 
   const showContent = phase >= PHASE.RESPONSE;
 
@@ -71,50 +67,59 @@ export default function ConversationBlock({
         <span className="text-text">
           {cmd.displayText}
           {phase === PHASE.TYPING && !cmd.isDone && (
-            <span
+            <motion.span
               className="inline-block w-2 h-4.5 align-text-bottom ml-px"
-              style={{ background: 'var(--color-accent)', animation: 'blink 1s step-end infinite' }}
+              style={{ background: 'var(--color-accent)' }}
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 1, repeat: Infinity, repeatType: 'loop', ease: 'steps(1)' }}
             />
           )}
         </span>
       </div>
 
       {/* Thinking block */}
-      <div
-        className={`
-          items-center gap-2 px-3.5 py-2.5 mb-5
-          rounded-md text-[0.8125rem] max-w-fit overflow-hidden
-          ${thinkingState === 'hidden' ? 'hidden' : 'flex'}
-          ${thinkingState === 'entering' ? 'animate-[thinking-enter_0.35s_cubic-bezier(0.16,1,0.3,1)_forwards]' : ''}
-          ${thinkingState === 'exiting' ? 'animate-[thinking-exit_0.25s_ease_forwards]' : ''}
-        `}
-        style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
-      >
-        <span className="inline-flex gap-1">
-          {[0, 0.15, 0.3].map((d) => (
-            <span
-              key={d}
-              className="w-[5px] h-[5px] rounded-full"
-              style={{ background: 'var(--color-accent)', animation: `dot-bounce 1.2s ease-in-out infinite ${d}s` }}
-            />
-          ))}
-        </span>
-        {thinkingMessage}
-      </div>
+      <AnimatePresence>
+        {phase === PHASE.THINKING && (
+          <motion.div
+            initial={{ opacity: 0, x: -8, height: 0, marginBottom: 0 }}
+            animate={{ opacity: 1, x: 0, height: 'auto', marginBottom: 20 }}
+            exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-md text-[0.8125rem] overflow-hidden"
+            style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
+          >
+            <span className="inline-flex gap-1">
+              {[0, 0.15, 0.3].map((d) => (
+                <motion.span
+                  key={d}
+                  className="w-[5px] h-[5px] rounded-full"
+                  style={{ background: 'var(--color-accent)' }}
+                  animate={{ y: [0, -6, 0], opacity: [0.3, 1, 0.3] }}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: d }}
+                />
+              ))}
+            </span>
+            {thinkingMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Response — children receive visible state for staggering */}
-      {children(showContent)}
+      {/* Response content */}
+      <motion.div
+        animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {children(showContent)}
+      </motion.div>
     </div>
   );
 }
 
-/** Helper: staggered reveal class generator */
-export function stagger(visible: boolean, index: number, base = 0.1): string {
-  return `transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-    visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-  }`;
-}
-
-export function staggerStyle(index: number, base = 0.1): React.CSSProperties {
-  return { transitionDelay: `${base + index * 0.08}s` };
+/** Stagger helper for children — returns motion props */
+export function staggerItem(visible: boolean, index: number, baseDelay = 0.1) {
+  return {
+    initial: { opacity: 0, y: 16 },
+    animate: visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as number[], delay: baseDelay + index * 0.08 },
+  };
 }
