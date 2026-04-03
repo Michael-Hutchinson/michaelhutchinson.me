@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useTypingEffect from './hooks/useTypingEffect';
 
-const ease = [0.16, 1, 0.3, 1] as const;
+const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const gradientStyle: React.CSSProperties = {
   background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3))',

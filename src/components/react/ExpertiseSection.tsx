@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 
-const ease = [0.16, 1, 0.3, 1] as const;
+const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const areas = [
   {

@@ -5,7 +5,7 @@ import { GithubIcon, LinkedinIcon } from './icons';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import ContactForm from './ContactForm';
 
-const ease = [0.16, 1, 0.3, 1] as const;
+const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const links = [
   { href: 'mailto:michael-hutchinson@hotmail.co.uk', icon: () => <Mail size={16} />, label: 'michael-hutchinson@hotmail.co.uk' },
