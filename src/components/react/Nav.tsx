@@ -82,12 +82,15 @@ export default function Nav() {
       </div>
 
       {/* Mobile overlay */}
-      <div className={`
-        fixed top-14 left-0 right-0 bottom-0 z-[999] bg-bg
-        flex flex-col items-center justify-center gap-5
-        transition-opacity duration-200 md:hidden z-50
-        ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-      `}>
+      <div
+        className={`
+          fixed inset-0 z-[999]
+          flex flex-col items-center justify-center gap-5
+          transition-opacity duration-200 md:hidden
+          ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+        `}
+        style={{ background: 'var(--color-bg)' }}
+      >
         {navItems.map((item) => (
           <a key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="text-base font-mono text-text-secondary py-2 px-4 hover:text-accent transition-colors">
             {item.label}
