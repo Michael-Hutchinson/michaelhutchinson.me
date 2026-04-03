@@ -18,6 +18,15 @@ const nameGradientStyle: React.CSSProperties = {
   animation: 'gradient-shift 6s ease infinite',
 };
 
+function BlinkingCursor() {
+  return (
+    <span
+      className="inline-block w-2 h-4.5 align-text-bottom ml-px"
+      style={{ background: 'var(--color-accent)', animation: 'blink 1s step-end infinite' }}
+    />
+  );
+}
+
 const PHASE = {
   TYPING_CMD1: 0, THINKING: 1, OUTPUT: 2,
   TYPING_CMD2: 3, STATUS: 4, IDLE: 5,
@@ -71,15 +80,6 @@ export default function HeroTerminal() {
     }
   }, [phase]);
 
-  const Cursor = () => (
-    <motion.span
-      className="inline-block w-2 h-4.5 align-text-bottom ml-px"
-      style={{ background: 'var(--color-accent)' }}
-      animate={{ opacity: [1, 0] }}
-      transition={{ duration: 1, repeat: Infinity, repeatType: 'loop', ease: 'steps(1)' }}
-    />
-  );
-
   return (
     <motion.div
       className="relative max-w-208"
@@ -126,7 +126,7 @@ export default function HeroTerminal() {
             <span className="font-bold text-base select-none shrink-0" style={gradientStyle}>❯</span>
             <span className="text-text">
               {cmd1.displayText}
-              {!cmd1.isDone && phase === PHASE.TYPING_CMD1 && <Cursor />}
+              {!cmd1.isDone && phase === PHASE.TYPING_CMD1 && <BlinkingCursor />}
             </span>
           </div>
 
@@ -196,7 +196,7 @@ export default function HeroTerminal() {
                 <span className="font-bold text-base select-none shrink-0" style={gradientStyle}>❯</span>
                 <span className="text-text">
                   {cmd2.displayText}
-                  {phase === PHASE.TYPING_CMD2 && !cmd2.isDone && <Cursor />}
+                  {phase === PHASE.TYPING_CMD2 && !cmd2.isDone && <BlinkingCursor />}
                 </span>
               </motion.div>
             )}
@@ -250,7 +250,7 @@ export default function HeroTerminal() {
             transition={{ duration: 0.4, ease }}
           >
             <span className="font-bold text-base select-none" style={gradientStyle}>❯</span>
-            <Cursor />
+            <BlinkingCursor />
           </motion.div>
         </div>
       </div>

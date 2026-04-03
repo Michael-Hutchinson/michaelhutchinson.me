@@ -67,11 +67,9 @@ export default function ConversationBlock({
         <span className="text-text">
           {cmd.displayText}
           {phase === PHASE.TYPING && !cmd.isDone && (
-            <motion.span
+            <span
               className="inline-block w-2 h-4.5 align-text-bottom ml-px"
-              style={{ background: 'var(--color-accent)' }}
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 1, repeat: Infinity, repeatType: 'loop', ease: 'steps(1)' }}
+              style={{ background: 'var(--color-accent)', animation: 'blink 1s step-end infinite' }}
             />
           )}
         </span>
