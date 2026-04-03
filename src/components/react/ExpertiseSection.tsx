@@ -92,7 +92,7 @@ function ExpertiseSection() {
                 </div>
 
                 <div className="p-5 relative z-2">
-                  <h3 className="text-[1.0625rem] font-semibold mb-2.5 font-sans text-text">{area.title}</h3>
+                  <h2 className="text-[1.0625rem] font-semibold mb-2.5 font-sans text-text">{area.title}</h2>
                   <p className="text-[0.8125rem] leading-relaxed mb-4" style={{ color: 'var(--color-text-secondary)' }}>{area.description}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {area.tags.map((tag) => (
