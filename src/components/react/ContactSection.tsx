@@ -4,6 +4,7 @@ import { Mail, ArrowUpRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './icons';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import ContactForm from './ContactForm';
+import withErrorBoundary from './withErrorBoundary';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -13,7 +14,7 @@ const links = [
   { href: 'https://www.linkedin.com/in/mhutchinson4', icon: LinkedinIcon, label: 'linkedin.com/in/mhutchinson4', external: true },
 ];
 
-export default function ContactSection() {
+function ContactSection() {
   return (
     <ConversationBlock prompt="how can I get in touch?" thinkingMessage="Composing response..." thinkingDuration={1000}>
       {(visible) => (
@@ -73,3 +74,5 @@ export default function ContactSection() {
     </ConversationBlock>
   );
 }
+
+export default withErrorBoundary(ContactSection, 'ContactSection');

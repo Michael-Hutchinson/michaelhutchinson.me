@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useTypingEffect from './hooks/useTypingEffect';
+import withErrorBoundary from './withErrorBoundary';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -44,7 +45,7 @@ const statusRows = [
   { key: 'tools:', value: 'Claude Code, MCP, AI Agents' },
 ];
 
-export default function HeroTerminal() {
+function HeroTerminal() {
   const [phase, setPhase] = useState(PHASE.TYPING_CMD1);
 
   const cmd1 = useTypingEffect({ text: 'whoami', speed: 70, delay: 800, enabled: phase >= PHASE.TYPING_CMD1 });
@@ -257,3 +258,5 @@ export default function HeroTerminal() {
     </motion.div>
   );
 }
+
+export default withErrorBoundary(HeroTerminal, 'HeroTerminal');

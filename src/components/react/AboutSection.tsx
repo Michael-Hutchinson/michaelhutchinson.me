@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
+import withErrorBoundary from './withErrorBoundary';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -24,7 +25,7 @@ const bios = [
   { key: 'staff-role', content: <>As a Staff Engineer, I operate across the entire organisation: defining technical strategy, mentoring engineers, driving architectural decisions, and <strong className="text-text font-medium">keeping my hands in the code every day</strong>.</> },
 ];
 
-export default function AboutSection() {
+function AboutSection() {
   return (
     <ConversationBlock prompt="tell me about Michael" thinkingMessage="Reading context..." thinkingDuration={1400}>
       {(visible) => (
@@ -92,3 +93,5 @@ export default function AboutSection() {
     </ConversationBlock>
   );
 }
+
+export default withErrorBoundary(AboutSection, 'AboutSection');

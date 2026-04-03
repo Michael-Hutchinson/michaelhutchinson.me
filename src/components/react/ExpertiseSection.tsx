@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
+import withErrorBoundary from './withErrorBoundary';
 
 const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -42,7 +43,7 @@ const badgeStyles: Record<string, React.CSSProperties> = {
   cyan: { background: 'color-mix(in srgb, var(--color-accent-cyan) 10%, transparent)', color: 'var(--color-accent-cyan)' },
 };
 
-export default function ExpertiseSection() {
+function ExpertiseSection() {
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
@@ -109,3 +110,5 @@ export default function ExpertiseSection() {
     </ConversationBlock>
   );
 }
+
+export default withErrorBoundary(ExpertiseSection, 'ExpertiseSection');
