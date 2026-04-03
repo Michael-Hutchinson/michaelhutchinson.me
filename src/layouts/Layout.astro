@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -20,25 +21,36 @@ const { title, description } = Astro.props;
     <meta name="theme-color" content="#1a1a2e" />
     <meta name="description" content={description} />
 
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalUrl.href} />
+
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalUrl.href} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
+    <!-- Fonts: preconnect + preload critical weights -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title="Michael Hutchinson — Blog" href="/rss.xml" />
+    <link rel="manifest" href="/manifest.json" />
 
     <title>{title}</title>
     <slot name="head" />
@@ -53,14 +65,22 @@ const { title, description } = Astro.props;
     </script>
   </head>
   <body>
+    <!-- Skip to content -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-md focus:text-sm focus:font-mono"
+      style="background: var(--color-accent); color: #fff;"
+    >
+      Skip to content
+    </a>
+
     <Header />
-    <main class="overflow-hidden relative">
+    <main id="main-content" class="overflow-hidden relative">
       <slot />
     </main>
     <Footer client:load />
 
     <script is:inline>
-      // Theme init (no flash)
       const theme = localStorage.getItem('theme') ||
         (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       document.documentElement.setAttribute('data-theme', theme);

@@ -1,15 +1,17 @@
 {
-  "short_name": "Michael Hutchinson",
-  "name": "Portfolio website for Michael Hutchinson",
+  "short_name": "MH",
+  "name": "Michael Hutchinson — Staff Engineer",
+  "description": "Portfolio and blog — AI-powered engineering, technical leadership, and building great software.",
   "icons": [
     {
       "src": "favicon.png",
       "sizes": "16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e",
+  "categories": ["portfolio", "blog", "technology"]
 }
