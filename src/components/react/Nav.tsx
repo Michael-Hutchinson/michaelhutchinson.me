@@ -83,7 +83,7 @@ export default function Nav() {
 
       {/* Mobile overlay */}
       <div className={`
-        fixed top-14 left-0 right-0 bottom-0 bg-bg backdrop-blur-xl
+        fixed top-14 left-0 right-0 bottom-0 z-[999] bg-bg
         flex flex-col items-center justify-center gap-5
         transition-opacity duration-200 md:hidden z-50
         ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
