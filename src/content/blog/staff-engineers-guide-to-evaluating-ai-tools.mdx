@@ -1,9 +1,9 @@
 ---
 title: "The Staff Engineer's Guide to Evaluating AI Tools"
-description: "A practical framework for cutting through AI hype — how to evaluate tools, measure real impact, and avoid the trap of adopting everything that ships."
-date: "2026-04-14"
+description: "A practical framework for cutting through AI hype. How to evaluate tools, measure real impact, and avoid the trap of adopting everything that ships."
+date: "2026-03-25"
 tags: ["AI", "Staff Engineer", "Strategy"]
-published: false
+published: true
 ---
 
 Every week there's a new AI tool that's going to "revolutionise your workflow." Every week, someone on the team wants to try it. And every week, the actual work still needs to get done.
@@ -58,7 +58,7 @@ After enough evaluations, patterns emerge. Here's what makes me immediately skep
 
 ## What actually matters: workflow integration over raw power
 
-The single most important insight from a year of evaluations: **the tools that stick are the ones that disappear into existing workflows.**
+After a year of this, one pattern is obvious: **the tools that stick are the ones that disappear into existing workflows.**
 
 Engineers don't want a new thing to learn. They want the thing they already do to work better. The AI tools that survived on my teams are the ones that operate inside the editor, inside the terminal, inside the PR review flow. They reduce friction rather than add a new step.
 
@@ -92,12 +92,12 @@ That's it. Three categories. We evaluated over thirty tools to get here. The res
 
 Sometimes the right tool doesn't exist. When a team has a specific enough workflow, building a custom integration often beats buying a general-purpose tool.
 
-My rule of thumb: **buy when the problem is generic, build when the problem is specific to your organisation.** Code completion is generic — buy it. Connecting AI to your internal deployment system with its specific quirks and permissions model — build it.
+My rule of thumb: **buy when the problem is generic, build when the problem is specific to your organisation.** Code completion is generic, buy it. Connecting AI to your internal deployment system with its specific quirks and permissions model? Build it.
 
 Building also gives you control. No vendor pivots, no surprise pricing changes, no dependency on someone else's roadmap. For critical workflow tools, that control is worth the upfront investment.
 
 ## The bottom line
 
-The AI tools landscape will keep moving fast. New products will keep shipping. The hype cycle will keep cycling. Your job as a Staff Engineer isn't to evaluate everything — it's to build a framework that lets you evaluate efficiently and adopt deliberately.
+The AI tools landscape will keep moving fast. New products will keep shipping. The hype cycle will keep cycling. Your job as a Staff Engineer isn't to evaluate everything. It's to build a framework that lets you evaluate efficiently and adopt deliberately.
 
-Be skeptical by default. Measure everything. Optimise for workflow integration over raw capability. And remember that the best AI tool is the one your team actually uses every day, not the one with the most impressive demo.
+Be skeptical by default. Measure everything. If you want the longer version of why workflow integration beats raw capability, I wrote about [going all-in on AI-first engineering](/blog/ai-first-engineering) and the [MCP server setup](/blog/mcp-servers-connect-claude-to-everything) that made it click for my team.

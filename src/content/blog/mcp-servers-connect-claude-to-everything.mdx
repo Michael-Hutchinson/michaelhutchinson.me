@@ -1,9 +1,9 @@
 ---
 title: "How I Use MCP Servers to Connect Claude to Everything"
-description: "A practical guide to building MCP servers that connect Claude Code to your internal tools, databases, and APIs — and why it's a game-changer for engineering teams."
+description: "A practical guide to building MCP servers that connect Claude Code to your internal tools, databases, and APIs. Why this matters for engineering teams using AI seriously."
 date: "2026-04-05"
 tags: ["MCP", "Claude Code", "Tooling"]
-published: false
+published: true
 ---
 
 If you've used Claude Code for more than a week, you've probably hit the wall: it's brilliant at reasoning about code, but it can't see your production metrics, query your internal APIs, or trigger a deployment. It's working blind.
@@ -46,13 +46,13 @@ Things I deliberately don't expose: anything that mutates production data withou
 
 ## Security is not optional
 
-Let me be direct: if you're connecting AI to internal systems and you're not thinking hard about security, stop and think harder.
+If you're connecting AI to internal systems and you're not thinking hard about security, stop and think harder.
 
 Here's what I enforce:
 
 - **Read-only by default.** Every MCP server starts read-only. Write access is opt-in, scoped, and logged.
 - **Least privilege everywhere.** The database MCP server connects with a role that can `SELECT` on specific tables. Not `*`. Not even close.
-- **Audit logging on every call.** Every tool invocation gets logged with the user, timestamp, parameters, and response summary. This isn't optional — it's how you maintain trust with your security team.
+- **Audit logging on every call.** Every tool invocation gets logged with the user, timestamp, parameters, and response summary. This isn't optional, it's how you maintain trust with your security team.
 - **No secrets in tool responses.** MCP servers should sanitize responses. If a user record includes an API key hash, strip it before returning.
 - **Environment gating.** Production access gets a different approval bar than staging. I run separate MCP server configs per environment, and production-touching tools require explicit opt-in in the Claude Code config.
 
@@ -62,7 +62,7 @@ The goal is to make the security posture so obviously solid that your infosec te
 
 Here's what's hard to convey until you've lived it: the value of MCP servers compounds.
 
-One server is convenient. Five servers connected to your core systems means Claude has a mental model of your infrastructure that's genuinely useful. It can correlate a customer complaint with a database record, a recent deploy, and an error spike — in a single conversation. That kind of cross-system reasoning used to require an experienced engineer with a dozen tabs open. Now it requires a well-connected Claude session.
+One server is convenient. Five servers connected to your core systems means Claude has a useful mental model of your infrastructure. It can correlate a customer complaint with a database record, a recent deploy, and an error spike in a single conversation. That kind of cross-system reasoning used to require an experienced engineer with a dozen tabs open. Now it requires a well-connected Claude session.
 
 The team effect is even more powerful. Junior engineers with access to these MCP tools can investigate issues with the effectiveness of someone who's been on the team for a year. The tools encode institutional knowledge about where to look, what to query, and how systems connect. That's leverage you can't get from documentation alone.
 
@@ -84,6 +84,6 @@ If you're sold and want to build your first MCP server, here's what I'd recommen
 
 ## Where this is going
 
-MCP is still early, but the trajectory is clear. The teams that build strong connective tissue between their AI tools and their internal systems will move meaningfully faster than those that don't. It's not about replacing engineers — it's about giving every engineer on the team an assistant that actually understands your stack.
+MCP is still early, but the trajectory is clear. The teams that build strong connective tissue between their AI tools and their internal systems will move meaningfully faster than those that don't. It's not about replacing engineers. It's about giving every engineer on the team an assistant that actually understands your stack.
 
-I've gone from skeptic to evangelist on this in six months. Build one MCP server, use it for a week, and I suspect you will too.
+Build one MCP server, use it for a week, and you'll see why I [went all-in on this approach](/blog/ai-first-engineering). If you want to take it further, I wrote about [building production AI agents](/blog/ai-agents-that-ship-to-production) on top of this kind of infrastructure.

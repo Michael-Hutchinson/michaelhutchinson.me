@@ -1,14 +1,14 @@
 ---
 title: "Building AI Agents That Actually Ship to Production"
-description: "Most AI agent demos are toys. Here's how we built agents that run in CI/CD, review code, and verify deployments — and what we learned along the way."
-date: "2026-04-11"
+description: "Most AI agent demos are toys. How we built agents that run in CI/CD, review code, and verify deployments in production."
+date: "2026-04-06"
 tags: ["AI Agents", "CI/CD", "Production"]
-published: false
+published: true
 ---
 
 Every conference talk about AI agents shows the same thing: a chatbot that books flights, a demo where an agent browses the web and fills out forms, maybe one that writes and executes code in a sandbox. The audience claps. Then everyone goes back to work and nothing changes.
 
-The gap between those demos and agents that actually run in production, unsupervised, making decisions that affect real systems — that gap is enormous. I've spent the last year building agents that cross it. Here's what I learned.
+The gap between those demos and agents that actually run in production, unsupervised, making decisions that affect real systems — that gap is enormous. I've spent the last year building agents that cross it.
 
 ## The demo-to-production gap
 
@@ -16,7 +16,7 @@ Demo agents operate in a world of happy paths. They have clean inputs, predictab
 
 Production agents deal with flaky APIs, ambiguous inputs, partial failures, rate limits, stale context, and the expectation that they'll handle all of it gracefully at 3am with nobody watching. The engineering required to make that work is at least 5x the effort of building the demo version.
 
-If you take one thing from this post: **the agent logic is maybe 20% of the work. The other 80% is reliability engineering.**
+The thing nobody tells you: **the agent logic is maybe 20% of the work. The other 80% is reliability engineering.**
 
 ## Three agents we actually shipped
 
@@ -32,7 +32,7 @@ The kill switch got used twice in the first month. We were glad we built it.
 
 This one watches for new functions and classes that lack test coverage. It generates test files, runs them to verify they pass, iterates if they fail, and opens a draft PR with the results.
 
-The critical design decision was making it open *draft* PRs, not merge directly. Engineers review the generated tests, keep what's useful, and close what isn't. Early on we tried having it commit directly to feature branches. Engineers hated it — it felt like someone else was pushing code to their branch without asking. The draft PR approach respects ownership while still reducing the grunt work.
+The critical design decision was making it open *draft* PRs, not merge directly. Engineers review the generated tests, keep what's useful, and close what isn't. Early on we tried having it commit directly to feature branches. Engineers hated it. It felt like someone else was pushing code to their branch without asking. The draft PR approach respects ownership while still reducing the grunt work.
 
 We also learned to constrain the agent's ambition. Left unchecked, it would generate elaborate integration tests requiring complex fixtures. We scoped it to unit tests only and saw acceptance rates jump from around 30% to over 70%.
 
@@ -44,20 +44,20 @@ The hardest part was calibrating the "something looks wrong" threshold. Too sens
 
 ## When to use agents vs simple LLM calls
 
-Not everything needs an agent. This is a mistake I see teams make constantly — reaching for autonomous, multi-step agent architectures when a single well-prompted LLM call would do the job.
+Not everything needs an agent. This is a mistake I see teams make constantly, reaching for autonomous, multi-step agent architectures when a single well-prompted LLM call would do the job.
 
-My rule of thumb: **use an agent when the task requires multiple decisions based on intermediate results.** If you can define the input and output cleanly with no branching, just make an LLM call. Code review needs an agent because it has to decide which files are relevant, what kind of feedback to give, and whether its findings are worth posting. Generating a PR description from a diff does not need an agent — that's one call.
+My rule of thumb: **use an agent when the task requires multiple decisions based on intermediate results.** If you can define the input and output cleanly with no branching, just make an LLM call. Code review needs an agent because it has to decide which files are relevant, what kind of feedback to give, and whether its findings are worth posting. Generating a PR description from a diff doesn't need an agent. That's one call.
 
 Agents add latency, cost, and failure modes. Every "step" in an agent loop is another place things can go wrong. Use them when the autonomy genuinely matters.
 
 ## Error handling is the whole game
 
-Agents fail. Models hallucinate. Context windows overflow. APIs time out. The question isn't whether your agent will fail — it's whether it fails gracefully.
+Agents fail. Models hallucinate. Context windows overflow. APIs time out. The question isn't whether your agent will fail. It's whether it fails gracefully.
 
 Our approach:
 
 - **Every agent action is idempotent.** If it crashes halfway through and restarts, it picks up where it left off without duplicating work or corrupting state.
-- **Structured output validation.** We don't trust the model's output format. Every response gets validated against a schema before anything downstream consumes it. If validation fails, we retry with explicit correction instructions — up to three times, then we bail and alert.
+- **Structured output validation.** We don't trust the model's output format. Every response gets validated against a schema before anything downstream consumes it. If validation fails, we retry with explicit correction instructions, up to three times, then bail and alert.
 - **Circuit breakers.** If an agent fails more than a threshold number of times in a window, it disables itself and notifies the team. This prevents runaway costs and cascading failures.
 - **Full trace logging.** Every prompt, every response, every decision point gets logged. When something goes wrong (and it will), you need to be able to reconstruct exactly what happened.
 
@@ -88,8 +88,8 @@ It took about three months before engineers started *expecting* the agents to be
 
 We're moving toward agents that don't just react but anticipate. An agent that notices a pattern of recent bug fixes in a module and proactively suggests refactoring. An agent that watches deployment metrics over time and recommends infrastructure changes before problems manifest.
 
-We're also investing in agent-to-agent coordination. Right now our agents are independent. The code review agent doesn't know what the test generation agent is doing. Connecting them — so that a review comment about missing edge case handling automatically triggers targeted test generation — is the next frontier.
+We're also investing in agent-to-agent coordination. Right now our agents are independent. The code review agent doesn't know what the test generation agent is doing. Connecting them so that a review comment about missing edge case handling automatically triggers targeted test generation is the next step.
 
 But I'll be honest: we're walking, not running. Every extension gets the same treatment. Shadow mode first. Metrics from day one. Kill switch always ready.
 
-The teams building AI agents that actually ship aren't the ones with the flashiest demos. They're the ones who treat agents like any other production system: with rigorous engineering, relentless measurement, and a healthy respect for everything that can go wrong.
+The teams building AI agents that actually ship aren't the ones with the flashiest demos. They're the ones who treat agents like any other production system: rigorous engineering, relentless measurement, and a healthy respect for what can go wrong. If you're earlier in the journey, I'd start with [MCP servers](/blog/mcp-servers-connect-claude-to-everything). The ROI is more immediate, and you'll learn the patterns you need for agents.
