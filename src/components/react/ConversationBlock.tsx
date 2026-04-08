@@ -104,6 +104,7 @@ export default function ConversationBlock({
 
       {/* Response content */}
       <motion.div
+        initial={{ opacity: 0, y: 12 }}
         animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
