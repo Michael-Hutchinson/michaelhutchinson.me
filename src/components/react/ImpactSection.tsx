@@ -31,23 +31,37 @@ const impacts = [
     metricLabel: 'enterprise customers',
     title: 'Social Learning Platform',
     description:
-      'Built a social feature — posts, comments, feeds — now a core platform capability used by all enterprise customers including Google and Emirates.',
+      'Built a social feature (posts, comments, feeds) now used as a core platform capability by all enterprise customers including Google and Emirates.',
     tags: ['React', 'Node.js', 'GraphQL'],
     file: 'src/impact/social.ts',
     accent: 'var(--color-accent-2)',
   },
 ];
 
-const project = {
-  name: 'ukrunner.com',
-  stat: '5,800+ km',
-  statLabel: 'tracked',
-  description:
-    "Personal side project — a Next.js app with Sanity CMS and Strava API integration tracking every kilometre I've run.",
-  tags: ['Next.js', 'Sanity CMS', 'Strava API'],
-  url: 'https://ukrunner.com',
-  file: 'projects/ukrunner/src/app/page.tsx',
-};
+const projects = [
+  {
+    name: 'strava-mcp-server',
+    stat: '9',
+    statLabel: 'MCP tools',
+    description:
+      'Open-source MCP server connecting Claude to Strava. Published on npm with an interactive OAuth setup flow.',
+    tags: ['MCP', 'Claude Code', 'Strava API', 'TypeScript'],
+    url: 'https://www.npmjs.com/package/@michaelhutchinson/strava-mcp-server',
+    file: 'strava-mcp-server/src/index.ts',
+    accent: 'var(--color-accent)',
+  },
+  {
+    name: 'ukrunner.com',
+    stat: '5,800+',
+    statLabel: 'km tracked',
+    description:
+      "Personal side project tracking every kilometre I've run. Next.js, Sanity CMS, Strava webhooks, and Neon Postgres.",
+    tags: ['Next.js', 'Sanity CMS', 'Strava API', 'Neon'],
+    url: 'https://ukrunner.com',
+    file: 'projects/ukrunner/src/app/page.tsx',
+    accent: 'var(--color-accent-green)',
+  },
+];
 
 function ImpactSection() {
   return (
@@ -146,94 +160,99 @@ function ImpactSection() {
             ))}
           </div>
 
-          {/* Side project card */}
-          <motion.a
-            href={project.url}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='group relative flex flex-col sm:flex-row sm:items-center gap-4 bg-bg-terminal border border-border rounded-lg overflow-hidden p-5 hover:border-border-hover transition-colors duration-200'
-            animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            transition={{ duration: 0.5, ease, delay: 0.55 }}
-            whileHover={{ y: -2 }}
-          >
-            {/* File tab label */}
-            <div className='absolute top-0 left-0 right-0 flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide'>
-              <span
-                className='text-[0.625rem] px-1.5 py-0.5 rounded font-medium'
-                style={{
-                  background:
-                    'color-mix(in srgb, var(--color-accent-green) 12%, transparent)',
-                  color: 'var(--color-accent-green)',
-                }}
+          {/* Project cards */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            {projects.map((project, i) => (
+              <motion.a
+                key={project.name}
+                href={project.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='group relative bg-bg-terminal border border-border rounded-lg overflow-hidden hover:border-border-hover transition-colors duration-200'
+                animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                transition={{ duration: 0.5, ease, delay: 0.55 + i * 0.1 }}
+                whileHover={{ y: -2 }}
               >
-                Open
-              </span>{' '}
-              {project.file}
-            </div>
-
-            <div className='mt-6 flex flex-col sm:flex-row sm:items-center gap-4 w-full'>
-              {/* Stat */}
-              <div className='shrink-0 text-center sm:text-left sm:w-32'>
+                {/* Top accent */}
                 <div
-                  className='text-[1.75rem] font-extrabold tracking-tight leading-none'
-                  style={{ color: 'var(--color-accent-green)' }}
-                >
-                  {project.stat}
-                </div>
-                <div
-                  className='text-[0.75rem] mt-0.5'
-                  style={{ color: 'var(--color-text-muted)' }}
-                >
-                  {project.statLabel}
-                </div>
-              </div>
+                  className='absolute top-0 left-0 right-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity duration-300'
+                  style={{ background: project.accent }}
+                />
 
-              <div className='h-px sm:h-10 sm:w-px bg-border shrink-0' />
-
-              {/* Content */}
-              <div className='flex-1 min-w-0'>
-                <div className='flex items-center gap-2 mb-1'>
-                  <span className='text-[0.9375rem] font-semibold text-text font-sans'>
-                    {project.name}
-                  </span>
-                  <svg
-                    className='w-3.5 h-3.5 opacity-40 group-hover:opacity-80 transition-opacity'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                    strokeWidth={2}
+                {/* File tab */}
+                <div className='flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide'>
+                  <span
+                    className='text-[0.625rem] px-1.5 py-0.5 rounded font-medium'
+                    style={{
+                      background: `color-mix(in srgb, ${project.accent} 12%, transparent)`,
+                      color: project.accent,
+                    }}
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
-                    />
-                  </svg>
+                    Open
+                  </span>{' '}
+                  {project.file}
                 </div>
-                <p
-                  className='text-[0.8125rem] leading-relaxed mb-3'
-                  style={{ color: 'var(--color-text-secondary)' }}
-                >
-                  {project.description}
-                </p>
-                <div className='flex flex-wrap gap-1.5'>
-                  {project.tags.map((tag) => (
+
+                <div className='p-5'>
+                  {/* Metric */}
+                  <div className='mb-3'>
                     <span
-                      key={tag}
-                      className='px-[7px] py-0.5 rounded text-[0.6875rem]'
-                      style={{
-                        background:
-                          'color-mix(in srgb, var(--color-accent-green) 8%, transparent)',
-                        color: 'var(--color-accent-green)',
-                      }}
+                      className='text-[2rem] font-extrabold tracking-tight leading-none'
+                      style={{ color: project.accent }}
                     >
-                      {tag}
+                      {project.stat}
                     </span>
-                  ))}
+                    <span
+                      className='text-[0.75rem] ml-2'
+                      style={{ color: 'var(--color-text-muted)' }}
+                    >
+                      {project.statLabel}
+                    </span>
+                  </div>
+
+                  <div className='flex items-center gap-2 mb-1'>
+                    <h2 className='text-[0.9375rem] font-semibold text-text font-sans'>
+                      {project.name}
+                    </h2>
+                    <svg
+                      className='w-3.5 h-3.5 opacity-40 group-hover:opacity-80 transition-opacity'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
+                      />
+                    </svg>
+                  </div>
+                  <p
+                    className='text-[0.8125rem] leading-relaxed mb-4'
+                    style={{ color: 'var(--color-text-secondary)' }}
+                  >
+                    {project.description}
+                  </p>
+
+                  <div className='flex flex-wrap gap-1.5'>
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className='px-[7px] py-0.5 rounded text-[0.6875rem]'
+                        style={{
+                          background: `color-mix(in srgb, ${project.accent} 8%, transparent)`,
+                          color: project.accent,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-          </motion.a>
+              </motion.a>
+            ))}
+          </div>
         </>
       )}
     </ConversationBlock>
