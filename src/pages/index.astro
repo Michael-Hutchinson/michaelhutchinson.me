@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import HeroTerminal from '../components/react/HeroTerminal.tsx';
 import AboutSection from '../components/react/AboutSection.tsx';
 import ExpertiseSection from '../components/react/ExpertiseSection.tsx';
+import ImpactSection from '../components/react/ImpactSection.tsx';
 import ContactSection from '../components/react/ContactSection.tsx';
 ---
 
@@ -26,6 +27,11 @@ import ContactSection from '../components/react/ContactSection.tsx';
   <!-- Expertise -->
   <section id="expertise" class="mx-auto max-w-4xl px-6 md:px-10 lg:px-12 py-20 md:py-28">
     <ExpertiseSection client:visible />
+  </section>
+
+  <!-- Impact -->
+  <section id="impact" class="mx-auto max-w-4xl px-6 md:px-10 lg:px-12 py-20 md:py-28">
+    <ImpactSection client:visible />
   </section>
 
   <!-- Contact -->
