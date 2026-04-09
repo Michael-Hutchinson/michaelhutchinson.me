@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import useTypingEffect from './hooks/useTypingEffect';
+import { ease } from './ui/constants';
 
 const chevronStyle: React.CSSProperties = {
-  background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3))',
+  background:
+    'linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3))',
   backgroundSize: '200% 200%',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
@@ -62,14 +64,22 @@ export default function ConversationBlock({
   return (
     <div ref={ref}>
       {/* Prompt line */}
-      <div className="flex items-baseline gap-2.5 text-[0.9375rem] mb-5">
-        <span className="font-bold text-base select-none shrink-0" style={chevronStyle}>❯</span>
-        <span className="text-text">
+      <div className='flex items-baseline gap-2.5 text-[0.9375rem] mb-5'>
+        <span
+          className='font-bold text-base select-none shrink-0'
+          style={chevronStyle}
+        >
+          ❯
+        </span>
+        <span className='text-text'>
           {cmd.displayText}
           {phase === PHASE.TYPING && !cmd.isDone && (
             <span
-              className="inline-block w-2 h-4.5 align-text-bottom ml-px"
-              style={{ background: 'var(--color-accent)', animation: 'blink 1s step-end infinite' }}
+              className='inline-block w-2 h-4.5 align-text-bottom ml-px'
+              style={{
+                background: 'var(--color-accent)',
+                animation: 'blink 1s step-end infinite',
+              }}
             />
           )}
         </span>
@@ -82,18 +92,27 @@ export default function ConversationBlock({
             initial={{ opacity: 0, x: -8, height: 0, marginBottom: 0 }}
             animate={{ opacity: 1, x: 0, height: 'auto', marginBottom: 20 }}
             exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-md text-[0.8125rem] overflow-hidden"
-            style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
+            transition={{ duration: 0.3, ease }}
+            className='flex items-center gap-2 px-3.5 py-2.5 rounded-md text-[0.8125rem] overflow-hidden'
+            style={{
+              background: 'var(--color-bg-card)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text-muted)',
+            }}
           >
-            <span className="inline-flex gap-1">
+            <span className='inline-flex gap-1'>
               {[0, 0.15, 0.3].map((d) => (
                 <motion.span
                   key={d}
-                  className="w-[5px] h-[5px] rounded-full"
+                  className='w-[5px] h-[5px] rounded-full'
                   style={{ background: 'var(--color-accent)' }}
                   animate={{ y: [0, -6, 0], opacity: [0.3, 1, 0.3] }}
-                  transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: d }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: d,
+                  }}
                 />
               ))}
             </span>
@@ -106,7 +125,7 @@ export default function ConversationBlock({
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.5, ease }}
       >
         {children(showContent)}
       </motion.div>
@@ -119,6 +138,6 @@ export function staggerItem(visible: boolean, index: number, baseDelay = 0.1) {
   return {
     initial: { opacity: 0, y: 16 },
     animate: visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: baseDelay + index * 0.08 },
+    transition: { duration: 0.5, ease, delay: baseDelay + index * 0.08 },
   };
 }

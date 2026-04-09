@@ -2,8 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import withErrorBoundary from './withErrorBoundary';
-
-const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+import Badge from './ui/Badge';
+import Tag from './ui/Tag';
+import { ease } from './ui/constants';
 
 const impacts = [
   {
@@ -102,16 +103,7 @@ function ImpactSection() {
 
                 {/* File tab */}
                 <div className='flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide'>
-                  <span
-                    className='text-[0.625rem] px-1.5 py-0.5 rounded font-medium'
-                    style={{
-                      background: `color-mix(in srgb, ${item.accent} 12%, transparent)`,
-                      color: item.accent,
-                    }}
-                  >
-                    Run
-                  </span>{' '}
-                  {item.file}
+                  <Badge color={item.accent}>Run</Badge> {item.file}
                 </div>
 
                 <div className='p-5'>
@@ -143,16 +135,9 @@ function ImpactSection() {
 
                   <div className='flex flex-wrap gap-1.5'>
                     {item.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className='px-[7px] py-0.5 rounded text-[0.6875rem]'
-                        style={{
-                          background: `color-mix(in srgb, ${item.accent} 8%, transparent)`,
-                          color: item.accent,
-                        }}
-                      >
+                      <Tag key={tag} color={item.accent}>
                         {tag}
-                      </span>
+                      </Tag>
                     ))}
                   </div>
                 </div>
@@ -181,16 +166,7 @@ function ImpactSection() {
 
                 {/* File tab */}
                 <div className='flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide'>
-                  <span
-                    className='text-[0.625rem] px-1.5 py-0.5 rounded font-medium'
-                    style={{
-                      background: `color-mix(in srgb, ${project.accent} 12%, transparent)`,
-                      color: project.accent,
-                    }}
-                  >
-                    Open
-                  </span>{' '}
-                  {project.file}
+                  <Badge color={project.accent}>Open</Badge> {project.file}
                 </div>
 
                 <div className='p-5'>
@@ -237,16 +213,9 @@ function ImpactSection() {
 
                   <div className='flex flex-wrap gap-1.5'>
                     {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className='px-[7px] py-0.5 rounded text-[0.6875rem]'
-                        style={{
-                          background: `color-mix(in srgb, ${project.accent} 8%, transparent)`,
-                          color: project.accent,
-                        }}
-                      >
+                      <Tag key={tag} color={project.accent}>
                         {tag}
-                      </span>
+                      </Tag>
                     ))}
                   </div>
                 </div>

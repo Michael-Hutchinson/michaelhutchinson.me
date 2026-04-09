@@ -23,6 +23,11 @@
 
   --color-border: rgba(255, 255, 255, 0.06);
   --color-border-hover: rgba(177, 151, 252, 0.2);
+
+  --shadow-accent-focus: 0 0 0 3px rgba(177, 151, 252, 0.08);
+  --shadow-accent-hover: 0 0 40px rgba(177, 151, 252, 0.08);
+  --shadow-button-hover: 0 4px 20px rgba(177, 151, 252, 0.2);
+  --shadow-glow-green: 0 0 8px rgba(105, 219, 124, 0.4);
 }
 
 @layer base {
