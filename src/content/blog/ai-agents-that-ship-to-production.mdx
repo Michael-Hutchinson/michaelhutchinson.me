@@ -48,7 +48,7 @@ Not everything needs an agent. This is a mistake I see teams make constantly, re
 
 My rule of thumb: **use an agent when the task requires multiple decisions based on intermediate results.** If you can define the input and output cleanly with no branching, just make an LLM call. Code review needs an agent because it has to decide which files are relevant, what kind of feedback to give, and whether its findings are worth posting. Generating a PR description from a diff doesn't need an agent. That's one call.
 
-Agents add latency, cost, and failure modes. Every "step" in an agent loop is another place things can go wrong. Use them when the autonomy genuinely matters.
+Agents add latency, cost, and failure modes. Every "step" in an agent loop is another place things can go wrong. Use them when the autonomy actually matters.
 
 ## Error handling is the whole game
 

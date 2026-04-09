@@ -60,7 +60,7 @@ After hundreds of hours with Claude Code, these are the patterns that consistent
 
 **Greenfield features.** I start by describing the feature in plain English, pointing to similar existing features for patterns, and letting Claude scaffold the full vertical slice — database schema, repository, API route, frontend component, and tests. I review the scaffold, then iterate on specifics.
 
-**Debugging.** This is where Claude Code genuinely shines. I paste the error, point it at the relevant files, and say "investigate." It reads the code, forms hypotheses, checks related files, and usually identifies the root cause faster than I would. For production issues, I pipe in the relevant logs and let it correlate.
+**Debugging.** This is where Claude Code really shines. I paste the error, point it at the relevant files, and say "investigate." It reads the code, forms hypotheses, checks related files, and usually identifies the root cause faster than I would. For production issues, I pipe in the relevant logs and let it correlate.
 
 **Refactoring.** Perfect AI task. "Migrate all uses of the old `UserService` class to the new `userRepository` pattern. Here is the mapping between old methods and new functions." Claude handles the mechanical work across dozens of files while I review the diffs.
 
@@ -74,7 +74,7 @@ The setup lives in `.claude/settings.json` under `mcpServers`. Each server is a 
 
 ## When to drive vs when to delegate
 
-This is the judgment call that takes practice. My rules of thumb:
+This is the judgement call that takes practice. My rules of thumb:
 
 **Let Claude drive** when the task is well-defined, has clear patterns to follow, and involves more typing than thinking. CRUD features, test writing, boilerplate, migrations, documentation.
 

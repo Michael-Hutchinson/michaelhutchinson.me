@@ -32,7 +32,7 @@ Our deploy pipeline exposes status via an API. Wrapping that in an MCP server me
 
 ### Monitoring and observability
 
-This one is underrated. Connecting Datadog, PagerDuty, or whatever your stack uses means Claude can pull recent alerts, check error rates, and correlate issues with recent deploys. When I'm investigating an incident, having Claude say "error rate for `payment-service` spiked 40 minutes ago, which aligns with deploy `v2.14.3`" is genuinely useful context that would have taken me several clicks and tabs to assemble.
+This one is underrated. Connecting Datadog, PagerDuty, or whatever your stack uses means Claude can pull recent alerts, check error rates, and correlate issues with recent deploys. When I'm investigating an incident, having Claude say "error rate for `payment-service` spiked 40 minutes ago, which aligns with deploy `v2.14.3`" is useful context that would have taken me several clicks and tabs to assemble.
 
 ## How to think about what to expose
 
@@ -48,7 +48,7 @@ Things I deliberately don't expose: anything that mutates production data withou
 
 If you're connecting AI to internal systems and you're not thinking hard about security, stop and think harder.
 
-Here's what I enforce:
+What I enforce:
 
 - **Read-only by default.** Every MCP server starts read-only. Write access is opt-in, scoped, and logged.
 - **Least privilege everywhere.** The database MCP server connects with a role that can `SELECT` on specific tables. Not `*`. Not even close.
@@ -60,7 +60,7 @@ The goal is to make the security posture so obviously solid that your infosec te
 
 ## The compound effect
 
-Here's what's hard to convey until you've lived it: the value of MCP servers compounds.
+The thing that's hard to convey until you've lived it: the value of MCP servers compounds.
 
 One server is convenient. Five servers connected to your core systems means Claude has a useful mental model of your infrastructure. It can correlate a customer complaint with a database record, a recent deploy, and an error spike in a single conversation. That kind of cross-system reasoning used to require an experienced engineer with a dozen tabs open. Now it requires a well-connected Claude session.
 
@@ -68,7 +68,7 @@ The team effect is even more powerful. Junior engineers with access to these MCP
 
 ## Getting started: practical advice
 
-If you're sold and want to build your first MCP server, here's what I'd recommend:
+If you're sold and want to build your first MCP server, this is what I'd recommend:
 
 1. **Start with the read-only database server.** It has the highest immediate ROI. Use a connection-pooled read replica, lock down the role permissions, and expose `query` and `list_tables` tools. You'll use it within the hour.
 
