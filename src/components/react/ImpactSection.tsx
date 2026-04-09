@@ -41,7 +41,7 @@ const impacts = [
 const projects = [
   {
     name: 'strava-mcp-server',
-    stat: '9',
+    stat: '7',
     statLabel: 'MCP tools',
     description:
       'Open-source MCP server connecting Claude to Strava. Published on npm with an interactive OAuth setup flow.',

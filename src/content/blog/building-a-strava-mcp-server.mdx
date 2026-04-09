@@ -8,17 +8,17 @@ published: false
 
 I run a lot. I also use Claude Code for basically everything at this point. So it was only a matter of time before I connected the two.
 
-Last week I built an MCP server that lets Claude query my Strava data directly. It's open source, published on npm, and anyone with a Strava account can set it up in about 60 seconds. Here's how I built it and what I learned along the way.
+Last week I built an MCP server that lets Claude query my Strava data directly. It's open source, published on npm, and anyone with a Strava account can set it up in about 60 seconds. Here's how I built it and what I learned.
 
 ## Why bother?
 
-I already have [ukrunner.com](https://ukrunner.com) for visualizing my running data. But ukrunner is a website. When I'm working in the terminal and want to know my mileage this month or check how a recent run went, I don't want to open a browser. I want to ask Claude.
+I already have [ukrunner.com](https://ukrunner.com) for visualising my running data. But ukrunner is a website. When I'm working in the terminal and want to know my mileage this month or check how a recent run went, I don't want to open a browser. I want to ask Claude.
 
 MCP servers solve exactly this problem. They give Claude structured access to external data without you having to copy-paste anything. I wrote about [the general approach](/blog/mcp-servers-connect-claude-to-everything) in an earlier post. This time I wanted to build something real, open source it, and see if other people would actually use it.
 
 ## What it does
 
-The server exposes 9 tools that Claude can call:
+The server exposes 7 tools that Claude can call:
 
 - **get_athlete** and **get_stats** for profile info and running totals (all-time, this year, last 4 weeks)
 - **get_activities** for listing recent runs with pagination and date filtering
@@ -26,7 +26,6 @@ The server exposes 9 tools that Claude can call:
 - **get_activity_streams** for time-series data (heart rate, pace, cadence, altitude over the course of a run)
 - **get_personal_records** for your best times across standard distances
 - **get_starred_segments** for your favourite segments with personal bests
-- **get_friends_activities** for seeing what people you follow have been up to
 
 Once it's set up, you just ask Claude natural questions. "What's my 5K PB?" or "How was my heart rate during last Sunday's long run?" and it picks the right tool automatically.
 
@@ -34,7 +33,7 @@ Once it's set up, you just ask Claude natural questions. "What's my 5K PB?" or "
 
 The hardest part wasn't building the tools. It was the setup experience.
 
-Strava uses OAuth 2.0. That means anyone who wants to use the server needs a client ID, client secret, and refresh token. Getting the refresh token requires crafting a URL, authorizing in the browser, catching a redirect, and exchanging an authorization code via curl. For a developer, it's 5 minutes of mild annoyance. For anyone else, it's a wall.
+Strava uses OAuth 2.0. That means anyone who wants to use the server needs a client ID, client secret, and refresh token. Getting the refresh token requires crafting a URL, authorising in the browser, catching a redirect, and exchanging an authorisation code via curl. For a developer, it's 5 minutes of mild annoyance. For anyone else, it's a wall.
 
 I built an interactive setup command that handles the whole flow:
 
@@ -42,7 +41,7 @@ I built an interactive setup command that handles the whole flow:
 npx @michaelhutchinson/strava-mcp-server setup
 ```
 
-It asks for your client ID and secret, spins up a local HTTP server on port 8420, opens the Strava authorization page in your browser, catches the OAuth callback, exchanges the code for tokens, and prints the exact `claude mcp add` command you need to paste. The whole thing takes about 30 seconds.
+It asks for your client ID and secret, spins up a local HTTP server on port 8420, opens the Strava authorisation page in your browser, catches the OAuth callback, exchanges the code for tokens, and prints the exact `claude mcp add` command you need to paste. The whole thing takes about 30 seconds.
 
 This was maybe 20% of the total code but 80% of the user experience improvement. Most MCP servers I've seen punt on this and tell you to "follow the OAuth guide." That's fine for developers, but I wanted non-technical friends who run to be able to set this up.
 
@@ -52,7 +51,7 @@ An early version of the server returned raw JSON from the Strava API. Claude cou
 
 I switched to pre-formatted plain text. Each tool returns human-readable output with the key information pulled out and formatted sensibly. Distances in km, paces in min/km, durations as "1h 23m", dates in a readable format. This cut the token usage significantly and made Claude's responses much cleaner.
 
-For activity streams (heart rate, pace over time), I added automatic downsampling. A 2-hour run might have 7,000+ data points. The server samples down to ~100 points, which is enough for Claude to analyze trends without burning through context.
+For activity streams (heart rate, pace over time), I added automatic downsampling. A 2-hour run might have 7,000+ data points. The server samples down to ~100 points, which is enough for Claude to analyse trends without burning through context.
 
 ## What I'd do differently
 
