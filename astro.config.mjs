@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://michael-hutchinson.me',
+  site: 'https://michaelhutchinson.me',
   output: 'static',
   integrations: [
     react(),
