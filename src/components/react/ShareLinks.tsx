@@ -18,12 +18,12 @@ export default function ShareLinks({ title, url }: Readonly<ShareLinksProps>) {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-xs font-mono text-text-muted">share:</span>
+      <span className="text-text-muted font-mono text-xs">share:</span>
       <a
         href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-8 h-8 rounded-md border border-border text-text-muted transition-all duration-150 hover:border-border-hover hover:text-text"
+        className="border-border text-text-muted hover:border-border-hover hover:text-text flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-150"
         aria-label="Share on X"
       >
         <XIcon />
@@ -32,7 +32,7 @@ export default function ShareLinks({ title, url }: Readonly<ShareLinksProps>) {
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-8 h-8 rounded-md border border-border text-text-muted transition-all duration-150 hover:border-border-hover hover:text-text"
+        className="border-border text-text-muted hover:border-border-hover hover:text-text flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-150"
         aria-label="Share on LinkedIn"
       >
         <LinkedinIcon />

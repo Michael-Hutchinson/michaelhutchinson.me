@@ -44,73 +44,65 @@ function ExperienceSection() {
   return (
     <ConversationBlock
       prompt="show me Michael's experience"
-      thinkingMessage='Reading career data...'
+      thinkingMessage="Reading career data..."
       thinkingDuration={1100}
     >
       {(visible) => (
         <>
           <motion.p
-            className='text-[0.9375rem] mb-6 max-w-xl'
+            className="mb-6 max-w-xl text-[0.9375rem]"
             style={{ color: 'var(--color-text-secondary)' }}
             {...staggerItem(visible, 0, 0.05)}
           >
             10+ years across insurance tech, e-commerce, and enterprise SaaS:
           </motion.p>
 
-          <div className='flex flex-col gap-4'>
+          <div className="flex flex-col gap-4">
             {career.map((entry, i) => (
               <motion.article
                 key={entry.company}
-                className='group relative bg-bg-terminal border border-border rounded-lg overflow-hidden'
+                className="group bg-bg-terminal border-border relative overflow-hidden rounded-lg border"
                 animate={
-                  visible
-                    ? { opacity: 1, y: 0, scale: 1 }
-                    : { opacity: 0, y: 20, scale: 0.96 }
+                  visible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.96 }
                 }
                 transition={{ duration: 0.5, ease, delay: 0.15 + i * 0.12 }}
               >
                 {/* Top accent */}
                 <div
-                  className='absolute top-0 left-0 right-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity duration-300'
+                  className="absolute top-0 right-0 left-0 h-[2px] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
                   style={{ background: entry.accent }}
                 />
 
                 {/* File tab */}
-                <div className='flex items-center gap-2 px-3.5 py-2 border-b border-border text-[0.6875rem] text-text-muted tracking-wide'>
+                <div className="border-border text-text-muted flex items-center gap-2 border-b px-3.5 py-2 text-[0.6875rem] tracking-wide">
                   <Badge color={entry.accent}>Read</Badge> {entry.file}
                 </div>
 
-                <div className='p-5'>
+                <div className="p-5">
                   {/* Company header */}
-                  <div className='flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1'>
-                    <h2 className='text-[0.9375rem] font-semibold text-text font-sans'>
+                  <div className="mb-1 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                    <h2 className="text-text font-sans text-[0.9375rem] font-semibold">
                       {entry.company}
                     </h2>
-                    <span
-                      className='text-[0.75rem]'
-                      style={{ color: 'var(--color-text-muted)' }}
-                    >
+                    <span className="text-[0.75rem]" style={{ color: 'var(--color-text-muted)' }}>
                       {entry.location}
                     </span>
                   </div>
-                  <p
-                    className='text-[0.75rem] mb-3'
-                    style={{ color: 'var(--color-text-muted)' }}
-                  >
+                  <p className="mb-3 text-[0.75rem]" style={{ color: 'var(--color-text-muted)' }}>
                     {entry.context}
                   </p>
 
                   {/* Roles */}
-                  <div className='flex flex-col gap-2'>
+                  <div className="flex flex-col gap-2">
                     {entry.roles.map((role) => (
                       <div
                         key={role.title}
-                        className='flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5'
+                        className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between"
                       >
-                        <div className='flex items-center gap-2'>
+                        <div className="flex items-center gap-2">
                           {role.current && (
                             <span
-                              className='w-[7px] h-[7px] rounded-full shrink-0'
+                              className="h-[7px] w-[7px] shrink-0 rounded-full"
                               style={{
                                 background: 'var(--color-accent-green)',
                                 boxShadow: 'var(--shadow-glow-green)',
@@ -118,7 +110,7 @@ function ExperienceSection() {
                             />
                           )}
                           <span
-                            className='text-[0.8125rem]'
+                            className="text-[0.8125rem]"
                             style={{
                               color: role.current
                                 ? 'var(--color-text)'
@@ -129,7 +121,7 @@ function ExperienceSection() {
                           </span>
                         </div>
                         <span
-                          className='text-[0.6875rem] font-mono'
+                          className="font-mono text-[0.6875rem]"
                           style={{ color: 'var(--color-text-muted)' }}
                         >
                           {role.period}
@@ -144,15 +136,15 @@ function ExperienceSection() {
 
           {/* CV download */}
           <motion.div
-            className='mt-4 text-center'
+            className="mt-4 text-center"
             animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, ease, delay: 0.6 }}
           >
             <a
-              href='/CV.pdf'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center gap-2 text-[0.8125rem] font-mono px-4 py-2 rounded border border-border hover:border-border-hover transition-colors duration-200'
+              href="/CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-border hover:border-border-hover inline-flex items-center gap-2 rounded border px-4 py-2 font-mono text-[0.8125rem] transition-colors duration-200"
               style={{ color: 'var(--color-accent)' }}
             >
               view full cv.pdf

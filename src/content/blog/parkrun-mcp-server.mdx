@@ -1,0 +1,58 @@
+---
+title: 'A parkrun MCP Server That Needs Zero Configuration'
+description: 'I built an MCP server for finding parkrun events from Claude. No API keys, no OAuth, no setup. Just install and ask.'
+date: '2026-05-06'
+tags: ['MCP', 'Claude Code', 'parkrun', 'TypeScript']
+published: false
+---
+
+After building the [Strava MCP server](/blog/building-a-strava-mcp-server), I wanted to try something different: an MCP server with zero configuration. No API keys, no OAuth flow, no environment variables. Just install it and start asking questions.
+
+parkrun was the perfect candidate. Their event data is publicly available as a JSON file on their CDN, and the questions you'd want to ask are simple: where's my nearest parkrun, how many are there in the UK, tell me about a specific event.
+
+## What it does
+
+Four tools:
+
+- **find_nearby_parkruns** takes a latitude and longitude and returns the closest events sorted by distance
+- **search_parkruns** matches against event names, locations, and park names
+- **get_parkrun_details** gives you the full info for a specific event with links to results, course map, and event page
+- **get_parkrun_stats** shows the global breakdown by country
+
+The setup is one command:
+
+```bash
+claude mcp add parkrun -- npx -y @michaelhutchinson/parkrun-mcp-server
+```
+
+No credentials, no config file, no browser auth flow. That's the whole setup.
+
+## The data source
+
+parkrun publishes a GeoJSON file at `images.parkrun.com/events.json` with every event worldwide. Each entry has the event name, location, country, coordinates, and whether it's a standard 5K or a junior 2K event.
+
+The server fetches this once and caches it for 24 hours. Every tool call after the first one is instant since it's just filtering in-memory data. No rate limits to worry about, no API keys to rotate.
+
+The tradeoff is that you only get event metadata, not results or times. parkrun blocks scraping of their results pages, so individual athlete data isn't available. If you want your personal parkrun results, they show up in Strava anyway, which the [Strava MCP server](/blog/building-a-strava-mcp-server) already handles.
+
+## Country-specific URLs
+
+One detail that took more thought than expected: parkrun uses different domains per country. A UK event links to `parkrun.org.uk`, an Australian one to `parkrun.com.au`, a US one to `parkrun.us`. The server maps country codes to the correct domain so every event link actually works, regardless of where it is.
+
+Small thing, but the kind of thing that breaks trust if you get it wrong. A user in Melbourne clicking a link that goes to the UK site isn't going to try your tool again.
+
+## Why zero-config MCP servers matter
+
+Most MCP servers require OAuth, API keys, or both. That's a real barrier to adoption. Every setup step is a point where someone gives up. The Strava MCP server needed an interactive OAuth flow just to make it bearable, and that still requires creating a Strava API app first.
+
+With parkrun, I could skip all of that. And the result is noticeably different: I can send someone a single command and they're running (pun intended) in 30 seconds. No "first go to this website and create an app" preamble.
+
+If you're building MCP servers, look for public data sources first. The best tool is the one people actually install.
+
+## Try it
+
+```bash
+claude mcp add parkrun -- npx -y @michaelhutchinson/parkrun-mcp-server
+```
+
+Source on [GitHub](https://github.com/Michael-Hutchinson/parkrun-mcp-server), package on [npm](https://www.npmjs.com/package/@michaelhutchinson/parkrun-mcp-server).

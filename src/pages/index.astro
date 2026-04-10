@@ -4,6 +4,7 @@ import HeroTerminal from '../components/react/HeroTerminal.tsx';
 import AboutSection from '../components/react/AboutSection.tsx';
 import ExpertiseSection from '../components/react/ExpertiseSection.tsx';
 import ImpactSection from '../components/react/ImpactSection.tsx';
+import ProjectsSection from '../components/react/ProjectsSection.tsx';
 import ExperienceSection from '../components/react/ExperienceSection.tsx';
 import ContactSection from '../components/react/ContactSection.tsx';
 ---
@@ -14,34 +15,46 @@ import ContactSection from '../components/react/ContactSection.tsx';
 >
   <!-- Hero -->
   <div class="relative min-h-screen">
-    <div class="hero-mesh absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 15% 50%, rgba(177,151,252,0.1) 0%, transparent 50%), radial-gradient(ellipse at 85% 20%, rgba(218,119,242,0.08) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(255,160,122,0.05) 0%, transparent 50%);" />
-    <section id="home" class="relative mx-auto max-w-4xl min-h-screen flex flex-col justify-center px-6 md:px-10 lg:px-12 py-20">
+    <div
+      class="hero-mesh pointer-events-none absolute inset-0"
+      style="background: radial-gradient(ellipse at 15% 50%, rgba(177,151,252,0.1) 0%, transparent 50%), radial-gradient(ellipse at 85% 20%, rgba(218,119,242,0.08) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(255,160,122,0.05) 0%, transparent 50%);"
+    >
+    </div>
+    <section
+      id="home"
+      class="relative mx-auto flex min-h-screen max-w-4xl flex-col justify-center px-6 py-20 md:px-10 lg:px-12"
+    >
       <HeroTerminal client:load />
     </section>
   </div>
 
   <!-- About -->
-  <section id="about" class="mx-auto max-w-4xl px-6 md:px-10 lg:px-12 py-20 md:py-28">
+  <section id="about" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
     <AboutSection client:visible />
   </section>
 
   <!-- Expertise -->
-  <section id="expertise" class="mx-auto max-w-4xl px-6 md:px-10 lg:px-12 py-20 md:py-28">
+  <section id="expertise" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
     <ExpertiseSection client:visible />
   </section>
 
   <!-- Impact -->
-  <section id="impact" class="mx-auto max-w-4xl px-6 md:px-10 lg:px-12 py-20 md:py-28">
+  <section id="impact" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
     <ImpactSection client:visible />
   </section>
 
+  <!-- Projects -->
+  <section id="projects" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
+    <ProjectsSection client:visible />
+  </section>
+
   <!-- Experience -->
-  <section id="experience" class="mx-auto max-w-4xl px-6 md:px-10 lg:px-12 py-20 md:py-28">
+  <section id="experience" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
     <ExperienceSection client:visible />
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="mx-auto max-w-4xl px-6 md:px-10 lg:px-12 py-20 md:py-28">
+  <section id="contact" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
     <ContactSection client:visible />
   </section>
 </Layout>

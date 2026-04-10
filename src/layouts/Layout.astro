@@ -29,6 +29,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl.href} />
+    <meta property="og:image" content={new URL('/og-default.png', Astro.site).href} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -49,7 +50,12 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" type="application/rss+xml" title="Michael Hutchinson — Blog" href="/rss.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Michael Hutchinson — Blog"
+      href="/rss.xml"
+    />
     <link rel="manifest" href="/manifest.json" />
 
     <title>{title}</title>
@@ -59,7 +65,9 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-44KVZWRR3C"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
+      function gtag() {
+        dataLayer.push(arguments); // eslint-disable-line prefer-rest-params
+      }
       gtag('js', new Date());
       gtag('config', 'G-44KVZWRR3C');
     </script>
@@ -68,20 +76,21 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <!-- Skip to content -->
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-md focus:text-sm focus:font-mono"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-9999 focus:rounded-md focus:px-4 focus:py-2 focus:font-mono focus:text-sm"
       style="background: var(--color-accent); color: #fff;"
     >
       Skip to content
     </a>
 
     <Header />
-    <main id="main-content" class="overflow-hidden relative">
+    <main id="main-content" class="relative overflow-hidden">
       <slot />
     </main>
-    <Footer client:load />
+    <Footer client:idle />
 
     <script is:inline>
-      const theme = localStorage.getItem('theme') ||
+      const theme =
+        localStorage.getItem('theme') ||
         (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       document.documentElement.setAttribute('data-theme', theme);
     </script>

@@ -36,13 +36,10 @@ const bios = [
     key: 'experience',
     content: (
       <>
-        I'm a <strong className='text-text font-medium'>Staff Engineer</strong>{' '}
-        with over a decade of experience building software across the full stack
-        — from React frontends to cloud-native backends. I hold a{' '}
-        <span style={{ color: 'var(--color-accent)' }}>
-          Master's in IT from Leeds University
-        </span>
-        .
+        I'm a <strong className="text-text font-medium">Staff Engineer</strong> with over a decade
+        of experience building software across the full stack — from React frontends to cloud-native
+        backends. I hold a{' '}
+        <span style={{ color: 'var(--color-accent)' }}>Master's in IT from Leeds University</span>.
       </>
     ),
   },
@@ -51,11 +48,9 @@ const bios = [
     content: (
       <>
         Right now, I'm all-in on the intersection of{' '}
-        <strong className='text-text font-medium'>
-          AI and software engineering
-        </strong>
-        . I use Claude Code, MCP servers, and custom AI agents every day to
-        multiply team velocity and ship better software, faster.
+        <strong className="text-text font-medium">AI and software engineering</strong>. I use Claude
+        Code, MCP servers, and custom AI agents every day to multiply team velocity and ship better
+        software, faster.
       </>
     ),
   },
@@ -63,13 +58,9 @@ const bios = [
     key: 'staff-role',
     content: (
       <>
-        As a Staff Engineer, I operate across the entire organisation: defining
-        technical strategy, mentoring engineers, driving architectural
-        decisions, and{' '}
-        <strong className='text-text font-medium'>
-          keeping my hands in the code every day
-        </strong>
-        .
+        As a Staff Engineer, I operate across the entire organisation: defining technical strategy,
+        mentoring engineers, driving architectural decisions, and{' '}
+        <strong className="text-text font-medium">keeping my hands in the code every day</strong>.
       </>
     ),
   },
@@ -78,8 +69,8 @@ const bios = [
 function AboutSection() {
   return (
     <ConversationBlock
-      prompt='tell me about Michael'
-      thinkingMessage='Reading context...'
+      prompt="tell me about Michael"
+      thinkingMessage="Reading context..."
       thinkingDuration={1400}
     >
       {(visible) => (
@@ -87,7 +78,7 @@ function AboutSection() {
           {bios.map((bio, i) => (
             <motion.p
               key={bio.key}
-              className='text-[0.9375rem] leading-relaxed mb-3.5'
+              className="mb-3.5 text-[0.9375rem] leading-relaxed"
               style={{ color: 'var(--color-text-secondary)' }}
               {...staggerItem(visible, i, 0.05)}
             >
@@ -95,29 +86,27 @@ function AboutSection() {
             </motion.p>
           ))}
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-5 mt-6'>
+          <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
             {/* Profile card */}
             <motion.div
-              className='bg-bg-terminal border border-border rounded-lg overflow-hidden'
+              className="bg-bg-terminal border-border overflow-hidden rounded-lg border"
               {...staggerItem(visible, 0, 0.35)}
             >
-              <FileTab label='Read' path='~/about/profile.yml' />
-              <div className='p-4'>
+              <FileTab label="Read" path="~/about/profile.yml" />
+              <div className="p-4">
                 {stats.map((row, i) => (
                   <motion.div
                     key={row.k}
-                    className='flex justify-between items-baseline py-2 border-b border-border last:border-0 text-[0.8125rem]'
-                    animate={
-                      visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -8 }
-                    }
+                    className="border-border flex items-baseline justify-between border-b py-2 text-[0.8125rem] last:border-0"
+                    animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -8 }}
                     transition={{
                       duration: 0.35,
                       ease,
                       delay: 0.45 + i * 0.06,
                     }}
                   >
-                    <span className='text-text-muted'>{row.k}</span>
-                    <span className='text-text text-right'>{row.v}</span>
+                    <span className="text-text-muted">{row.k}</span>
+                    <span className="text-text text-right">{row.v}</span>
                   </motion.div>
                 ))}
               </div>
@@ -125,20 +114,16 @@ function AboutSection() {
 
             {/* Stack card */}
             <motion.div
-              className='bg-bg-terminal border border-border rounded-lg overflow-hidden'
+              className="bg-bg-terminal border-border overflow-hidden rounded-lg border"
               {...staggerItem(visible, 1, 0.35)}
             >
-              <FileTab label='Read' path='~/about/stack.json' />
-              <div className='p-4'>
-                <div className='flex flex-wrap gap-1.5'>
+              <FileTab label="Read" path="~/about/stack.json" />
+              <div className="p-4">
+                <div className="flex flex-wrap gap-1.5">
                   {dailyTech.map((tech, i) => (
                     <motion.span
                       key={tech}
-                      animate={
-                        visible
-                          ? { opacity: 1, scale: 1 }
-                          : { opacity: 0, scale: 0.75 }
-                      }
+                      animate={visible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.75 }}
                       transition={{
                         duration: 0.3,
                         ease,

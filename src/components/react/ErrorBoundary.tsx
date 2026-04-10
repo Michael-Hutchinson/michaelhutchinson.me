@@ -26,20 +26,22 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback ?? (
-        <div
-          className="p-6 rounded-lg border text-center font-mono text-sm"
-          style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
-        >
-          <p>Something went wrong loading this section.</p>
-          <button
-            onClick={() => this.setState({ hasError: false })}
-            className="mt-3 px-4 py-1.5 rounded border text-xs"
-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-accent)' }}
+      return (
+        this.props.fallback ?? (
+          <div
+            className="rounded-lg border p-6 text-center font-mono text-sm"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
           >
-            try again
-          </button>
-        </div>
+            <p>Something went wrong loading this section.</p>
+            <button
+              onClick={() => this.setState({ hasError: false })}
+              className="mt-3 rounded border px-4 py-1.5 text-xs"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-accent)' }}
+            >
+              try again
+            </button>
+          </div>
+        )
       );
     }
 

@@ -7,6 +7,7 @@ const navItems = [
   { label: 'About', href: '/#about' },
   { label: 'Expertise', href: '/#expertise' },
   { label: 'Impact', href: '/#impact' },
+  { label: 'Projects', href: '/#projects' },
   { label: 'Experience', href: '/#experience' },
   { label: 'Contact', href: '/#contact' },
   { label: 'Blog', href: '/blog' },
@@ -15,27 +16,25 @@ const navItems = [
 function MobileOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Lock body scroll
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [open]);
 
   if (!mounted) return null;
 
   return createPortal(
     <div
-      className={`
-        fixed inset-0
-        flex flex-col items-center justify-center gap-6
-        transition-all duration-300 md:hidden
-        ${open
-          ? 'opacity-100 pointer-events-auto'
-          : 'opacity-0 pointer-events-none'
-        }
-      `}
+      className={`fixed inset-0 flex flex-col items-center justify-center gap-6 transition-all duration-300 md:hidden ${
+        open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+      } `}
       style={{
         zIndex: 9999,
         background: 'var(--color-bg)',
@@ -45,7 +44,7 @@ function MobileOverlay({ open, onClose }: { open: boolean; onClose: () => void }
       <button
         onClick={onClose}
         aria-label="Close menu"
-        className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 text-text-secondary"
+        className="text-text-secondary absolute top-4 right-4 flex h-10 w-10 items-center justify-center"
       >
         <X size={24} />
       </button>
@@ -56,10 +55,14 @@ function MobileOverlay({ open, onClose }: { open: boolean; onClose: () => void }
           key={item.href}
           href={item.href}
           onClick={onClose}
-          className="text-lg font-mono py-2 px-4 transition-colors duration-150"
+          className="px-4 py-2 font-mono text-lg transition-colors duration-150"
           style={{ color: 'var(--color-text-secondary)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-accent)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-text-secondary)'; }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--color-accent)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'var(--color-text-secondary)';
+          }}
         >
           {item.label}
         </a>
@@ -68,7 +71,7 @@ function MobileOverlay({ open, onClose }: { open: boolean; onClose: () => void }
         href="/CV.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-sm font-mono px-5 py-2 rounded transition-all duration-150"
+        className="rounded px-5 py-2 font-mono text-sm transition-all duration-150"
         style={{
           color: 'var(--color-accent)',
           border: '1px solid var(--color-border)',
@@ -77,7 +80,7 @@ function MobileOverlay({ open, onClose }: { open: boolean; onClose: () => void }
         cv.pdf
       </a>
     </div>,
-    document.body
+    document.body,
   );
 }
 
@@ -102,12 +105,13 @@ export default function Nav() {
 
   return (
     <>
-      <nav className="flex items-center justify-between w-full">
+      <nav className="flex w-full items-center justify-between">
         <a
           href="/#home"
-          className="font-mono font-bold text-[0.9375rem]"
+          className="font-mono text-[0.9375rem] font-bold"
           style={{
-            background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3))',
+            background:
+              'linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3))',
             backgroundSize: '200% 200%',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -115,18 +119,29 @@ export default function Nav() {
             animation: 'gradient-shift 4s ease infinite',
           }}
         >
-          mh<span style={{ WebkitTextFillColor: 'var(--color-text-muted)' }}>~$</span>
+          mh
+          <span style={{ WebkitTextFillColor: 'var(--color-text-muted)' }}>~$</span>
         </a>
 
         <div className="flex items-center gap-1">
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-0">
+          <div className="hidden items-center gap-0 md:flex">
             {navItems.map((item) => (
-              <a key={item.href} href={item.href} className="text-[0.8125rem] font-mono text-text-muted px-2.5 py-1.5 rounded transition-colors duration-150 hover:text-text">
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-text-muted hover:text-text rounded px-2.5 py-1.5 font-mono text-[0.8125rem] transition-colors duration-150"
+              >
                 {item.label}
               </a>
             ))}
-            <a href="/CV.pdf" target="_blank" rel="noopener noreferrer" className="text-xs font-mono border border-border rounded px-2.5 py-1 ml-1.5 transition-all duration-150 hover:border-border-hover" style={{ color: 'var(--color-accent)' }}>
+            <a
+              href="/CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-border hover:border-border-hover ml-1.5 rounded border px-2.5 py-1 font-mono text-xs transition-all duration-150"
+              style={{ color: 'var(--color-accent)' }}
+            >
               cv.pdf
             </a>
           </div>
@@ -135,7 +150,7 @@ export default function Nav() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="flex items-center justify-center w-8 h-8 border border-border rounded text-text-muted text-sm transition-all duration-150 hover:text-text hover:border-border-hover"
+            className="border-border text-text-muted hover:text-text hover:border-border-hover flex h-8 w-8 items-center justify-center rounded border text-sm transition-all duration-150"
           >
             {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
           </button>
@@ -144,7 +159,7 @@ export default function Nav() {
           <button
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
-            className="flex md:hidden items-center justify-center p-1.5 text-lg"
+            className="flex items-center justify-center p-1.5 text-lg md:hidden"
             style={{ color: 'var(--color-text-secondary)' }}
           >
             <Menu size={20} />

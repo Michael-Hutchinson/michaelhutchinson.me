@@ -40,7 +40,7 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.description.toLowerCase().includes(q) ||
-          p.tags.some((t) => t.toLowerCase().includes(q))
+          p.tags.some((t) => t.toLowerCase().includes(q)),
       );
     }
     return result;
@@ -51,7 +51,7 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
   const currentPage = Math.min(page, totalPages);
   const paginated = filtered.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
-    currentPage * POSTS_PER_PAGE
+    currentPage * POSTS_PER_PAGE,
   );
 
   // Reset page when filters change
@@ -70,7 +70,7 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
       <div className="relative mb-6">
         <Search
           size={16}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+          className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2"
           style={{ color: 'var(--color-text-muted)' }}
         />
         <input
@@ -78,20 +78,28 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
           placeholder="grep -i 'search posts...'"
           value={search}
           onChange={(e) => handleSearch(e.target.value)}
-          className="w-full bg-bg-terminal border border-border rounded-md font-mono text-[0.8125rem] text-text pl-10 pr-4 h-11 transition-all duration-150 placeholder:text-text-muted focus:outline-none focus:border-border-hover focus:shadow-[0_0_0_3px_rgba(177,151,252,0.08)]"
+          className="bg-bg-terminal border-border text-text placeholder:text-text-muted focus:border-border-hover h-11 w-full rounded-md border pr-4 pl-10 font-mono text-[0.8125rem] transition-all duration-150 focus:shadow-(--shadow-accent-focus) focus:outline-none"
         />
       </div>
 
       {/* Tag filters */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div className="mb-8 flex flex-wrap gap-2">
         <button
           onClick={() => handleTag(null)}
-          className={`px-3 py-1 rounded-md font-mono text-xs transition-all duration-150 border ${
+          className={`rounded-md border px-3 py-1 font-mono text-xs transition-all duration-150 ${
             activeTag === null
               ? 'border-border-hover text-text'
               : 'border-border text-text-muted hover:border-border-hover hover:text-text'
           }`}
-          style={activeTag === null ? { background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)', borderColor: 'var(--color-border-hover)' } : {}}
+          style={
+            activeTag === null
+              ? {
+                  background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
+                  color: 'var(--color-accent)',
+                  borderColor: 'var(--color-border-hover)',
+                }
+              : {}
+          }
         >
           all
         </button>
@@ -99,12 +107,20 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
           <button
             key={tag}
             onClick={() => handleTag(tag)}
-            className={`px-3 py-1 rounded-md font-mono text-xs transition-all duration-150 border ${
+            className={`rounded-md border px-3 py-1 font-mono text-xs transition-all duration-150 ${
               activeTag === tag
                 ? 'border-border-hover'
                 : 'border-border text-text-muted hover:border-border-hover hover:text-text'
             }`}
-            style={activeTag === tag ? { background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)', borderColor: 'var(--color-border-hover)' } : {}}
+            style={
+              activeTag === tag
+                ? {
+                    background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
+                    color: 'var(--color-accent)',
+                    borderColor: 'var(--color-border-hover)',
+                  }
+                : {}
+            }
           >
             {tag.toLowerCase()}
           </button>
@@ -113,10 +129,8 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
 
       {/* Posts */}
       {paginated.length === 0 ? (
-        <div className="bg-bg-terminal border border-border rounded-lg p-8 text-center">
-          <p className="text-text-muted font-mono text-sm mb-1">
-            No matches found.
-          </p>
+        <div className="bg-bg-terminal border-border rounded-lg border p-8 text-center">
+          <p className="text-text-muted mb-1 font-mono text-sm">No matches found.</p>
           <p className="text-text-muted font-mono text-xs">
             Try a different search or clear the filter.
           </p>
@@ -127,11 +141,11 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
             <a
               key={post.id}
               href={`/blog/${post.id}`}
-              className="group bg-bg-terminal border border-border rounded-lg p-5 transition-all duration-200 hover:border-border-hover hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(177,151,252,0.06)]"
+              className="group bg-bg-terminal border-border hover:border-border-hover rounded-lg border p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(177,151,252,0.06)]"
             >
-              <div className="flex items-center gap-2 text-[0.6875rem] text-text-muted font-mono mb-2.5">
+              <div className="text-text-muted mb-2.5 flex items-center gap-2 font-mono text-[0.6875rem]">
                 <span
-                  className="px-1.5 py-0.5 rounded font-medium"
+                  className="rounded px-1.5 py-0.5 font-medium"
                   style={{
                     background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
                     color: 'var(--color-accent)',
@@ -146,17 +160,18 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
                 })}
                 <span>· {post.readingTime} min read</span>
               </div>
-              <h2 className="text-lg font-semibold font-sans text-text group-hover:text-accent transition-colors mb-1.5" style={{ color: undefined }}>
+              <h2
+                className="text-text group-hover:text-accent mb-1.5 font-sans text-lg font-semibold transition-colors"
+                style={{ color: undefined }}
+              >
                 {post.title}
               </h2>
-              <p className="text-sm text-text-secondary leading-relaxed mb-3">
-                {post.description}
-              </p>
+              <p className="text-text-secondary mb-3 text-sm leading-relaxed">{post.description}</p>
               <div className="flex flex-wrap gap-1.5">
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 rounded text-[0.6875rem]"
+                    className="rounded px-2 py-0.5 text-[0.6875rem]"
                     style={{
                       background: 'color-mix(in srgb, var(--color-accent) 8%, transparent)',
                       color: 'var(--color-accent)',
@@ -173,11 +188,11 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 mt-8 font-mono text-sm">
+        <div className="mt-8 flex items-center justify-center gap-3 font-mono text-sm">
           <button
             onClick={() => setPage(Math.max(1, currentPage - 1))}
             disabled={currentPage <= 1}
-            className="flex items-center gap-1 px-3 py-1.5 border border-border rounded-md text-text-muted transition-all duration-150 hover:border-border-hover hover:text-text disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-border disabled:hover:text-text-muted"
+            className="border-border text-text-muted hover:border-border-hover hover:text-text disabled:hover:border-border disabled:hover:text-text-muted flex items-center gap-1 rounded-md border px-3 py-1.5 transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-30"
           >
             <ChevronLeft size={14} /> prev
           </button>
@@ -187,7 +202,7 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
           <button
             onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage >= totalPages}
-            className="flex items-center gap-1 px-3 py-1.5 border border-border rounded-md text-text-muted transition-all duration-150 hover:border-border-hover hover:text-text disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-border disabled:hover:text-text-muted"
+            className="border-border text-text-muted hover:border-border-hover hover:text-text disabled:hover:border-border disabled:hover:text-text-muted flex items-center gap-1 rounded-md border px-3 py-1.5 transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-30"
           >
             next <ChevronRight size={14} />
           </button>
@@ -195,8 +210,10 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
       )}
 
       {/* Result count */}
-      <p className="text-center text-text-muted font-mono text-xs mt-4">
-        {filtered.length} post{filtered.length === 1 ? '' : 's'}{activeTag ? ` tagged "${activeTag}"` : ''}{search ? ` matching "${search}"` : ''}
+      <p className="text-text-muted mt-4 text-center font-mono text-xs">
+        {filtered.length} post{filtered.length === 1 ? '' : 's'}
+        {activeTag ? ` tagged "${activeTag}"` : ''}
+        {search ? ` matching "${search}"` : ''}
       </p>
     </div>
   );

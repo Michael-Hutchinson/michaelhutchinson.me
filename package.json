@@ -7,7 +7,21 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "aws s3 sync dist/ s3://michael-hutchinson"
+    "deploy": "aws s3 sync dist/ s3://michael-hutchinson",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,astro}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,json,md,mdx}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
@@ -27,8 +41,18 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "typescript": "^5.4.0"
+    "eslint": "^9.0.0",
+    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "typescript": "^5.4.0",
+    "typescript-eslint": "^8.58.1"
   }
 }

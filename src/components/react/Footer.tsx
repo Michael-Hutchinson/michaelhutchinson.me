@@ -5,11 +5,8 @@ export default function Footer() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      setScrollPercent(
-        docHeight > 0 ? Math.round((window.scrollY / docHeight) * 100) : 0
-      );
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollPercent(docHeight > 0 ? Math.round((window.scrollY / docHeight) * 100) : 0);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
@@ -18,22 +15,21 @@ export default function Footer() {
 
   return (
     <footer
-      className='sticky bottom-0 border-t border-border backdrop-blur-sm px-4 md:px-10 py-1.5 flex items-center justify-between font-mono text-[0.6875rem] text-text-muted z-50 whitespace-nowrap overflow-x-auto'
+      className="border-border text-text-muted sticky bottom-0 z-50 flex items-center justify-between overflow-x-auto border-t px-4 py-1.5 font-mono text-[0.6875rem] whitespace-nowrap backdrop-blur-sm md:px-10"
       style={{
         background: 'color-mix(in srgb, var(--color-bg) 90%, transparent)',
       }}
     >
-      <div className='flex items-center gap-2 md:gap-3 shrink-0'>
+      <div className="flex shrink-0 items-center gap-2 md:gap-3">
         <span
-          className='inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-medium'
+          className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 font-medium"
           style={{
-            background:
-              'color-mix(in srgb, var(--color-accent) 10%, transparent)',
+            background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
             color: 'var(--color-accent)',
           }}
         >
           <span
-            className='w-1.5 h-1.5 rounded-full'
+            className="h-1.5 w-1.5 rounded-full"
             style={{
               background: 'var(--color-accent-green)',
               boxShadow: 'var(--shadow-glow-green)',
@@ -41,28 +37,25 @@ export default function Footer() {
           />{' '}
           claude-opus-4.6
         </span>{' '}
-        <span
-          className='hidden sm:inline'
-          style={{ color: 'var(--color-border)' }}
-        >
+        <span className="hidden sm:inline" style={{ color: 'var(--color-border)' }}>
           |
         </span>
         <a
-          href='mailto:michael-hutchinson@hotmail.co.uk'
-          className='hidden sm:inline hover:text-text transition-colors'
+          href="mailto:michael-hutchinson@hotmail.co.uk"
+          className="hover:text-text hidden transition-colors sm:inline"
         >
           michael-hutchinson@hotmail.co.uk
         </a>
       </div>
-      <div className='flex items-center gap-2 md:gap-3 shrink-0'>
-        <div className='hidden md:flex items-center gap-2'>
+      <div className="flex shrink-0 items-center gap-2 md:gap-3">
+        <div className="hidden items-center gap-2 md:flex">
           <span>context</span>
           <div
-            className='w-20 h-[3px] rounded-full overflow-hidden'
+            className="h-[3px] w-20 overflow-hidden rounded-full"
             style={{ background: 'var(--color-border)' }}
           >
             <div
-              className='h-full rounded-full transition-[width] duration-150'
+              className="h-full rounded-full transition-[width] duration-150"
               style={{
                 width: `${Math.max(5, scrollPercent)}%`,
                 background:
@@ -74,18 +67,18 @@ export default function Footer() {
         </div>
         <span style={{ color: 'var(--color-border)' }}>|</span>
         <a
-          href='https://github.com/Michael-Hutchinson'
-          target='_blank'
-          rel='noopener noreferrer'
-          className='hover:text-text transition-colors'
+          href="https://github.com/Michael-Hutchinson"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-text transition-colors"
         >
           github
         </a>
         <a
-          href='https://www.linkedin.com/in/mhutchinson4'
-          target='_blank'
-          rel='noopener noreferrer'
-          className='hover:text-text transition-colors'
+          href="https://www.linkedin.com/in/mhutchinson4"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-text transition-colors"
         >
           linkedin
         </a>

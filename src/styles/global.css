@@ -1,9 +1,9 @@
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @theme {
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   --color-bg: #1a1a2e;
   --color-bg-secondary: #16162a;
@@ -40,7 +40,9 @@
 
   body {
     @apply bg-bg text-text;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
   }
 
   /* Theme transition class */
@@ -64,7 +66,12 @@
     border-radius: 3px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-sans);
     font-weight: 700;
     line-height: 1.15;
@@ -97,7 +104,7 @@
 }
 
 /* Light theme overrides */
-[data-theme="light"] {
+[data-theme='light'] {
   --color-bg: #f8f7f4;
   --color-bg-secondary: #f0efe9;
   --color-bg-terminal: #ffffff;
@@ -116,31 +123,33 @@
 }
 
 /* Light mode: card shadows for depth */
-[data-theme="light"] .bg-bg-terminal {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+[data-theme='light'] .bg-bg-terminal {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
 /* Light mode: reduce noise overlay */
-[data-theme="light"] main::before {
+[data-theme='light'] main::before {
   opacity: 0.008;
 }
 
 /* Light mode: scrollbar */
-[data-theme="light"] ::-webkit-scrollbar-thumb {
+[data-theme='light'] ::-webkit-scrollbar-thumb {
   background: rgba(124, 58, 237, 0.15);
 }
 
 /* Light mode: selection */
-[data-theme="light"] ::selection {
+[data-theme='light'] ::selection {
   background: rgba(124, 58, 237, 0.2);
 }
 
 /* Light mode: hero mesh uses darker tones */
-[data-theme="light"] .hero-mesh {
+[data-theme='light'] .hero-mesh {
   background:
-    radial-gradient(ellipse at 15% 50%, rgba(124,58,237,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 20%, rgba(168,85,247,0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(232,116,97,0.04) 0%, transparent 50%) !important;
+    radial-gradient(ellipse at 15% 50%, rgba(124, 58, 237, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 20%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(232, 116, 97, 0.04) 0%, transparent 50%) !important;
 }
 
 /* Section dividers */
@@ -151,13 +160,25 @@ section + section::before {
   max-width: 12rem;
   height: 1px;
   margin: 0 auto 3rem;
-  background: linear-gradient(90deg, transparent, var(--color-accent) 30%, var(--color-accent-2) 50%, var(--color-accent-3) 70%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent) 30%,
+    var(--color-accent-2) 50%,
+    var(--color-accent-3) 70%,
+    transparent
+  );
   opacity: 0.2;
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3));
+  background: linear-gradient(
+    135deg,
+    var(--color-accent),
+    var(--color-accent-2),
+    var(--color-accent-3)
+  );
   background-size: 200% 200%;
   animation: gradient-shift 6s ease infinite;
   -webkit-background-clip: text;
@@ -166,7 +187,12 @@ section + section::before {
 }
 
 .gradient-chevron {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3));
+  background: linear-gradient(
+    135deg,
+    var(--color-accent),
+    var(--color-accent-2),
+    var(--color-accent-3)
+  );
   background-size: 200% 200%;
   animation: gradient-shift 4s ease infinite;
   -webkit-background-clip: text;
@@ -175,44 +201,99 @@ section + section::before {
 }
 
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes dot-bounce {
-  0%, 80%, 100% { transform: translateY(0); opacity: 0.3; }
-  40% { transform: translateY(-6px); opacity: 1; }
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
 }
 
 @keyframes terminal-enter {
-  from { opacity: 0; transform: translateY(20px) scale(0.98); filter: blur(4px); }
-  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 @keyframes border-rotate {
-  from { --border-angle: 0deg; }
-  to { --border-angle: 360deg; }
+  from {
+    --border-angle: 0deg;
+  }
+  to {
+    --border-angle: 360deg;
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes thinking-enter {
-  from { opacity: 0; transform: translateX(-8px); max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
-  to { opacity: 1; transform: translateX(0); max-height: 60px; }
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+    max-height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    max-height: 60px;
+  }
 }
 
 @keyframes thinking-exit {
-  from { opacity: 1; max-height: 60px; }
-  to { opacity: 0; max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; }
+  from {
+    opacity: 1;
+    max-height: 60px;
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
 @property --border-angle {

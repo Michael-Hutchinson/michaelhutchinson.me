@@ -48,7 +48,10 @@ export default function useTypingEffect({
     };
 
     timeoutId = setTimeout(typeChar, delay);
-    return () => { cancelled.current = true; clearTimeout(timeoutId); };
+    return () => {
+      cancelled.current = true;
+      clearTimeout(timeoutId);
+    };
   }, [text, speed, delay, enabled]);
 
   return { displayText, isDone };

@@ -43,10 +43,10 @@ Posts live in `src/content/blog/` as MDX files. Add frontmatter:
 
 ```yaml
 ---
-title: "Post Title"
-description: "Short description"
-date: "2026-04-02"
-tags: ["AI", "Engineering"]
+title: 'Post Title'
+description: 'Short description'
+date: '2026-04-02'
+tags: ['AI', 'Engineering']
 published: true
 ---
 ```

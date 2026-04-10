@@ -5,13 +5,10 @@ interface BadgeProps {
   color?: string;
 }
 
-export default function Badge({
-  children,
-  color = 'var(--color-accent)',
-}: BadgeProps) {
+export default function Badge({ children, color = 'var(--color-accent)' }: BadgeProps) {
   return (
     <span
-      className='text-[0.625rem] px-1.5 py-0.5 rounded font-medium'
+      className="rounded px-1.5 py-0.5 text-[0.625rem] font-medium"
       style={{
         background: `color-mix(in srgb, ${color} 10%, transparent)`,
         color,

@@ -4,7 +4,7 @@ import ErrorBoundary from './ErrorBoundary';
 
 export default function withErrorBoundary<P extends object>(
   Component: ComponentType<P>,
-  name?: string
+  name?: string,
 ) {
   function Wrapped(props: P) {
     return (

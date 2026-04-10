@@ -21,13 +21,18 @@ const posts = (await getCollection('blog'))
   description="Thoughts on AI-powered engineering, technical leadership, and building great software."
 >
   <div class="mx-auto max-w-3xl px-6 py-24 md:py-32">
-    <nav class="flex items-center gap-1.5 font-mono text-xs text-text-muted mb-8">
+    <nav class="text-text-muted mb-8 flex items-center gap-1.5 font-mono text-xs">
       <a href="/" class="hover:text-text transition-colors">~</a>
       <span>/</span>
       <span class="text-text-secondary">blog</span>
     </nav>
-    <div class="flex items-baseline gap-2.5 text-[0.9375rem] mb-8">
-      <span class="font-bold text-base select-none" style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">❯</span>
+    <h1 class="sr-only">Blog</h1>
+    <div class="mb-8 flex items-baseline gap-2.5 text-[0.9375rem]">
+      <span
+        class="text-base font-bold select-none"
+        style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+        >❯</span
+      >
       <span class="text-text">ls ~/blog/</span>
     </div>
 

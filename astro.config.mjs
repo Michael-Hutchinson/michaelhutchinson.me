@@ -7,11 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://michaelhutchinson.me',
   output: 'static',
-  integrations: [
-    react(),
-    mdx(),
-    sitemap(),
-  ],
+  integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

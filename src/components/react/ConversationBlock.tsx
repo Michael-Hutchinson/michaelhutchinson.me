@@ -64,18 +64,15 @@ export default function ConversationBlock({
   return (
     <div ref={ref}>
       {/* Prompt line */}
-      <div className='flex items-baseline gap-2.5 text-[0.9375rem] mb-5'>
-        <span
-          className='font-bold text-base select-none shrink-0'
-          style={chevronStyle}
-        >
+      <div className="mb-5 flex items-baseline gap-2.5 text-[0.9375rem]">
+        <span className="shrink-0 text-base font-bold select-none" style={chevronStyle}>
           ❯
         </span>
-        <span className='text-text'>
+        <span className="text-text">
           {cmd.displayText}
           {phase === PHASE.TYPING && !cmd.isDone && (
             <span
-              className='inline-block w-2 h-4.5 align-text-bottom ml-px'
+              className="ml-px inline-block h-4.5 w-2 align-text-bottom"
               style={{
                 background: 'var(--color-accent)',
                 animation: 'blink 1s step-end infinite',
@@ -93,18 +90,18 @@ export default function ConversationBlock({
             animate={{ opacity: 1, x: 0, height: 'auto', marginBottom: 20 }}
             exit={{ opacity: 0, height: 0, marginBottom: 0 }}
             transition={{ duration: 0.3, ease }}
-            className='flex items-center gap-2 px-3.5 py-2.5 rounded-md text-[0.8125rem] overflow-hidden'
+            className="flex items-center gap-2 overflow-hidden rounded-md px-3.5 py-2.5 text-[0.8125rem]"
             style={{
               background: 'var(--color-bg-card)',
               border: '1px solid var(--color-border)',
               color: 'var(--color-text-muted)',
             }}
           >
-            <span className='inline-flex gap-1'>
+            <span className="inline-flex gap-1">
               {[0, 0.15, 0.3].map((d) => (
                 <motion.span
                   key={d}
-                  className='w-[5px] h-[5px] rounded-full'
+                  className="h-[5px] w-[5px] rounded-full"
                   style={{ background: 'var(--color-accent)' }}
                   animate={{ y: [0, -6, 0], opacity: [0.3, 1, 0.3] }}
                   transition={{

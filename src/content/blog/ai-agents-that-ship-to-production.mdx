@@ -1,8 +1,8 @@
 ---
-title: "Building AI Agents That Actually Ship to Production"
-description: "Most AI agent demos are toys. How we built agents that run in CI/CD, review code, and verify deployments in production."
-date: "2026-04-06"
-tags: ["AI Agents", "CI/CD", "Production"]
+title: 'Building AI Agents That Actually Ship to Production'
+description: 'Most AI agent demos are toys. How we built agents that run in CI/CD, review code, and verify deployments in production.'
+date: '2026-04-06'
+tags: ['AI Agents', 'CI/CD', 'Production']
 published: true
 ---
 
@@ -32,7 +32,7 @@ The kill switch got used twice in the first month. We were glad we built it.
 
 This one watches for new functions and classes that lack test coverage. It generates test files, runs them to verify they pass, iterates if they fail, and opens a draft PR with the results.
 
-The critical design decision was making it open *draft* PRs, not merge directly. Engineers review the generated tests, keep what's useful, and close what isn't. Early on we tried having it commit directly to feature branches. Engineers hated it. It felt like someone else was pushing code to their branch without asking. The draft PR approach respects ownership while still reducing the grunt work.
+The critical design decision was making it open _draft_ PRs, not merge directly. Engineers review the generated tests, keep what's useful, and close what isn't. Early on we tried having it commit directly to feature branches. Engineers hated it. It felt like someone else was pushing code to their branch without asking. The draft PR approach respects ownership while still reducing the grunt work.
 
 We also learned to constrain the agent's ambition. Left unchecked, it would generate elaborate integration tests requiring complex fixtures. We scoped it to unit tests only and saw acceptance rates jump from around 30% to over 70%.
 
@@ -82,7 +82,7 @@ Even after launch, we kept agents clearly labelled. Every comment, every PR, eve
 
 The biggest trust accelerator was the feedback loop. When an engineer marks a review comment as unhelpful, they see fewer comments like it in the future. When they mark one as helpful, similar patterns get reinforced. Engineers who see the system learning from their feedback start to trust it.
 
-It took about three months before engineers started *expecting* the agents to be there. That's when we knew it was working.
+It took about three months before engineers started _expecting_ the agents to be there. That's when we knew it was working.
 
 ## What's next
 
