@@ -1,0 +1,48 @@
+---
+title: 'Reverse-Engineering a Dead Smart Kettle into an MCP Server'
+description: 'My AppKettle smart kettle stopped being smart when the company shut down. So I reverse-engineered their Android app, decoded the protocol, and wrote an MCP server for it.'
+date: '2026-05-06'
+tags: ['MCP', 'Claude Code', 'Reverse Engineering', 'IoT', 'TypeScript', 'AppKettle']
+published: true
+---
+
+The company that made my AppKettle shut down their services. The kettle still worked, but only as a kettle. No app, no cloud, no way to boil it from anywhere except the button on the side.
+
+I wanted the smart bit back, so I reverse-engineered the official Android app and built an MCP server on top of what I found.
+
+## The dead end
+
+The kettle has a 2.4GHz Wi-Fi module, so I locked my router to 2.4GHz, ran ESP SmartConfig, and wrote scripts to watch for whatever it was sending during pairing. I caught plenty of packets. None of them looked like anything I could parse.
+
+After a few evenings of staring at hex with no progress I gave up on sniffing and went looking for the source.
+
+## The APK
+
+The official Android app was still on a mirror, so I pulled it apart. That was the breakthrough. Inside was the whole protocol — the developers call it "Across" — running over plain TCP on port 6002. It also explained why my sniffing had failed.
+
+The kettle doesn't broadcast its setup data at all. The flow goes the other way. The kettle runs its own Wi-Fi AP, you connect to it, push your home Wi-Fi credentials in via a command, and it drops off and joins your network. After that it's a TCP server on your LAN. There was nothing for me to intercept because the credentials were going _to_ the kettle, not from it.
+
+## The protocol
+
+Across is a custom framing layer wrapped in a JSON envelope. Each frame has a header byte, a length, a prefix, a 12-byte unique ID, a serial, an API code, content, and a checksum. Any literal `0xAA` bytes inside the payload get stuffed to `AA55` so the framing stays unambiguous.
+
+That last bit is easy to get wrong and a nightmare to debug. The protocol layer ships with a test suite that round-trips every frame and parses real status replies. I'd rather find a stuffing bug now than at 7am next time I want a cup of tea.
+
+## The MCP server
+
+I've built a couple of MCP servers before — one for [Strava](/blog/building-a-strava-mcp-server), one for [parkrun](/blog/parkrun-mcp-server) — so once the protocol was decoded and the TCP client worked, the MCP wrapper was the easy part. Five tools — `boil`, `stop`, `standby`, `status`, `discover` — each mapping to one Across command.
+
+"Boil the kettle" now works from Claude. The status tool came back Heating, 46°C climbing to 100, 619ml of water. From a chat window, on a kettle whose manufacturer doesn't exist anymore.
+
+## What's next
+
+The MCP server is what I needed for Claude, but it's not the full picture. Two things on the list:
+
+- **My own phone app.** The original vendor app is gone. I want to rebuild it — same control surface, same convenience, but talking to my own client instead of someone's dead cloud.
+- **Run it on a Pi.** Right now the MCP server only works when I'm on my home network. Park it on a Raspberry Pi at home with a small remote endpoint and I can boil the kettle from anywhere — phone, laptop, wherever I am.
+
+There's smaller stuff too: more MCP tools (`set_keep_warm`, `wait_until_ready`), a Home Assistant bridge, an npm publish so install is one line. Those are weekend jobs. The phone app and the Pi are the real next steps.
+
+The repo is private for now. Once the rough edges are sanded down I'll open it up.
+
+The hardware works. The protocol works. The only reason this kettle stopped being smart was that someone turned off a server, and that didn't seem like a good enough reason to stop using it.
