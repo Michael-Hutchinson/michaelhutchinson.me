@@ -36,10 +36,9 @@ A DESIGN.md file has two layers, and you need both.
 
 **A markdown body** below explains why those values exist and when to use them. The YAML gives the agent precise answers. The markdown gives it context for cases that are not cut and dried.
 
-A minimal example:
+A minimal example. The YAML front matter first:
 
-```markdown
----
+```yaml
 name: DevFocus Dark
 colors:
   primary: '#2665fd'
@@ -53,8 +52,11 @@ typography:
     fontWeight: 400
 rounded:
   md: 8px
----
+```
 
+Then the markdown body below it:
+
+```markdown
 # Design System
 
 ## Overview
