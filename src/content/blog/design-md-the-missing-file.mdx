@@ -1,0 +1,104 @@
+---
+title: 'The Missing File in Your AI Coding Setup'
+description: 'Your AI can read your code but it cannot read your design system. DESIGN.md is a plain-text spec that gives AI agents the exact visual rules your project follows.'
+date: '2026-05-13'
+tags: ['Claude Code', 'Workflow', 'Tooling', 'AI', 'Design']
+published: false
+---
+
+I've been reading a lot about DESIGN.md recently. I added it to my team's repo a few weeks ago after seeing it come up repeatedly in the AI tooling conversation, and it's one of those things that seems obvious in hindsight.
+
+Your AI can read your code. It cannot read your design system.
+
+Every project has a visual identity: colors, typography, spacing, component styles. Traditionally it lives in a Figma file, a brand PDF, or a designer's head. None of those are readable by an AI agent. So the agent guesses, and the guesses are consistent with nothing in particular.
+
+DESIGN.md fixes that.
+
+## What it actually is
+
+Google Labs open-sourced DESIGN.md in April 2026, spinning it out of their [Stitch](https://stitch.withgoogle.com) design tool. It's a plain-text design system document that sits in your repo and tells AI agents how your project should look and feel.
+
+The way I think about it, your repo already has a few of these context files:
+
+| File                  | Who reads it  | What it defines                      |
+| --------------------- | ------------- | ------------------------------------ |
+| README.md             | Humans        | What the project is                  |
+| AGENTS.md / CLAUDE.md | Coding agents | How to build the project             |
+| DESIGN.md             | Design agents | How the project should look and feel |
+
+Most setups stop at two. DESIGN.md is the third layer.
+
+## How it works
+
+A DESIGN.md file has two layers, and you need both.
+
+**YAML front matter** at the top defines your design tokens with exact values: hex codes for colors, pixel values for font sizes, named scale values for spacing and corner radii.
+
+**A markdown body** below explains why those values exist and when to use them. The YAML gives the agent precise answers. The markdown gives it context for cases that are not cut and dried.
+
+A minimal example:
+
+```markdown
+---
+name: DevFocus Dark
+colors:
+  primary: '#2665fd'
+  surface: '#0b1326'
+  on-surface: '#dae2fd'
+  error: '#ffb4ab'
+typography:
+  body-md:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: 400
+rounded:
+  md: 8px
+---
+
+# Design System
+
+## Overview
+
+A focused, minimal dark interface for a developer productivity tool.
+Clean lines, low visual noise, high information density.
+
+## Colors
+
+- **Primary** (#2665fd): CTAs, active states, key interactive elements only
+- **Surface** (#0b1326): Page backgrounds
+- **On-surface** (#dae2fd): Primary text on dark backgrounds
+
+## Components
+
+- **Buttons**: Rounded (8px), primary uses brand blue fill
+- **Cards**: No elevation, border and background contrast only
+
+## Do's and Don'ts
+
+- Do use the primary color sparingly, only for the most important action on screen
+- Don't mix rounded and sharp corners in the same view
+```
+
+## What to actually put in it
+
+The spec defines eight markdown sections: Overview, Colors, Typography, Layout, Elevation, Shapes, Components, Do's and Don'ts. You don't need all of them. Start with what you have actual opinions about.
+
+Do's and Don'ts is the section I'd write first. It's where you encode the mistakes AI tools make in your project by default. If you've been through three rounds of feedback saying "not that blue, the brand blue" or "no drop shadows", write it down. The agent stops doing it.
+
+Overview gets skipped most often and it shouldn't. Telling the agent it's building "a focused developer tool" versus "a playful consumer app" shapes decisions across the whole codebase. Small framing, big effect on output.
+
+## The design/engineering gap it closes
+
+Designers make calls that never make it into code. Why a component hierarchy works a certain way, when to break the spacing system, the accessibility reasoning behind an interaction. That knowledge lives in Figma comments or people's heads and disappears when someone leaves the team.
+
+Once it's in DESIGN.md, when you ask Claude to build a component, it has the actual design intent to work from. Components come out pixel-perfect against your Figma rather than approximately right. Your Storybook stays in sync with your design system because the rules are written down and version-controlled, not passed around verbally.
+
+Fewer revision cycles. The agent knows what you want before you have to explain it.
+
+## Getting one set up
+
+You don't have to write it from scratch. [getdesign.md](https://getdesign.md) and [designmd.app](https://designmd.app) have pre-built files for common design systems you can adapt. Google Stitch can generate one from a URL or a prompt describing your brand. Or write it by hand starting with colors and typography, which covers most of what AI tools need.
+
+The spec is Apache 2.0 and lives at [github.com/google-labs-code/design.md](https://github.com/google-labs-code/design.md). There's a CLI for validating against the spec, checking WCAG contrast ratios, and exporting to Tailwind config or W3C design tokens format.
+
+Start with your palette and one Do's and Don'ts rule about whatever your AI gets wrong most often. Go from there.
