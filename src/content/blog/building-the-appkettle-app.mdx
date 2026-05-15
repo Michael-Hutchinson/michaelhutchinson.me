@@ -1,0 +1,89 @@
+---
+title: 'I Built a Mobile App For My Kettle'
+description: 'After decoding the AppKettle protocol and building an MCP server, the obvious next step was a proper mobile app. Here is how I built it in React Native and what I learned along the way.'
+date: '2026-05-15'
+tags: ['React Native', 'IoT', 'TypeScript', 'AppKettle']
+published: true
+---
+
+In [the last post](/blog/reverse-engineering-a-dead-smart-kettle) I decoded the AppKettle protocol, built a TCP client, and wrapped it in an MCP server so Claude could boil my kettle. It worked. But asking Claude to make me a cup of tea from the terminal felt like the wrong interface for 7am.
+
+So I built a mobile app.
+
+## What I was replacing
+
+The original AppKettle app was fine. One screen, a boil button, a temperature picker, a keep warm toggle. Simple. But the company shut down, the app stopped working, and I was left with a Wi-Fi kettle I could only control by walking over to it.
+
+The bar was "does what the original app did." Anything on top of that was a bonus.
+
+## Why React Native
+
+The kettle is Android-only for now, but I wanted to leave the door open for iOS later without starting from scratch. I'm a Javascript developer, so React Native made sense.
+
+The bigger question was what to do about the kettle protocol. I'd already written it in Node.js: the full Across framing layer, the TCP client, the UDP discovery logic. Rewriting it from scratch when it was already tested and working seemed pointless.
+
+## Porting the protocol
+
+The Node.js protocol module is pure functions with no I/O. Frame building, parsing, checksum, byte stuffing. That part copied across without a single change.
+
+The I/O layer was a straight swap. `node:net` for the TCP socket became `react-native-tcp-socket`. `node:dgram` for UDP discovery became `react-native-udp`. Same logic, different transport. The existing tests still described exactly how the wire format should behave. The only new thing to verify was that the React Native socket libraries behaved the same way as Node's.
+
+This is why the app lives in a separate repo. The `appkettle` repo is the source of truth for the wire protocol and the home of the CLI and MCP server. The app repo copies the `protocol/` module verbatim. If the protocol needs significant changes down the line, the plan is to extract it as a versioned npm package that both repos pull in.
+
+## Connection management
+
+This is where most of the development time went. The kettle is a TCP server on your LAN. The app needs to find it via UDP broadcast, connect on port 6002, and keep that connection alive while the phone screen turns off, the app goes to background, and the kettle occasionally goes quiet.
+
+Everything lives in a single `useKettle` hook. On mount it tries a cached endpoint first: the last known IP and IMEI from AsyncStorage. If the cached endpoint answers, you're connected in under a second with no discovery round-trip. If it doesn't answer (kettle off, router assigned a different IP), it falls through to UDP discovery, finds it fresh, connects, and saves the new endpoint for next time.
+
+```typescript
+// 1. Try cached endpoint first
+if (!opts.skipCache) {
+  const cached = await loadKettleConfig();
+  if (cached) {
+    const client = new KettleClient({ ip: cached.ip, imei: cached.imei });
+    try {
+      await client.connectAndWait();
+      return; // fast path
+    } catch {
+      // Cache stale, fall through to discovery
+    }
+  }
+}
+
+// 2. UDP broadcast
+const found = await discoverKettle();
+
+// 3. Connect and save for next time
+const client = new KettleClient({ ip: found.ip, imei: found.imei });
+await client.connectAndWait();
+await saveKettleConfig({ ip: found.ip, imei: found.imei });
+```
+
+AppState events handle the rest. When the app goes to background, the socket closes cleanly. Android will kill network access eventually anyway, and a clean close frees the kettle's slot. When the app comes back to the foreground with no client, startup runs again from scratch.
+
+## Keeping it small
+
+The app is one screen. That made some decisions easy.
+
+No state management library. `useState` and `useKettle` cover everything. Adding Redux or Zustand to a single-screen app would be solving a problem I don't have.
+
+No navigation library either. Settings is a `Modal`. The onboarding overlay is absolutely positioned. If the app grows to multiple screens later I'll add proper navigation then, not now.
+
+Animations use the built-in `Animated` API. No Reanimated. One fewer native module, no added complexity for an app that doesn't need anything fancy.
+
+## The mascot
+
+The one addition the original app never had: a chubby animated kettle that watches you from the top of the screen.
+
+It's an SVG with state-driven colours and three steam wisps that animate when it's heating. Green when idle, warm orange when boiling, eyes open when active and closed when on standby. The steam runs as three independent looping animations offset by 600ms each so the wisps rise at different times.
+
+It's completely unnecessary. I like looking at it in the morning.
+
+## What's next
+
+The app was item one from the last post. Item two is still outstanding: running the MCP server on a Raspberry Pi so I can boil the kettle from outside the house. The Pi side is straightforward. The interesting part is the remote access layer. Tailscale is the current plan.
+
+The repo is private for now while I work out what "ready for other people" looks like for something that requires specific hardware to pair. Once that's sorted it'll go public.
+
+Until then: button on phone, kettle boils, morning improved.
