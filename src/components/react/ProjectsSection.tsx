@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import withErrorBoundary from './withErrorBoundary';
-import Badge from './ui/Badge';
+import Card from './ui/Card';
+import FileTab from './ui/FileTab';
 import Tag from './ui/Tag';
 import { ease } from './ui/constants';
 
@@ -30,6 +31,17 @@ const projects = [
     accent: 'var(--color-accent-cyan)',
   },
   {
+    name: 'appkettle',
+    stat: '9',
+    statLabel: 'MCP tools',
+    description:
+      'Reverse-engineered a dead smart kettle back to life. Decoded the proprietary protocol from the Android APK and built an MCP server and React Native app on top.',
+    tags: ['Reverse Engineering', 'IoT', 'React Native', 'TypeScript'],
+    url: '/blog/reverse-engineering-a-dead-smart-kettle',
+    file: 'appkettle/src/mcp-tools.ts',
+    accent: 'var(--color-accent-green)',
+  },
+  {
     name: 'ukrunner.com',
     stat: '5,800+',
     statLabel: 'km tracked',
@@ -38,7 +50,7 @@ const projects = [
     tags: ['Next.js', 'Sanity CMS', 'Strava API', 'Neon'],
     url: 'https://ukrunner.com',
     file: 'projects/ukrunner/src/app/page.tsx',
-    accent: 'var(--color-accent-green)',
+    accent: 'var(--color-accent-3)',
   },
 ];
 
@@ -59,33 +71,21 @@ function ProjectsSection() {
             Open-source tools and side projects:
           </motion.p>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {projects.map((project, i) => (
-              <motion.a
+              <Card
                 key={project.name}
                 href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-bg-terminal border-border hover:border-border-hover relative overflow-hidden rounded-lg border transition-colors duration-200"
+                accent={project.accent}
+                hover
                 animate={
                   visible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.96 }
                 }
                 transition={{ duration: 0.5, ease, delay: 0.15 + i * 0.1 }}
-                whileHover={{ y: -3 }}
               >
-                {/* Top accent */}
-                <div
-                  className="absolute top-0 right-0 left-0 h-[2px] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{ background: project.accent }}
-                />
-
-                {/* File tab */}
-                <div className="border-border text-text-muted flex items-center gap-2 border-b px-3.5 py-2 text-[0.6875rem] tracking-wide">
-                  <Badge color={project.accent}>Open</Badge> {project.file}
-                </div>
+                <FileTab label="Open" path={project.file} color={project.accent} />
 
                 <div className="p-5">
-                  {/* Metric */}
                   <div className="mb-3">
                     <span
                       className="text-[2rem] leading-none font-extrabold tracking-tight"
@@ -134,7 +134,7 @@ function ProjectsSection() {
                     ))}
                   </div>
                 </div>
-              </motion.a>
+              </Card>
             ))}
           </div>
         </>

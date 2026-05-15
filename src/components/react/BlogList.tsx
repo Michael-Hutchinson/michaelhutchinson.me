@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import Card from './ui/Card';
 
 interface Post {
   id: string;
@@ -129,59 +130,58 @@ export default function BlogList({ posts }: Readonly<BlogListProps>) {
 
       {/* Posts */}
       {paginated.length === 0 ? (
-        <div className="bg-bg-terminal border-border rounded-lg border p-8 text-center">
-          <p className="text-text-muted mb-1 font-mono text-sm">No matches found.</p>
-          <p className="text-text-muted font-mono text-xs">
-            Try a different search or clear the filter.
-          </p>
-        </div>
+        <Card>
+          <div className="p-8 text-center">
+            <p className="text-text-muted mb-1 font-mono text-sm">No matches found.</p>
+            <p className="text-text-muted font-mono text-xs">
+              Try a different search or clear the filter.
+            </p>
+          </div>
+        </Card>
       ) : (
         <div className="flex flex-col gap-4">
           {paginated.map((post) => (
-            <a
-              key={post.id}
-              href={`/blog/${post.id}`}
-              className="group bg-bg-terminal border-border hover:border-border-hover rounded-lg border p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(177,151,252,0.06)]"
-            >
-              <div className="text-text-muted mb-2.5 flex items-center gap-2 font-mono text-[0.6875rem]">
-                <span
-                  className="rounded px-1.5 py-0.5 font-medium"
-                  style={{
-                    background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
-                    color: 'var(--color-accent)',
-                  }}
-                >
-                  Read
-                </span>
-                {new Date(post.date).toLocaleDateString('en-GB', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })}
-                <span>· {post.readingTime} min read</span>
-              </div>
-              <h2
-                className="text-text group-hover:text-accent mb-1.5 font-sans text-lg font-semibold transition-colors"
-                style={{ color: undefined }}
-              >
-                {post.title}
-              </h2>
-              <p className="text-text-secondary mb-3 text-sm leading-relaxed">{post.description}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {post.tags.map((tag) => (
+            <Card key={post.id} href={`/blog/${post.id}`} accent="var(--color-accent)" hover>
+              <div className="p-5">
+                <div className="text-text-muted mb-2.5 flex items-center gap-2 font-mono text-[0.6875rem]">
                   <span
-                    key={tag}
-                    className="rounded px-2 py-0.5 text-[0.6875rem]"
+                    className="rounded px-1.5 py-0.5 font-medium"
                     style={{
-                      background: 'color-mix(in srgb, var(--color-accent) 8%, transparent)',
+                      background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
                       color: 'var(--color-accent)',
                     }}
                   >
-                    {tag}
+                    Read
                   </span>
-                ))}
+                  {new Date(post.date).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })}
+                  <span>· {post.readingTime} min read</span>
+                </div>
+                <h2 className="text-text group-hover:text-accent mb-1.5 font-sans text-lg font-semibold transition-colors">
+                  {post.title}
+                </h2>
+                <p className="text-text-secondary mb-3 text-sm leading-relaxed">
+                  {post.description}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded px-2 py-0.5 text-[0.6875rem]"
+                      style={{
+                        background: 'color-mix(in srgb, var(--color-accent) 8%, transparent)',
+                        color: 'var(--color-accent)',
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </a>
+            </Card>
           ))}
         </div>
       )}

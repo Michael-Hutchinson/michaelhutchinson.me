@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import withErrorBoundary from './withErrorBoundary';
-import Badge from './ui/Badge';
+import Card from './ui/Card';
+import FileTab from './ui/FileTab';
 import { ease } from './ui/constants';
 
 const career = [
@@ -59,27 +60,17 @@ function ExperienceSection() {
 
           <div className="flex flex-col gap-4">
             {career.map((entry, i) => (
-              <motion.article
+              <Card
                 key={entry.company}
-                className="group bg-bg-terminal border-border relative overflow-hidden rounded-lg border"
+                accent={entry.accent}
                 animate={
                   visible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.96 }
                 }
                 transition={{ duration: 0.5, ease, delay: 0.15 + i * 0.12 }}
               >
-                {/* Top accent */}
-                <div
-                  className="absolute top-0 right-0 left-0 h-[2px] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{ background: entry.accent }}
-                />
-
-                {/* File tab */}
-                <div className="border-border text-text-muted flex items-center gap-2 border-b px-3.5 py-2 text-[0.6875rem] tracking-wide">
-                  <Badge color={entry.accent}>Read</Badge> {entry.file}
-                </div>
+                <FileTab label="Read" path={entry.file} color={entry.accent} />
 
                 <div className="p-5">
-                  {/* Company header */}
                   <div className="mb-1 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
                     <h2 className="text-text font-sans text-[0.9375rem] font-semibold">
                       {entry.company}
@@ -92,7 +83,6 @@ function ExperienceSection() {
                     {entry.context}
                   </p>
 
-                  {/* Roles */}
                   <div className="flex flex-col gap-2">
                     {entry.roles.map((role) => (
                       <div
@@ -130,11 +120,10 @@ function ExperienceSection() {
                     ))}
                   </div>
                 </div>
-              </motion.article>
+              </Card>
             ))}
           </div>
 
-          {/* CV download */}
           <motion.div
             className="mt-4 text-center"
             animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}

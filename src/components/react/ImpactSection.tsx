@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import withErrorBoundary from './withErrorBoundary';
-import Badge from './ui/Badge';
+import Card from './ui/Card';
+import FileTab from './ui/FileTab';
 import Tag from './ui/Tag';
 import { ease } from './ui/constants';
 
@@ -56,31 +57,19 @@ function ImpactSection() {
             Selected work and measurable outcomes from the past few years:
           </motion.p>
 
-          {/* Impact cards */}
           <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-3">
             {impacts.map((item, i) => (
-              <motion.article
+              <Card
                 key={item.title}
-                className="group bg-bg-terminal border-border relative overflow-hidden rounded-lg border"
+                accent={item.accent}
                 animate={
                   visible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.96 }
                 }
                 transition={{ duration: 0.5, ease, delay: 0.15 + i * 0.1 }}
-                whileHover={{ y: -3 }}
               >
-                {/* Top accent bar */}
-                <div
-                  className="absolute top-0 right-0 left-0 h-[2px] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{ background: item.accent }}
-                />
-
-                {/* File tab */}
-                <div className="border-border text-text-muted flex items-center gap-2 border-b px-3.5 py-2 text-[0.6875rem] tracking-wide">
-                  <Badge color={item.accent}>Run</Badge> {item.file}
-                </div>
+                <FileTab label="Run" path={item.file} color={item.accent} />
 
                 <div className="p-5">
-                  {/* Metric */}
                   <div className="mb-3">
                     <span
                       className="text-[2rem] leading-none font-extrabold tracking-tight"
@@ -114,7 +103,7 @@ function ImpactSection() {
                     ))}
                   </div>
                 </div>
-              </motion.article>
+              </Card>
             ))}
           </div>
         </>

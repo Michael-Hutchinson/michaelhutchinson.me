@@ -5,6 +5,7 @@ import { GithubIcon, LinkedinIcon } from './icons';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import ContactForm from './ContactForm';
 import withErrorBoundary from './withErrorBoundary';
+import Card from './ui/Card';
 import FileTab from './ui/FileTab';
 import { ease } from './ui/constants';
 
@@ -47,11 +48,7 @@ function ContactSection() {
           </motion.p>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Form card */}
-            <motion.div
-              className="bg-bg-terminal border-border overflow-hidden rounded-lg border"
-              {...staggerItem(visible, 0, 0.15)}
-            >
+            <Card accent="var(--color-accent-2)" {...staggerItem(visible, 0, 0.15)}>
               <FileTab
                 label="Edit"
                 path="~/contact/new-message.yml"
@@ -60,7 +57,7 @@ function ContactSection() {
               <div className="p-5">
                 <ContactForm />
               </div>
-            </motion.div>
+            </Card>
 
             {/* Links */}
             <div className="flex flex-col gap-2.5">

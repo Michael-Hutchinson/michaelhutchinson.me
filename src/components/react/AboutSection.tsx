@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ConversationBlock, { staggerItem } from './ConversationBlock';
 import withErrorBoundary from './withErrorBoundary';
+import Card from './ui/Card';
 import FileTab from './ui/FileTab';
 import Tag from './ui/Tag';
 import { ease } from './ui/constants';
@@ -87,11 +88,7 @@ function AboutSection() {
           ))}
 
           <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-            {/* Profile card */}
-            <motion.div
-              className="bg-bg-terminal border-border overflow-hidden rounded-lg border"
-              {...staggerItem(visible, 0, 0.35)}
-            >
+            <Card accent="var(--color-accent)" {...staggerItem(visible, 0, 0.35)}>
               <FileTab label="Read" path="~/about/profile.yml" />
               <div className="p-4">
                 {stats.map((row, i) => (
@@ -110,13 +107,9 @@ function AboutSection() {
                   </motion.div>
                 ))}
               </div>
-            </motion.div>
+            </Card>
 
-            {/* Stack card */}
-            <motion.div
-              className="bg-bg-terminal border-border overflow-hidden rounded-lg border"
-              {...staggerItem(visible, 1, 0.35)}
-            >
+            <Card accent="var(--color-accent)" {...staggerItem(visible, 1, 0.35)}>
               <FileTab label="Read" path="~/about/stack.json" />
               <div className="p-4">
                 <div className="flex flex-wrap gap-1.5">
@@ -135,7 +128,7 @@ function AboutSection() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </Card>
           </div>
         </>
       )}
