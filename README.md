@@ -4,11 +4,11 @@ Portfolio and blog built with Astro, React, and Tailwind CSS. Claude Code termin
 
 ## Stack
 
-- **Astro** — Static site generation, SSR-ready, perfect SEO
-- **React** — Interactive islands (hero terminal, conversation sections, blog search)
-- **Tailwind CSS v4** — Utility-first styling with custom theme tokens
-- **MDX** — Blog posts with component support
-- **Satori + Sharp** — Auto-generated OG images per post
+- **Astro** - Static site generation, SSR-ready, perfect SEO
+- **React** - Interactive islands (hero terminal, conversation sections, blog search)
+- **Tailwind CSS v4** - Utility-first styling with custom theme tokens
+- **MDX** - Blog posts with component support
+- **Satori + Sharp** - Auto-generated OG images per post
 
 ## Features
 

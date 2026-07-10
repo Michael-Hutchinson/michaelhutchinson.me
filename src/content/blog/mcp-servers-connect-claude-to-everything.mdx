@@ -12,7 +12,7 @@ MCP servers fix that. I've been building and running them for months now, and at
 
 ## MCP in thirty seconds
 
-Model Context Protocol is a standard for giving AI models structured access to external tools and data. You write a server that exposes capabilities — `query_database`, `get_deploy_status`, `search_logs` — and Claude can call them mid-conversation. It's function calling, but with a proper protocol, discoverability, and a clean separation between the model and your systems.
+Model Context Protocol is a standard for giving AI models structured access to external tools and data. You write a server that exposes capabilities - `query_database`, `get_deploy_status`, `search_logs` - and Claude can call them mid-conversation. It's function calling, but with a proper protocol, discoverability, and a clean separation between the model and your systems.
 
 I'm not going to walk through the spec. The docs are good. What I want to talk about is what happens when you actually commit to building these out for your team.
 
@@ -20,11 +20,11 @@ I'm not going to walk through the spec. The docs are good. What I want to talk a
 
 ### Internal APIs
 
-We have a handful of internal services — user lookup, feature flag management, service registry — that engineers query constantly during debugging. Before MCP, that meant switching to a browser, finding the right admin panel, copy-pasting IDs around. Now I ask Claude to look up a user by email and it calls `internal_api_user_lookup` directly. The context stays in the conversation. The debugging flow never breaks.
+We have a handful of internal services - user lookup, feature flag management, service registry - that engineers query constantly during debugging. Before MCP, that meant switching to a browser, finding the right admin panel, copy-pasting IDs around. Now I ask Claude to look up a user by email and it calls `internal_api_user_lookup` directly. The context stays in the conversation. The debugging flow never breaks.
 
 ### Databases (read-only)
 
-This was the single biggest productivity unlock. I built an MCP server that exposes read-only access to our staging and analytics databases. Claude can write and execute SQL in context — "show me the order volume for merchant X over the last 30 days" just works. It sees the schema, writes the query, runs it, and reasons about the results. What used to be a five-minute context switch is now a five-second tool call.
+This was the single biggest productivity unlock. I built an MCP server that exposes read-only access to our staging and analytics databases. Claude can write and execute SQL in context - "show me the order volume for merchant X over the last 30 days" just works. It sees the schema, writes the query, runs it, and reasons about the results. What used to be a five-minute context switch is now a five-second tool call.
 
 ### Deployment and CI/CD
 
@@ -38,9 +38,9 @@ This one is underrated. Connecting Datadog, PagerDuty, or whatever your stack us
 
 Not everything should be an MCP tool. I use a simple framework:
 
-- **High frequency, low complexity** — If engineers do it multiple times a day and it's mostly lookup or status-checking, wrap it. User lookups, log searches, deploy status, feature flag checks.
-- **Context-preserving** — If the action's value comes from staying in the current conversation flow (like querying a database mid-debugging), it's a strong candidate.
-- **Automatable but not automated** — Things that are too nuanced for a cron job but too tedious to do manually. Generating a migration script based on the current schema diff, for example.
+- **High frequency, low complexity** - If engineers do it multiple times a day and it's mostly lookup or status-checking, wrap it. User lookups, log searches, deploy status, feature flag checks.
+- **Context-preserving** - If the action's value comes from staying in the current conversation flow (like querying a database mid-debugging), it's a strong candidate.
+- **Automatable but not automated** - Things that are too nuanced for a cron job but too tedious to do manually. Generating a migration script based on the current schema diff, for example.
 
 Things I deliberately don't expose: anything that mutates production data without a separate approval flow, anything involving secrets rotation, anything where the blast radius of a mistake is high and the undo cost is higher.
 

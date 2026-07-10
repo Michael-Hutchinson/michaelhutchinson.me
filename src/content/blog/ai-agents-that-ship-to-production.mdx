@@ -8,7 +8,7 @@ published: true
 
 Every conference talk about AI agents shows the same thing: a chatbot that books flights, a demo where an agent browses the web and fills out forms, maybe one that writes and executes code in a sandbox. The audience claps. Then everyone goes back to work and nothing changes.
 
-The gap between those demos and agents that actually run in production, unsupervised, making decisions that affect real systems — that gap is enormous. I've spent the last year building agents that cross it.
+The gap between those demos and agents that actually run in production, unsupervised, making decisions that affect real systems - that gap is enormous. I've spent the last year building agents that cross it.
 
 ## The demo-to-production gap
 
@@ -24,7 +24,7 @@ The thing nobody tells you: **the agent logic is maybe 20% of the work. The othe
 
 This runs on every PR in our CI pipeline. It pulls the diff, fetches relevant context (related files, recent changes to the same modules, the PR description), and posts structured review comments.
 
-What made it production-ready wasn't the review quality — that was decent from day one. It was everything around it. We had to build: deduplication so it wouldn't repeat itself on re-runs, confidence scoring so it only posted comments it was reasonably sure about, a feedback loop where engineers could thumbs-up/thumbs-down comments to improve future reviews, and a kill switch for when the model started hallucinating about APIs that didn't exist.
+What made it production-ready wasn't the review quality - that was decent from day one. It was everything around it. We had to build: deduplication so it wouldn't repeat itself on re-runs, confidence scoring so it only posted comments it was reasonably sure about, a feedback loop where engineers could thumbs-up/thumbs-down comments to improve future reviews, and a kill switch for when the model started hallucinating about APIs that didn't exist.
 
 The kill switch got used twice in the first month. We were glad we built it.
 
@@ -76,7 +76,7 @@ If an agent's acceptance rate drops below 40%, we either retrain the approach or
 
 This is the hardest part, and it's not technical. Getting engineers to actually trust and rely on agent output requires a deliberate approach.
 
-We started by deploying agents in "shadow mode" — they ran alongside normal workflows but didn't post results publicly. We reviewed their output internally for two weeks before turning them on. This gave us confidence and gave the team a heads-up about what was coming.
+We started by deploying agents in "shadow mode" - they ran alongside normal workflows but didn't post results publicly. We reviewed their output internally for two weeks before turning them on. This gave us confidence and gave the team a heads-up about what was coming.
 
 Even after launch, we kept agents clearly labelled. Every comment, every PR, every Slack message from an agent is unmistakably automated. Engineers need to know when they're looking at machine output so they can calibrate their scrutiny appropriately.
 

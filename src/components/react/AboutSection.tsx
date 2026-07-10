@@ -38,7 +38,7 @@ const bios = [
     content: (
       <>
         I'm a <strong className="text-text font-medium">Staff Engineer</strong> with over a decade
-        of experience building software across the full stack — from React frontends to cloud-native
+        of experience building software across the full stack - from React frontends to cloud-native
         backends. I hold a{' '}
         <span style={{ color: 'var(--color-accent)' }}>Master's in IT from Leeds University</span>.
       </>

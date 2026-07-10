@@ -123,7 +123,7 @@ export async function GET({ props }: APIContext) {
                 type: 'span',
                 props: {
                   style: { fontFamily: 'JetBrains Mono', fontSize: '16px', color: '#8b8ba7' },
-                  children: 'Michael Hutchinson — Staff Engineer',
+                  children: 'Michael Hutchinson - Staff Engineer',
                 },
               },
               {

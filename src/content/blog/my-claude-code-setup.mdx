@@ -12,7 +12,7 @@ I get asked about my Claude Code setup constantly. Rather than repeating myself 
 
 I've tried most of the AI coding tools at this point. Copilot, Cursor, Cody, various chat wrappers. Claude Code won out for a few reasons: it operates in my terminal where I already live, it has genuine agentic capabilities (reading files, running commands, editing code across multiple files), and the `CLAUDE.md` system gives me fine-grained control over its behaviour without leaving my repo.
 
-The deciding factor was how well it handles _multi-file changes_. Most AI tools are great at single-file edits. Claude Code can reason across an entire feature — models, API routes, frontend components, tests — in a single session. For full-stack work, that matters enormously.
+The deciding factor was how well it handles _multi-file changes_. Most AI tools are great at single-file edits. Claude Code can reason across an entire feature (models, API routes, frontend components, tests) in a single session. For full-stack work, that matters enormously.
 
 ## CLAUDE.md: the foundation
 
@@ -32,7 +32,7 @@ I also use the tiered approach: a root `CLAUDE.md` for project-wide context, and
 
 ## Hooks: automating the guardrails
 
-Claude Code hooks let you run scripts at specific points in the workflow. These are configured in your `.claude/settings.json` and they run automatically — Claude doesn't decide whether to skip them.
+Claude Code hooks let you run scripts at specific points in the workflow. These are configured in your `.claude/settings.json` and they run automatically. Claude doesn't decide whether to skip them.
 
 My essential hooks:
 
@@ -48,7 +48,7 @@ The pattern here is simple: use hooks to enforce the standards you would enforce
 
 After hundreds of hours with Claude Code, these are the patterns that consistently produce good results:
 
-**Start with context, then intent, then constraints.** Bad: "Add a search feature." Good: "We have a products table with 50k rows, already indexed on `name` and `category`. Add full-text search to the existing `GET /api/products` endpoint. Use the Postgres `tsvector` approach we use in the orders service. Keep the response shape the same — just add a `q` query param."
+**Start with context, then intent, then constraints.** Bad: "Add a search feature." Good: "We have a products table with 50k rows, already indexed on `name` and `category`. Add full-text search to the existing `GET /api/products` endpoint. Use the Postgres `tsvector` approach we use in the orders service. Keep the response shape the same, just add a `q` query param."
 
 **Reference existing code explicitly.** "Follow the same pattern as `src/features/orders/actions.ts`" is worth a hundred words of description. Claude Code will read that file and match the patterns. This is the single most effective prompting technique I use.
 
@@ -58,7 +58,7 @@ After hundreds of hours with Claude Code, these are the patterns that consistent
 
 ## Task-specific workflows
 
-**Greenfield features.** I start by describing the feature in plain English, pointing to similar existing features for patterns, and letting Claude scaffold the full vertical slice — database schema, repository, API route, frontend component, and tests. I review the scaffold, then iterate on specifics.
+**Greenfield features.** I start by describing the feature in plain English, pointing to similar existing features for patterns, and letting Claude scaffold the full vertical slice: database schema, repository, API route, frontend component, and tests. I review the scaffold, then iterate on specifics.
 
 **Debugging.** This is where Claude Code really shines. I paste the error, point it at the relevant files, and say "investigate." It reads the code, forms hypotheses, checks related files, and usually identifies the root cause faster than I would. For production issues, I pipe in the relevant logs and let it correlate.
 
@@ -68,7 +68,7 @@ After hundreds of hours with Claude Code, these are the patterns that consistent
 
 ## MCP server integration
 
-This is the setup that surprises people. I run MCP servers that connect Claude Code to our internal tooling — Jira for ticket context, our deployment platform for service status, and our internal documentation wiki. When I say "pick up PROJ-1234," Claude reads the ticket, understands the requirements, checks the relevant service's current state, and starts working with full context.
+This is the setup that surprises people. I run MCP servers that connect Claude Code to our internal tooling: Jira for ticket context, our deployment platform for service status, and our internal documentation wiki. When I say "pick up PROJ-1234," Claude reads the ticket, understands the requirements, checks the relevant service's current state, and starts working with full context.
 
 The setup lives in `.claude/settings.json` under `mcpServers`. Each server is a small process that exposes tools Claude can call. The investment in setting these up pays back immediately. It eliminates the copy-paste-context dance that slows down every AI interaction.
 
@@ -80,7 +80,7 @@ This is the judgement call that takes practice. My rules of thumb:
 
 **Take over** when the task requires architectural decisions, involves ambiguous requirements, or touches code where a subtle mistake has outsized consequences. Security-critical paths, data migration logic, performance-sensitive code.
 
-**Pair actively** when you are exploring a solution space. Use Claude Code as a thinking partner — describe the problem, ask for options, discuss tradeoffs. This is surprisingly effective for design work.
+**Pair actively** when you are exploring a solution space. Use Claude Code as a thinking partner: describe the problem, ask for options, discuss tradeoffs. This is surprisingly effective for design work.
 
 ## Tips for getting the most out of it
 
@@ -92,6 +92,6 @@ This is the judgement call that takes practice. My rules of thumb:
 
 **Invest in your MCP setup.** Every manual context-gathering step you automate away makes the entire workflow faster. The first MCP server takes a couple of hours. After that, each new one takes minutes.
 
-**Run Claude Code in your actual environment.** Not a sandbox, not a container — your real dev environment with your real tools. It needs access to your test runner, your linter, your database. The closer its environment matches yours, the better its output.
+**Run Claude Code in your actual environment.** Not a sandbox, not a container. Your real dev environment with your real tools. It needs access to your test runner, your linter, your database. The closer its environment matches yours, the better its output.
 
 Six months into using Claude Code as my primary development tool, I can't imagine going back. If you want the bigger picture on why I think this matters, I wrote about [going all-in on AI-first engineering](/blog/ai-first-engineering). But honestly, just start with the `CLAUDE.md` file and one good hook. The rest follows naturally.

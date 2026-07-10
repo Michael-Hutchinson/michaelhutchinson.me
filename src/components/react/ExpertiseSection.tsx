@@ -15,7 +15,7 @@ const areas = [
     accent: 'linear-gradient(90deg, #b197fc, #da77f2)',
     title: 'AI-Powered Engineering',
     description:
-      'Integrating AI into development workflows — from code generation and review to testing and deployment. Building the tools and culture for AI-first engineering.',
+      'Integrating AI into development workflows - from code generation and review to testing and deployment. Building the tools and culture for AI-first engineering.',
     tags: ['Claude Code', 'MCP', 'LLMs', 'AI Agents', 'Prompt Engineering'],
   },
   {
@@ -75,7 +75,7 @@ function ExpertiseSection() {
             style={{ color: 'var(--color-text-secondary)' }}
             {...staggerItem(visible, 0, 0.05)}
           >
-            Here are the areas where Michael focuses his energy — from AI integration to technical
+            Here are the areas where Michael focuses his energy - from AI integration to technical
             strategy:
           </motion.p>
 

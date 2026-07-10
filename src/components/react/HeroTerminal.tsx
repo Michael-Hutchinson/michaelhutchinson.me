@@ -137,7 +137,7 @@ function HeroTerminal() {
             />
           ))}
           <span className="text-text-muted mx-auto text-[0.6875rem] tracking-wide">
-            claude — michael@hutchinson ~/portfolio
+            claude - michael@hutchinson ~/portfolio
           </span>
         </div>
 

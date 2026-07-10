@@ -44,7 +44,7 @@ function ContactSection() {
             {...staggerItem(visible, 0, 0.05)}
           >
             Whether you want to discuss a role, a project, or just talk shop about AI and
-            engineering — I'd love to hear from you.
+            engineering - I'd love to hear from you.
           </motion.p>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

@@ -130,7 +130,7 @@ export default function ConversationBlock({
   );
 }
 
-/** Stagger helper for children — returns motion props */
+/** Stagger helper for children - returns motion props */
 export function staggerItem(visible: boolean, index: number, baseDelay = 0.1) {
   return {
     initial: { opacity: 0, y: 16 },
