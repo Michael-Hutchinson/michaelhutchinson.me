@@ -1,0 +1,72 @@
+---
+title: 'I am Building a Raspberry Pi Smart Home Hub'
+description: 'A single box that tracks my training, watches my finances, automates my home, and finally gives my kettle a permanent home. Here is what I am building and why.'
+date: '2026-07-26'
+tags: ['Raspberry Pi', 'Home Assistant', 'Self-Hosted', 'Docker']
+published: true
+---
+
+I've spent the last year building things that live on other people's infrastructure. MCP servers on npm. A mobile app in Expo. A portfolio site on Vercel. All of it stateless, all of it somewhere else, all of it dependent on a service staying alive.
+
+The Raspberry Pi sitting on my desk is the opposite of that. It's a box I own, on a network I control, running software I chose. It boots from a 256GB NVMe SSD, it lives in a proper aluminium case with active cooling, and it's going to run 24 hours a day doing things I actually care about.
+
+The hardware is assembled. The OS isn't flashed yet. This post is about what I'm planning to build and why.
+
+## The problem
+
+I check too many apps.
+
+On a typical morning I'll open Strava to see last night's run, Garmin to check sleep, Trading 212 to see where the ISA is sitting, Starling to check the joint account, Philips Hue to turn the lights on, Hive to get the heating going, and some janky workaround to boil the kettle. Seven apps before I've had a coffee. None of them talk to each other. None of them know I exist beyond an account ID.
+
+The Pi ties them together. One box, one place where all of this comes in and surfaces something useful, without me opening seven apps to piece it together.
+
+## What it's going to do
+
+"Smart home hub" can mean anything from a glorified light switch controller to something that runs half your life. Mine sits somewhere in the middle. Three areas.
+
+**Home automation.** The kettle, the Hue lights, the Hive heating. The kettle already has a story: I reverse-engineered the AppKettle protocol after the manufacturer shut down their servers, [built a TCP client and MCP server](/blog/reverse-engineering-a-dead-smart-kettle), then [built a React Native app](/blog/building-the-appkettle-app) to control it properly. The Pi gives it a permanent home: a Node.js service running 24/7 on the local network so anything on the network can talk to it, including Home Assistant. Hue and Hive are simpler. Both have mature official integrations and it's mostly configuration, not code.
+
+**Fitness tracking.** This is where I'm most interested, and where the Pi can do things Strava and Garmin won't do for me. They sit in different systems that have no incentive to talk to each other.
+
+**Personal finance.** I've got money spread across lots of different bank accounts, ISA's, mortages and pension which I can only check by logging in. I want one view: a dashboard that pulls live data from the accounts that have APIs and the ones that dont I will update every so often. Net worth at a glance, without opening all my apps.
+
+## The architecture
+
+Everything runs in Docker. No exceptions, nothing installed directly onto the OS. It costs a bit of setup time upfront and saves a lot of pain later: clean uninstalls, isolated environments, easy updates, and the option to move services to a second Pi without rebuilding everything.
+
+Pi-hole goes in first. Before anything else, it runs as the network DNS server. It validates the whole stack (the Pi boots reliably, Docker works, the network routing is correct) and pays for itself immediately with network-wide ad blocking.
+
+Home Assistant comes once Pi-hole confirms the foundation is solid. Hue and Hive connect natively. The AppKettle service exposes itself to Home Assistant through a custom integration I will build. This is where automations live: the heating schedule, the lights, whatever I end up wanting to trigger based on conditions.
+
+The finance and fitness dashboards are custom builds. A Node.js service pulling from the financial APIs on a schedule, storing locally, serving a dashboard. The fitness side is less defined because it depends on which data sources end up being reliable. Garmin's unofficial API has a history of breaking after auth changes so well see how it goes.
+
+Tailscale handles remote access. I'm not opening ports on the router. Tailscale gives me a private mesh network so I can reach Home Assistant and the finance dashboard from anywhere, without exposing anything to the public internet.
+
+All secrets can go through my 1Password, loaded at service start rather than stored on disk. The Pi's going to hold API tokens for my bank accounts eventually therefore plaintext `.env` files aren't going to cut it.
+
+## The hardware
+
+The full parts list:
+
+- **Raspberry Pi 5, 8GB RAM**
+- **Argon ONE V5 M.2 NVMe Case:**
+- **SK Hynix 256GB NVMe SSD:**
+- **Official Raspberry Pi 27W USB-C Power Supply**
+- **Netac 128GB microSD:**
+- **USB-C microSD card reader:**
+
+The Pi 5 with 8GB is over-specced for what I'm running right now, which is deliberate. I want headroom without hitting limits mid-experiment.
+
+The case was the main decision. The Argon ONE V5 has an M.2 slot built in, so the NVMe sits inside the case rather than hanging off a USB adapter. It also has active cooling and a proper aluminium shell, which matters for something running 24/7 in a warm-ish house.
+
+The NVMe is an SK hynix BC901, bought new-old-stock on eBay.
+
+The microSD is temporary. The plan is to flash Raspberry Pi OS onto it, boot the Pi once, clone the OS across to the NVMe, then boot from the NVMe and pull the microSD out for good. It won't touch the machine after that. The reason for NVMe over leaving it on microSD: a Pi doing database writes to a microSD 24/7 will wear it out. Not immediately, but faster than you want. NVMe is the right call for something that needs to run reliably for years.
+
+## What comes next
+
+The next few posts will follow the actual build. OS setup and Docker first, then Pi-hole, then Home Assistant, then whichever of the bigger projects comes together first. Right now that looks like the finance dashboard because the APIs are cleaner.
+
+I'll write honestly about what doesn't work, because things won't work; e.g. I already know Bluetooth audio on Linux is famously fiddly. The Garmin API has broken before. Home Assistant has opinions about how integrations should behave. The interesting posts are usually the ones where something went sideways.
+
+The microSD reader arrives this week. We start then.
