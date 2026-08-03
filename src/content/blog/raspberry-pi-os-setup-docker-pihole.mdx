@@ -1,0 +1,162 @@
+---
+title: 'Setting Up a Raspberry Pi 5: OS, NVMe Boot, Docker, and Pi-hole'
+description: 'How I got the Pi 5 running headless from an NVMe SSD, locked it down properly, and hit the Docker firewall problem that nobody warns you about.'
+date: '2026-08-02'
+tags: ['Raspberry Pi', 'Docker', 'Pi-hole', 'Self-Hosted']
+published: true
+---
+
+[In the last post](/blog/building-a-raspberry-pi-smart-home-hub) I laid out what I'm building: a Pi 5 running Docker, with Pi-hole, Home Assistant, and eventually finance and fitness dashboards. All on hardware I own.
+
+The reader arrived. Here's what it actually took to get from an empty SSD to a box I'd trust running 24/7 on my home network.
+
+## Flashing the OS
+
+Raspberry Pi Imager on the Mac. OS choice: Raspberry Pi OS Lite (64-bit). Headless, no desktop. Everything runs in Docker, so a GUI would be dead weight.
+
+Before writing the image, Imager has an "Edit Settings" screen. Do this before flashing:
+
+- Hostname: `homehub`
+- SSH enabled, with your public key pasted in
+- Wifi credentials
+
+That means the Pi will join the network and accept SSH connections on first boot with no keyboard or monitor needed. The Netac microSD went into the USB-C reader, into the Mac, and three minutes later it was done.
+
+## NVMe boot
+
+Booted from the microSD first. Found the Pi via the router's DHCP table and SSH'd in. The Argon case wires the M.2 slot directly to the Pi's PCIe connector so the NVMe shows up immediately as `/dev/nvme0n1`. No config, it's just there.
+
+Two steps to move to NVMe:
+
+**Change boot order.** `sudo raspi-config` → Advanced Options → Boot Order → NVMe/USB first. Without this the Pi will always try the microSD first, even if the NVMe has a working OS on it.
+
+**Clone the OS.** SD Card Copier (`sudo apt install rpi-sd-copier`, then `picloner`). Source: microSD. Destination: NVMe. It copies the partition layout, clones the contents, and resizes the root partition to fill the drive.
+
+Shut down, remove the microSD, power back on. SSH in and run `findmnt /`. It should show `/dev/nvme0n1p2`. That's the last time the microSD is needed.
+
+I kept it as a fallback for a couple of weeks rather than wiping it straight away. The NVMe was eBay new-old-stock, and "confirmed working" and "confirmed working after a month" are different things.
+
+## Hardening
+
+The Pi is going to run 24/7 on a home network and eventually hold API tokens for bank accounts. So before running any services, I locked it down.
+
+**Static IP.** Set as a DHCP reservation on the router by MAC address, not as a static IP config on the Pi. Survives OS reinstalls, easier to change.
+
+**SSH key-only.** Set `PasswordAuthentication no` in `/etc/ssh/sshd_config`. Password login disabled entirely.
+
+**Firewall.** `ufw` restricting port 22 to the LAN subnet and the Tailscale CGNAT range (`100.64.0.0/10`). Nothing else can even attempt to connect.
+
+**Automatic security updates.** `sudo apt install unattended-upgrades`, configured to apply security-only updates automatically. It won't silently upgrade everything and it won't reboot the Pi on its own. Just patches CVEs without me needing to remember.
+
+## Tailscale
+
+Tailscale goes in early, before any services, because I want remote SSH access set up before the box is doing anything important.
+
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up --ssh
+```
+
+The `--ssh` flag enables Tailscale SSH on the Pi, which means any device on my tailnet can SSH in without needing the private key file. Tailscale authenticates the connection using tailnet identity instead. From my phone (using Termius with the Pi's Tailscale IP), I can SSH in with no key, no password. That's a different trust model from the Mac's key-based SSH, and it's deliberately separate.
+
+## Installing Docker
+
+Don't use `apt install docker.io`. The package in the Raspberry Pi OS repositories is old. Use the official apt repository instead:
+
+```bash
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker.gpg
+echo "deb [arch=arm64 signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/debian bookworm stable" | sudo tee /etc/apt/sources.list.d/docker.list
+sudo apt update && sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -aG docker $USER
+```
+
+This gets you the Compose plugin bundled with Docker rather than as a separate install, and future upgrades go through normal `apt` rather than a one-off script.
+
+## The Docker firewall problem nobody warns you about
+
+This is the gotcha. I set up `ufw` to lock things down, verified it was working, then ran a Pi-hole container with `ports:` in the compose file and wondered why it was reachable from the whole network.
+
+Docker inserts its own `iptables` rules that bypass `ufw` entirely for any port a container publishes with `ports:`. Your `ufw default deny incoming` does nothing to protect them. The container's port is open to everyone.
+
+The fix: explicit rules in `/etc/ufw/after.rules` that restrict Docker-published ports to the LAN and Tailscale, keyed to the physical network interface rather than source IP alone. Source IP filtering alone also breaks containers' own outbound traffic (which is what killed Pi-hole's upstream DNS queries when I first tried it).
+
+The rules I added to the end of `/etc/ufw/after.rules`:
+
+```
+*filter
+:DOCKER-USER - [0:0]
+-A DOCKER-USER -i eth0 -s 192.168.x.0/24 -j RETURN
+-A DOCKER-USER -i eth0 -s 100.64.0.0/10 -j RETURN
+-A DOCKER-USER -i eth0 -j DROP
+COMMIT
+```
+
+`sudo ufw reload` and verify with `sudo iptables -L DOCKER-USER -n -v`. Now containers are only reachable from the LAN and Tailscale, same as everything else.
+
+## Pi-hole
+
+Pi-hole is the first container because if it works, the full stack is valid: the Pi is up, Docker is running, the network routing is correct. And it's immediately useful: network-wide ad and tracker blocking the moment DNS is pointed at it.
+
+One problem first: port 53 is already in use by `systemd-resolved`. Pi-hole needs port 53. Fix:
+
+```bash
+# In /etc/systemd/resolved.conf
+DNSStubListener=no
+```
+
+Then temporarily point `/etc/resolv.conf` at a real upstream:
+
+```bash
+echo "nameserver 1.1.1.1" | sudo tee /etc/resolv.conf
+sudo systemctl restart systemd-resolved
+```
+
+Now Pi-hole can bind to 53. The compose file:
+
+```yaml
+services:
+  pihole:
+    image: pihole/pihole:2024.07.0
+    container_name: pihole
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '80:80/tcp'
+    environment:
+      TZ: 'Europe/London'
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    networks:
+      hub-net:
+        ipv4_address: 172.18.0.10
+    restart: unless-stopped
+
+networks:
+  hub-net:
+    external: true
+```
+
+I pinned Pi-hole to a specific version rather than `:latest`. Auto-updates can break things; I want to know when there's a new version and apply it deliberately. I also gave it a fixed IP on `hub-net`. Some services need to query Pi-hole directly by IP for DNS, and container names don't work for raw DNS lookups.
+
+Pi-hole's DNS engine defaults to only answering queries that look local, which a bridge-networked container never satisfies from the real LAN. Setting `dns.listeningMode` to `ALL` in Pi-hole's config fixes that. The firewall above does the actual access control; this just tells Pi-hole not to silently ignore queries it'd otherwise refuse.
+
+Once it's running, point the router's DHCP DNS setting at the Pi's LAN IP. Every device gets Pi-hole automatically.
+
+## The rest of the foundation
+
+A few more things before the stack felt complete:
+
+**Uptime Kuma.** Self-hosted status monitoring. Runs as a container, watches the things that actually matter: a DNS monitor that performs a real query through Pi-hole (not just "is the container running"), and an HTTP monitor on Pi-hole's admin UI. Alerts go to my phone via ntfy.
+
+**Disk and SMART health checks.** A daily cron job (as root, since it needs raw device access) checks disk usage and the NVMe's SMART health data. Silent on a normal day, pushes an ntfy alert if something looks wrong.
+
+**Diun.** Watches all running containers against their registries and notifies via ntfy when a new image version is available. It does not auto-update anything. Upgrades are deliberate.
+
+**Pi-hole monthly summary.** A Python script in cron on the 1st of each month, pulling stats from Pi-hole's API and pushing a summary to ntfy. Useful for seeing how much the blocking actually does.
+
+## What it looks like now
+
+The Pi has been up for a few weeks. Pi-hole is blocking around 15% of DNS queries across the network, which is normal for a mix of phones, smart TVs, and laptops. Resource usage is low: 150MB RAM, negligible CPU. The Pi 5 is barely awake.
+
+The foundation is solid. Home Assistant goes in next.
