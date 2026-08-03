@@ -35,6 +35,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og-default.png', Astro.site).href} />
 
     <!-- Fonts: preconnect + preload critical weights -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -60,6 +61,14 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 
     <title>{title}</title>
     <slot name="head" />
+
+    <!-- Theme: set before render to avoid flash -->
+    <script is:inline>
+      const theme =
+        localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    </script>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-44KVZWRR3C"></script>
@@ -87,12 +96,5 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer client:idle />
-
-    <script is:inline>
-      const theme =
-        localStorage.getItem('theme') ||
-        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.setAttribute('data-theme', theme);
-    </script>
   </body>
 </html>
