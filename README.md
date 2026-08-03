@@ -24,18 +24,21 @@ Portfolio and blog built with Astro, React, and Tailwind CSS. Claude Code termin
 ## Development
 
 ```bash
-npm run dev       # Start dev server on localhost:3000
+npm run dev       # Start dev server on localhost:4321
 npm run build     # Build static site to dist/
 npm run preview   # Preview production build
 ```
 
 ## Deployment
 
-```bash
-npm run build && npm run deploy
-```
+Deployed on **Netlify**, built from `master`. Build settings live in `netlify.toml`:
 
-Deploys to AWS S3 with CloudFront CDN.
+- Build command: `npm run build`
+- Publish directory: `dist`
+- Node version: 22, pinned in both `netlify.toml` and `.node-version`
+
+Security and cache headers live in `public/_headers`. Pushes to `master` deploy to
+production; pull requests get a deploy preview.
 
 ## Blog
 
