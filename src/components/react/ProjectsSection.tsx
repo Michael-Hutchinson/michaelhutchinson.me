@@ -37,7 +37,7 @@ const projects = [
     description:
       'Reverse-engineered a smart kettle whose manufacturer went under, then built the app to replace theirs. Decoded the protocol from the Android APK; the phone app finds, pairs and boils entirely over your own Wi-Fi, with no account and no cloud.',
     tags: ['Reverse Engineering', 'IoT', 'React Native', 'TypeScript'],
-    url: '/blog/reverse-engineering-a-dead-smart-kettle',
+    url: 'https://kettle.michaelhutchinson.me',
     file: 'kettle-remote/src/setup/machine.ts',
     accent: 'var(--color-accent-green)',
   },
