@@ -35,7 +35,7 @@ export default function Footer() {
               boxShadow: 'var(--shadow-glow-green)',
             }}
           />{' '}
-          claude-opus-4.7
+          claude-sonnet-4-6
         </span>{' '}
         <span className="hidden sm:inline" style={{ color: 'var(--color-border)' }}>
           |

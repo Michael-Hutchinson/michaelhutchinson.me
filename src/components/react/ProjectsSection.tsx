@@ -31,14 +31,14 @@ const projects = [
     accent: 'var(--color-accent-cyan)',
   },
   {
-    name: 'appkettle',
-    stat: '9',
-    statLabel: 'MCP tools',
+    name: 'kettle-remote',
+    stat: '0',
+    statLabel: 'servers involved',
     description:
-      'Reverse-engineered a dead smart kettle back to life. Decoded the proprietary protocol from the Android APK and built an MCP server and React Native app on top.',
+      'Reverse-engineered a smart kettle whose manufacturer went under, then built the app to replace theirs. Decoded the protocol from the Android APK; the phone app finds, pairs and boils entirely over your own Wi-Fi, with no account and no cloud.',
     tags: ['Reverse Engineering', 'IoT', 'React Native', 'TypeScript'],
     url: '/blog/reverse-engineering-a-dead-smart-kettle',
-    file: 'appkettle/src/mcp-tools.ts',
+    file: 'kettle-remote/src/setup/machine.ts',
     accent: 'var(--color-accent-green)',
   },
   {
