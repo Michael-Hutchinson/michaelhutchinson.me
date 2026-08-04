@@ -1,0 +1,55 @@
+---
+title: 'An MCP Server for Every Hill in Britain and Ireland'
+description: 'My third MCP server ships its entire dataset inside the npm package. 21,576 hills, no API key, no network calls at runtime.'
+date: '2026-08-04'
+tags: ['MCP', 'Claude Code', 'TypeScript', 'Hiking']
+published: true
+---
+
+The [parkrun MCP server](/blog/parkrun-mcp-server) proved that zero configuration is worth chasing: no API keys, no OAuth, install and ask. This one goes a step further. There's no API at all. The entire dataset ships inside the npm package.
+
+It answers questions like "which Munros are within 20km of Fort William?", "tell me about Helvellyn", and "how many Marilyns are there?". Every hill in Britain and Ireland, 21,576 of them, across 31 classifications.
+
+## What it does
+
+Five tools:
+
+- **find_nearby_hills** takes a latitude and longitude and returns hills sorted by distance, optionally filtered to one classification (only Munros, only Wainwrights)
+- **search_hills** is a ranked name search that handles the Gaelic diacritics in names like Beinn Eighe
+- **get_hill_details** gives you height, drop, grid reference, coordinates, and every list a hill belongs to
+- **get_list** returns a whole classification sorted by height, with optional height filters
+- **get_hill_stats** breaks the database down by classification and country
+
+Setup is one command:
+
+```bash
+claude mcp add hills -- npx -y @michaelhutchinson/hills-mcp-server
+```
+
+## The data source
+
+The [Database of British and Irish Hills](https://www.hill-bagging.co.uk/dobih) is a volunteer-maintained dataset that's been going for over twenty years. It records every hill on these islands with surveyed heights, prominence, grid references, and membership of every hill list you've heard of and plenty you haven't: Munros, Corbetts, Wainwrights, Marilyns, HuMPs, Dodds. It's licensed CC-BY 4.0, so you can build on it as long as you credit it. Every response from the server carries the attribution.
+
+The database updates a few times a year. That release cadence is what makes bundling work: a build script processes the official CSV into a trimmed JSON that gets committed and shipped in the package. Lookups are instant, nothing touches the network, and the server works on a train in the Highlands, which is thematically appropriate. When a new DoBIH version lands, I rerun the script and publish a patch release.
+
+## Two gotchas in the data
+
+Two things bit me that are worth knowing if you ever work with this dataset.
+
+First, the CSV has a Classification column listing each hill's codes, and I assumed it was complete. It isn't. Four lists (Murdos, Trail 100, Carns, Binnions) only exist as separate 0/1 flag columns. My stats tool confidently reported zero Murdos in Scotland until I actually read its output while testing. There are 441.
+
+Second, twelve hills carry codes with an equals suffix, like `Ma=`, marking a summit of equal height to its parent. Filter on the exact string `Ma` and those hills silently vanish from the Marilyns. The right count is 2008, not 2007. Nobody would ever notice that bug from the output. It only surfaced because a code review queried the raw data and checked the counts.
+
+## Error messages are an API for models
+
+One bug taught me something MCP-specific. When a classification didn't resolve, the server replied with the list of valid names. Two of those names didn't themselves resolve, because my alias table was hand-written and incomplete. So the error message told the model to retry with a value the server would reject, which is an infinite loop with extra steps.
+
+The fix was to derive the aliases from the classification data itself, so the suggestion list and the resolver can't drift apart. The general rule: in an MCP server, an error message isn't documentation, it's an instruction the model will follow. If your error suggests a value, your code must accept that value.
+
+## Try it
+
+```bash
+claude mcp add hills -- npx -y @michaelhutchinson/hills-mcp-server
+```
+
+Source on [GitHub](https://github.com/Michael-Hutchinson/hills-mcp-server), package on [npm](https://www.npmjs.com/package/@michaelhutchinson/hills-mcp-server). Hill data from the [Database of British and Irish Hills](https://www.hill-bagging.co.uk/dobih), CC-BY 4.0.
