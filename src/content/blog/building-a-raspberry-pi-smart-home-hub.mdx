@@ -28,7 +28,7 @@ The Pi ties them together. One box, one place where all of this comes in and sur
 
 **Fitness tracking.** This is where I'm most interested, and where the Pi can do things Strava and Garmin won't do for me. They sit in different systems that have no incentive to talk to each other.
 
-**Personal finance.** I've got money spread across lots of different bank accounts, ISA's, mortages and pension which I can only check by logging in. I want one view: a dashboard that pulls live data from the accounts that have APIs and the ones that dont I will update every so often. Net worth at a glance, without opening all my apps.
+**Personal finance.** I've got money spread across lots of different bank accounts, ISAs, mortgages and pensions which I can only check by logging in. I want one view: a dashboard that pulls live data from the accounts that have APIs and the ones that don't I will update every so often. Net worth at a glance, without opening all my apps.
 
 ## The architecture
 
@@ -38,7 +38,7 @@ Pi-hole goes in first. Before anything else, it runs as the network DNS server. 
 
 Home Assistant comes once Pi-hole confirms the foundation is solid. Hue and Hive connect natively. The AppKettle service exposes itself to Home Assistant through a custom integration I will build. This is where automations live: the heating schedule, the lights, whatever I end up wanting to trigger based on conditions.
 
-The finance and fitness dashboards are custom builds. A Node.js service pulling from the financial APIs on a schedule, storing locally, serving a dashboard. The fitness side is less defined because it depends on which data sources end up being reliable. Garmin's unofficial API has a history of breaking after auth changes so well see how it goes.
+The finance and fitness dashboards are custom builds. A Node.js service pulling from the financial APIs on a schedule, storing locally, serving a dashboard. The fitness side is less defined because it depends on which data sources end up being reliable. Garmin's unofficial API has a history of breaking after auth changes so we'll see how it goes.
 
 Tailscale handles remote access. I'm not opening ports on the router. Tailscale gives me a private mesh network so I can reach Home Assistant and the finance dashboard from anywhere, without exposing anything to the public internet.
 

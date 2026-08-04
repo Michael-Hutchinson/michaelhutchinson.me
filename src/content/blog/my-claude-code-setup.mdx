@@ -28,7 +28,7 @@ Here is what goes in mine:
 
 **What not to include.** Anything that changes frequently, anything overly verbose, and anything that duplicates what Claude can read from your actual code. Don't paste your entire API schema in there. Don't write paragraphs about obvious things. Keep it under 200 lines. If your `CLAUDE.md` is longer than your README, trim it.
 
-I also use the tiered approach: a root `CLAUDE.md` for project-wide context, and smaller `.claude/` scoped files in subdirectories for feature-specific guidance. The frontend team's conventions are different from the infrastructure code, and the configuration should reflect that.
+I also use the tiered approach: a root `CLAUDE.md` for project-wide context, and smaller `CLAUDE.md` files in subdirectories for feature-specific guidance. The frontend team's conventions are different from the infrastructure code, and the configuration should reflect that.
 
 ## Hooks: automating the guardrails
 
@@ -70,7 +70,7 @@ After hundreds of hours with Claude Code, these are the patterns that consistent
 
 This is the setup that surprises people. I run MCP servers that connect Claude Code to our internal tooling: Jira for ticket context, our deployment platform for service status, and our internal documentation wiki. When I say "pick up PROJ-1234," Claude reads the ticket, understands the requirements, checks the relevant service's current state, and starts working with full context.
 
-The setup lives in `.claude/settings.json` under `mcpServers`. Each server is a small process that exposes tools Claude can call. The investment in setting these up pays back immediately. It eliminates the copy-paste-context dance that slows down every AI interaction.
+The setup lives in `.mcp.json` at the project root. Each server is a small process that exposes tools Claude can call. The investment in setting these up pays back immediately. It eliminates the copy-paste-context dance that slows down every AI interaction.
 
 ## When to drive vs when to delegate
 

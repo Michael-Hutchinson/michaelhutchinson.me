@@ -53,7 +53,7 @@ What I enforce:
 - **Read-only by default.** Every MCP server starts read-only. Write access is opt-in, scoped, and logged.
 - **Least privilege everywhere.** The database MCP server connects with a role that can `SELECT` on specific tables. Not `*`. Not even close.
 - **Audit logging on every call.** Every tool invocation gets logged with the user, timestamp, parameters, and response summary. This isn't optional, it's how you maintain trust with your security team.
-- **No secrets in tool responses.** MCP servers should sanitize responses. If a user record includes an API key hash, strip it before returning.
+- **No secrets in tool responses.** MCP servers should sanitise responses. If a user record includes an API key hash, strip it before returning.
 - **Environment gating.** Production access gets a different approval bar than staging. I run separate MCP server configs per environment, and production-touching tools require explicit opt-in in the Claude Code config.
 
 The goal is to make the security posture so obviously solid that your infosec team becomes an ally, not a blocker.

@@ -15,7 +15,7 @@ It answers questions like "which Munros are within 20km of Fort William?", "tell
 Five tools:
 
 - **find_nearby_hills** takes a latitude and longitude and returns hills sorted by distance, optionally filtered to one classification (only Munros, only Wainwrights)
-- **search_hills** is a ranked name search that handles the Gaelic diacritics in names like Beinn Eighe
+- **search_hills** is a ranked name search that handles the Gaelic diacritics in names like Sgùrr nan Gillean
 - **get_hill_details** gives you height, drop, grid reference, coordinates, and every list a hill belongs to
 - **get_list** returns a whole classification sorted by height, with optional height filters
 - **get_hill_stats** breaks the database down by classification and country
@@ -38,7 +38,7 @@ Two things bit me that are worth knowing if you ever work with this dataset.
 
 First, the CSV has a Classification column listing each hill's codes, and I assumed it was complete. It isn't. Four lists (Murdos, Trail 100, Carns, Binnions) only exist as separate 0/1 flag columns. My stats tool confidently reported zero Murdos in Scotland until I actually read its output while testing. There are 441.
 
-Second, twelve hills carry codes with an equals suffix, like `Ma=`, marking a summit of equal height to its parent. Filter on the exact string `Ma` and those hills silently vanish from the Marilyns. The right count is 2008, not 2007. Nobody would ever notice that bug from the output. It only surfaced because a code review queried the raw data and checked the counts.
+Second, twelve hills carry codes with an equals suffix, like `Ma=`, marking a summit of equal height to its parent. Filter on the exact string `Ma` and the Marilyns among them silently vanish. The right count is 2008, not 2007. Nobody would ever notice that bug from the output. It only surfaced because a code review queried the raw data and checked the counts.
 
 ## Error messages are an API for models
 
