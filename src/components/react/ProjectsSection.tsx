@@ -31,6 +31,17 @@ const projects = [
     accent: 'var(--color-accent-cyan)',
   },
   {
+    name: 'hills-mcp-server',
+    stat: '21,576',
+    statLabel: 'hills in the dataset',
+    description:
+      'Open-source MCP server for every hill in Britain and Ireland. Ships the whole dataset inside the npm package, so no API key and no network calls at runtime.',
+    tags: ['MCP', 'Claude Code', 'DoBIH', 'TypeScript'],
+    url: 'https://www.npmjs.com/package/@michaelhutchinson/hills-mcp-server',
+    file: 'hills-mcp-server/src/index.ts',
+    accent: 'var(--color-accent-2)',
+  },
+  {
     name: 'kettle-remote',
     stat: '0',
     statLabel: 'servers involved',
@@ -43,7 +54,7 @@ const projects = [
   },
   {
     name: 'ukrunner.com',
-    stat: '5,800+',
+    stat: '6,000+',
     statLabel: 'km tracked',
     description:
       "Personal side project tracking every kilometre I've run. Next.js, Sanity CMS, Strava webhooks, and Neon Postgres.",

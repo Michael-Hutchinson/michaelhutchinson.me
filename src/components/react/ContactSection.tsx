@@ -16,9 +16,9 @@ const links = [
     label: 'michael-hutchinson@hotmail.co.uk',
   },
   {
-    href: 'https://github.com/Michael-Hutchinson',
+    href: 'https://github.com/michael-hutchinson',
     icon: GithubIcon,
-    label: 'github.com/Michael-Hutchinson',
+    label: 'github.com/michael-hutchinson',
     external: true,
   },
   {

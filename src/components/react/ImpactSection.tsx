@@ -9,6 +9,16 @@ import { ease } from './ui/constants';
 
 const impacts = [
   {
+    metric: '2026',
+    metricLabel: 'CEO Award',
+    title: 'Thrive CEO Award',
+    description:
+      "Won Thrive's company-wide CEO Award, recognising the work and impact brought to the platform and team across the year.",
+    tags: ['Leadership', 'Impact', 'AI-First'],
+    file: 'src/impact/ceo-award.ts',
+    accent: 'var(--color-accent-green)',
+  },
+  {
     metric: '60%',
     metricLabel: 'faster CI/CD',
     title: 'DevEx Overhaul',
@@ -57,7 +67,7 @@ function ImpactSection() {
             Selected work and measurable outcomes from the past few years:
           </motion.p>
 
-          <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {impacts.map((item, i) => (
               <Card
                 key={item.title}
