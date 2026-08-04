@@ -26,7 +26,7 @@ The Pi ties them together. One box, one place where all of this comes in and sur
 
 **Home automation.** The kettle, the Hue lights, the Hive heating. The kettle already has a story: I reverse-engineered the AppKettle protocol after the manufacturer shut down their servers, [built a TCP client and MCP server](/blog/reverse-engineering-a-dead-smart-kettle), then [built a React Native app](/blog/building-the-appkettle-app) to control it properly. The Pi gives it a permanent home: a Node.js service running 24/7 on the local network so anything on the network can talk to it, including Home Assistant. Hue and Hive are simpler. Both have mature official integrations and it's mostly configuration, not code.
 
-**Fitness tracking.** This is where I'm most interested, and where the Pi can do things Strava and Garmin won't do for me. They sit in different systems that have no incentive to talk to each other.
+**Fitness tracking.** This is where I'm most interested, and where the Pi can do things Strava and Garmin won't do for me. They sit in different systems that have no incentive to talk to each other. The Pi can pull both into one place, so training load and recovery finally sit side by side instead of in separate apps.
 
 **Personal finance.** I've got money spread across lots of different bank accounts, ISAs, mortgages and pensions which I can only check by logging in. I want one view: a dashboard that pulls live data from the accounts that have APIs and the ones that don't I will update every so often. Net worth at a glance, without opening all my apps.
 
@@ -49,11 +49,11 @@ All secrets can go through my 1Password, loaded at service start rather than sto
 The full parts list:
 
 - **Raspberry Pi 5, 8GB RAM**
-- **Argon ONE V5 M.2 NVMe Case:**
-- **SK Hynix 256GB NVMe SSD:**
+- **Argon ONE V5 M.2 NVMe Case**
+- **SK hynix 256GB NVMe SSD**
 - **Official Raspberry Pi 27W USB-C Power Supply**
-- **Netac 128GB microSD:**
-- **USB-C microSD card reader:**
+- **Netac 128GB microSD**
+- **USB-C microSD card reader**
 
 The Pi 5 with 8GB is over-specced for what I'm running right now, which is deliberate. I want headroom without hitting limits mid-experiment.
 
@@ -65,8 +65,8 @@ The microSD is temporary. The plan is to flash Raspberry Pi OS onto it, boot the
 
 ## What comes next
 
-The next few posts will follow the actual build. OS setup and Docker first, then Pi-hole, then Home Assistant, then whichever of the bigger projects comes together first. Right now that looks like the finance dashboard because the APIs are cleaner.
+The next few posts will follow the actual build. [OS setup, Docker and Pi-hole first](/blog/raspberry-pi-os-setup-docker-pihole), then Home Assistant, then whichever of the bigger projects comes together first. Right now that looks like the finance dashboard because the APIs are cleaner.
 
-I'll write honestly about what doesn't work, because things won't work; e.g. I already know Bluetooth audio on Linux is famously fiddly. The Garmin API has broken before. Home Assistant has opinions about how integrations should behave. The interesting posts are usually the ones where something went sideways.
+I'll write honestly about what doesn't work, because things won't work. The Garmin API has broken before. Home Assistant has opinions about how integrations should behave. The interesting posts are usually the ones where something went sideways.
 
 The microSD reader arrives this week. We start then.

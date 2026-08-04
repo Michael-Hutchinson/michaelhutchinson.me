@@ -8,7 +8,7 @@ published: true
 
 [In the last post](/blog/building-a-raspberry-pi-smart-home-hub) I laid out what I'm building: a Pi 5 running Docker, with Pi-hole, Home Assistant, and eventually finance and fitness dashboards. All on hardware I own.
 
-The reader arrived. Here's what it actually took to get from an empty SSD to a box I'd trust running 24/7 on my home network.
+The microSD reader arrived. Here's what it actually took to get from an empty SSD to a box I'd trust running 24/7 on my home network.
 
 ## Flashing the OS
 
@@ -28,9 +28,9 @@ Booted from the microSD first. Found the Pi via the router's DHCP table and SSH'
 
 Two steps to move to NVMe:
 
-**Change boot order.** `sudo raspi-config` → Advanced Options → Boot Order → NVMe/USB first. Without this the Pi will always try the microSD first, even if the NVMe has a working OS on it.
+**Change boot order.** `sudo raspi-config` > Advanced Options > Boot Order > NVMe/USB first. Without this the Pi will always try the microSD first, even if the NVMe has a working OS on it.
 
-**Clone the OS.** SD Card Copier (`sudo apt install rpi-sd-copier`, then `picloner`). Source: microSD. Destination: NVMe. It copies the partition layout, clones the contents, and resizes the root partition to fill the drive.
+**Clone the OS.** `rpi-clone`, run from the microSD system with the NVMe as the target (`sudo rpi-clone nvme0n1`). It copies the partition layout, clones the contents, and resizes the root partition to fill the drive.
 
 Shut down, remove the microSD, power back on. SSH in and run `findmnt /`. It should show `/dev/nvme0n1p2`. That's the last time the microSD is needed.
 
@@ -124,6 +124,7 @@ services:
       - '80:80/tcp'
     environment:
       TZ: 'Europe/London'
+      DNSMASQ_LISTENING: 'all'
     volumes:
       - ./etc-pihole:/etc/pihole
       - ./etc-dnsmasq.d:/etc/dnsmasq.d
@@ -139,7 +140,7 @@ networks:
 
 I pinned Pi-hole to a specific version rather than `:latest`. Auto-updates can break things; I want to know when there's a new version and apply it deliberately. I also gave it a fixed IP on `hub-net`. Some services need to query Pi-hole directly by IP for DNS, and container names don't work for raw DNS lookups.
 
-Pi-hole's DNS engine defaults to only answering queries that look local, which a bridge-networked container never satisfies from the real LAN. Setting `dns.listeningMode` to `ALL` in Pi-hole's config fixes that. The firewall above does the actual access control; this just tells Pi-hole not to silently ignore queries it'd otherwise refuse.
+Pi-hole's DNS engine defaults to only answering queries that look local, which a bridge-networked container never satisfies from the real LAN. Setting `DNSMASQ_LISTENING` to `all` in the compose environment fixes that. The firewall above does the actual access control; this just tells Pi-hole not to silently ignore queries it'd otherwise refuse.
 
 Once it's running, point the router's DHCP DNS setting at the Pi's LAN IP. Every device gets Pi-hole automatically.
 
