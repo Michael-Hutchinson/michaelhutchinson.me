@@ -92,7 +92,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     </a>
 
     <Header />
-    <main id="main-content" class="relative overflow-hidden">
+    <main id="main-content" class="relative overflow-x-clip">
       <slot />
     </main>
     <Footer client:idle />
