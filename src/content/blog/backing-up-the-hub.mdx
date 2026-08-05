@@ -1,0 +1,63 @@
+---
+title: 'A Backup Is Not a Backup Until You Restore It'
+description: 'Encrypted nightly backups from the Pi to Google Drive with restic and rclone, what actually needs backing up, and the restore drill that makes it real.'
+date: '2026-09-06'
+tags: ['Raspberry Pi', 'Self-Hosted']
+published: true
+---
+
+Everything on [the hub](/blog/building-a-raspberry-pi-smart-home-hub) is defined in a git repo: compose files, Home Assistant config, dashboards, docs. For a while now I told myself that meant the Pi was backed up. It wasn't.
+
+Git holds the _definition_ of the system. It deliberately excludes the _state_: the secrets in `.env` files, Home Assistant's database, monitoring history, and the one file that would really hurt, the Zigbee network key. Lose that key and every bulb needs factory-resetting and re-pairing. The NVMe dies and the config restores in minutes while the state is just gone.
+
+## Choosing where it goes
+
+Two candidates: my Mac, or cloud storage.
+
+The Mac fails on two counts. It sleeps, so backups only land when it happens to be awake. And it's in the same house, so the scenarios beyond "the NVMe died" (fire, theft, a surge taking out everything on the mains) take the backup with the original.
+
+Google Drive won: genuinely offsite, always on, and the whole backup set is small enough that the free tier covers it forever. The condition is non-negotiable though: this backup contains every secret the hub has, so it gets encrypted _on the Pi_, before upload. Google stores ciphertext and nothing else.
+
+That's restic's default behaviour, with rclone as its transport to Drive. One deliberate choice on the Drive side: the rclone token is scoped to `drive.file`, so it can only touch files it created. Even fully compromised, it can't read the rest of the Drive.
+
+## The nightly job
+
+A root cron job at 3am runs one script:
+
+```bash
+restic backup "$HUB" "$STAGING" \
+  --exclude "$HUB/*/log" \
+  --exclude "$HUB/**/*.log*" \
+  || fail "backup"
+
+restic forget --keep-daily 7 --keep-weekly 4 --prune || fail "prune"
+restic check --read-data-subset=5% || fail "check"
+```
+
+Three details doing the quiet work:
+
+**Staging.** Before the backup, the script dumps the things that live outside the repo: both crontabs and the firewall rules. The rebuild notes can say "restore and re-apply" instead of "hope you remember".
+
+**The 5% check.** Every night, restic downloads a random twentieth of the stored data and verifies it cryptographically. Silent corruption on the remote gets caught within weeks, not on restore day.
+
+**`fail`.** Any step failing pushes a high-priority ntfy to my phone. This matters more than it looks: backup systems don't fail loudly, they fail silently and get discovered during a disaster. This one is designed to be incapable of failing quietly. There's even a known future failure baked in: rclone's shared Google client ID is being retired sometime in 2026, and when that day comes the backup will fail, my phone will buzz, and the fix is a ten-minute personal client ID. I'd rather have a planned alarm than a surprise.
+
+First run: 3,360 files, 125MB of state, stored as 48MB after deduplication and compression, in under two minutes. Nightly runs only upload what changed.
+
+## The restore drill
+
+Here's the part most people skip. The same day the first backup ran, I restored from it:
+
+```bash
+restic restore latest --target /tmp/restore-test
+```
+
+Then checksummed the three files whose loss would hurt most, restored copy against live copy: the Zigbee configuration with the network key, a secrets file, the Home Assistant config. All three matched byte for byte. The network key, the file that saves me re-pairing every bulb in the house, provably round-trips from Google's servers.
+
+Delete the test directory, write the date down. The drill gets repeated every few months. A backup that restored last year proves nothing about today.
+
+## What the disaster looks like now
+
+If the Pi's NVMe dies tomorrow: flash a new OS, clone the repo, restore the state from Drive, `docker compose up` service by service. No re-pairing bulbs, no regenerating secrets, no lost history. The worst day this system can have has a written procedure and a tested recovery.
+
+It's the least visible thing the hub does, and it might be the most important. The next post is the opposite: the most gimmicky thing the hub does, which turns out to be genuinely useful.

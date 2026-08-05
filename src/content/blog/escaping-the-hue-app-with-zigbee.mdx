@@ -1,0 +1,53 @@
+---
+title: 'Escaping the Hue App: Running My Own Zigbee Network'
+description: 'A £20 USB dongle, Mosquitto, and Zigbee2MQTT versus the Philips Hue app. The hard requirement: my partner loses none of the features she actually uses.'
+date: '2026-08-30'
+tags: ['Raspberry Pi', 'Smart Home', 'Self-Hosted']
+published: true
+---
+
+The Hue bulbs were the last devices in the house still living in a manufacturer's app. After [what happened to the kettle](/blog/reverse-engineering-a-dead-smart-kettle) I don't trust any smart device whose brain lives in someone else's cloud, and the whole point of [the hub](/blog/building-a-raspberry-pi-smart-home-hub) is one box, one place.
+
+But this migration had a hard requirement that made it interesting: my partner likes the Hue app. The colour picking, the effects, the lot. "I moved the lights to my own system and now they do less" was not an acceptable outcome. Feature parity or don't bother.
+
+## The stack
+
+Zigbee is the radio protocol the bulbs already speak. The Hue app is just one way to run a Zigbee network; a £20 USB dongle is another. Mine is a Sonoff Dongle-E, on a USB extension cable because a radio plugged directly into a Pi 5 sits next to a lot of USB 3 interference.
+
+Three pieces, each doing one job:
+
+- **The dongle** is the coordinator: the radio that forms the network.
+- **Zigbee2MQTT** drives the dongle and translates Zigbee into MQTT messages.
+- **Mosquitto** is the MQTT broker, and Home Assistant subscribes to it.
+
+Zigbee2MQTT publishes Home Assistant discovery messages, so every bulb it learns about just appears in Home Assistant as a light entity. No custom integration, no YAML per bulb.
+
+Two config details that matter. The dongle gets passed into the container by its `/dev/serial/by-id/` path, which is stable across reboots where `/dev/ttyUSB0` is not. And this dongle's chip needs `adapter: ember` in Zigbee2MQTT's config; the default driver connects and then fails in ways that look like everything else is broken.
+
+## Pairing, or: the factory reset is in the app
+
+Pairing should be: enable permit-join, reset the bulb, it appears. The resetting is where the folklore lives. The classic advice for bulbs is a power-cycle dance at the wall. These bulbs ignored it completely.
+
+The actual factory reset for a bulb that's paired to the Hue app is deleting it _from the Hue app_. The app sends the reset over Bluetooth as it removes the bulb, the bulb starts advertising for a new network, and Zigbee2MQTT grabs it within seconds. All three bulbs went the same way: delete from Hue, blink, joined.
+
+So the last thing the Hue app ever did was set its own bulbs free. Thanks for that.
+
+## Feature parity is a real project
+
+Getting the bulbs into Home Assistant is the easy 80%. The remaining 20% is why most migrations fail the partner test, so I did it properly:
+
+**Colour and temperature controls** on every light card: brightness, a colour wheel, warm-to-cool. The gradient lightstrip's card shows all three.
+
+**The effects.** The Hue effects (candle flicker, fireplace, sunrise, the colour loop) are implemented in the bulb firmware, not the app, so they survive the migration. Each one is a chip on the dashboard now: one tap for candlelight, one tap to stop it.
+
+**A colour picker you can actually use.** The inline colour bar on the dashboard cards is about four millimetres tall. Tapping the light now opens the full-size wheel instead. This sounds trivial; it was the difference between "fine" and "better than the app".
+
+The dashboard side is HACS plus the Mushroom card collection plus a theme. Stock Home Assistant dashboards are functional; this looks like something you'd choose.
+
+## Verdict
+
+The lights do everything they did in the Hue app, from the same dashboard that runs the heating and the kettle, with no Hue account involved. The bulbs' effects survived, the colour wheel is bigger than the app's, and the whole network is mine: the pairing database and network key live on the Pi, in the backup, not in a cloud.
+
+Partner verdict, which is the one that counts: approved. The effects chips get used most.
+
+One warning if you do this: the moment the bulbs leave the Hue app, that app is no longer a fallback. You're the vendor now. Which is rather the point, but it's worth saying out loud before you delete the first bulb. The next post is about what "you're the vendor now" means for backups.

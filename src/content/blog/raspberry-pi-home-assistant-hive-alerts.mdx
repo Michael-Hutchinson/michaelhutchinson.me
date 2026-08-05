@@ -1,0 +1,56 @@
+---
+title: 'Home Assistant on the Pi: Alerts, Not Automations'
+description: 'Installing Home Assistant properly, connecting Hive, and the design decision that shapes everything: the house tells me things, it does not do things.'
+date: '2026-08-16'
+tags: ['Raspberry Pi', 'Smart Home', 'Self-Hosted']
+published: true
+---
+
+[The foundation is done](/blog/raspberry-pi-os-setup-docker-pihole): the Pi boots from NVMe, Docker runs everything, Pi-hole guards the network. Time for the centrepiece. Home Assistant is the orchestration layer the whole hub hangs off, so I wanted it installed properly, not just running.
+
+## Installing it like it matters
+
+Home Assistant in Docker, with three decisions that differ from the copy-paste compose files:
+
+**Host networking.** Home Assistant discovers devices via mDNS and UDP broadcast. Bridge networking breaks that quietly: integrations that should find your TV or your speakers just come up empty. `network_mode: host` and discovery works like it should.
+
+**A pinned version, not `latest`.** Same policy as everything else on the box. Diun tells me when a new version exists, I read the release notes, I upgrade deliberately. Home Assistant ships breaking changes often enough that this has already paid for itself.
+
+**Hardened from day one.** MFA on the account, `ip_ban_enabled` with a five-attempt threshold, and no cloud account. Remote access comes later via Tailscale, not via someone else's relay.
+
+## Hive, and two lessons about cloud integrations
+
+The Hive integration is official and setup is just logging in. You get the thermostat as a climate entity, current and target temperature sensors, a battery level, and a hub-online binary sensor.
+
+The two things that cost me time were both about trusting the data.
+
+First: the thermostat vanished from Home Assistant and the logs showed a `MALFORMED_NODE_DESCRIPTOR` warning. I assumed a broken integration. It was nothing of the sort: the physical device was offline, Hive's cloud was serving a husk of a device record, and the integration was faithfully reporting the mess. When the receiver came back, everything healed itself. Lesson: with cloud integrations, check the device before you blame the code.
+
+Second: after batteries came back from the dead, Home Assistant kept showing the old low percentage for hours. Hive's cloud serves the last-known value until the device next phones home, and a UI refresh does not force a re-read. Waking the thermostat (turn the dial on the unit) triggers a fresh report. Lesson: a stale value and a wrong value look identical on a dashboard.
+
+## Alerts, not automations
+
+Here's the design decision that shapes everything I've built on top: the house is not allowed to act on my behalf. No "good morning" routines, no heating that turns itself down because it thinks I've left. I don't want to come home to a decision the house made without me, and I definitely don't want to debug one.
+
+What I want is awareness. The house should tell me things I'd otherwise find out too late:
+
+- **Thermostat battery low**, debounced by twelve hours. The debounce is doing real work: a stale post-reconnect reading clears within hours, a genuinely dying battery stays low for days. Twelve hours filters one from the other.
+- **Heating offline**, after fifteen minutes. Short blips and Home Assistant restarts recover in under a minute; a real outage doesn't.
+- **Heating an empty house.** Fires only when everyone is out, the thermostat is calling for heat, and the room is actually below target, all true for fifteen minutes straight. The below-target check matters: "heat mode" alone just means the schedule is on, not that the boiler is burning money.
+- **House unexpectedly cold**, below 10°C for half an hour. That's either a boiler failure or a frost risk, and I want to know about both from anywhere.
+
+All four push through [ntfy](https://ntfy.sh) to my phone, through one reusable `rest_command` in the config. Notifications, not actions. If the heating is on in an empty house, my phone tells me, and I decide.
+
+Presence for the empty-house check comes from the companion app. On Android it needs location set to "allow all the time" before it reports anything, which is the sort of detail that eats an evening.
+
+## Two people, one house
+
+The presence logic started with just my phone, which made "nobody home" mean "Michael is out". Wrong the moment my partner is in. She got her own Home Assistant account (non-admin, her own login, never share yours), the companion app, and her own person entity. The empty-house alert now requires both of us gone.
+
+If you live with someone, do this early. Every presence-based anything is wrong until you do.
+
+## What it looks like now
+
+Hive runs the heating exactly as it always did. Home Assistant watches, graphs a day of temperatures against the target, and stays quiet unless something is genuinely worth a notification. My phone has buzzed twice in a month: once for a real battery, once when I proved the empty-house alert works by leaving.
+
+Next job: the URLs. Everything so far lives on ports (`:8123`, `:3001`, `/admin`) and I want proper names for it all, plus HTTPS access from outside without opening a single port. That's the next post.

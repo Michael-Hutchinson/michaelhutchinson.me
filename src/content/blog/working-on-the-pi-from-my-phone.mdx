@@ -1,0 +1,43 @@
+---
+title: 'Working on the Pi from My Phone'
+description: 'mosh for connections that survive anything, herdr for terminal sessions that keep working after you pocket the phone, and Claude Code running on the Pi in the middle.'
+date: '2026-09-13'
+tags: ['Raspberry Pi', 'Self-Hosted', 'Claude Code']
+published: true
+---
+
+The Pi is always on, always on the tailnet, and has Claude Code installed. My laptop is none of those things reliably. At some point the obvious question arrives: why does the machine that sleeps do the work while the machine that never sleeps sits there [blocking ads](/blog/raspberry-pi-os-setup-docker-pihole)?
+
+I'd been half-planning to clone repos onto the Pi for exactly this, and then a podcast introduced me to the two tools that make it actually pleasant from a phone: mosh and herdr.
+
+## The problem with SSH from a phone
+
+Plain SSH from a phone is miserable in two specific ways. The connection dies every time you switch apps, walk out of wifi range, or let the screen lock. And every keystroke does a round trip before it appears, which on mobile data feels like typing through treacle.
+
+**mosh** fixes both. It authenticates over normal SSH, then switches to its own UDP protocol that survives the phone sleeping, the network changing from wifi to 4G, and anything short of the Pi itself going down. It also echoes your typing locally and instantly, predicting what the server will say. Install on the Pi is one apt package; the firewall gets its UDP range opened to the tailnet and LAN only; Termius on the phone has a mosh toggle.
+
+**herdr** fixes the other half. It's a session keeper in the tmux family, built for coding agents: sessions run server-side, survive disconnects, and show whether the agent inside is working, blocked, or idle. Single binary, no daemon exposed to the network. Before it went anywhere near the hub I checked what it listens on: a local unix socket and nothing else, which is exactly the right answer.
+
+## The test that sold it
+
+Setup done, I ran the test that matters:
+
+1. Termius into the Pi from the phone, `herdr`, then `claude` inside the session
+2. Gave it a real task in a repo
+3. Swiped Termius away entirely, mid-answer
+4. Made tea ([there's a notification for that now](/blog/the-kettle-goes-open-source))
+5. Reconnected, ran `herdr`
+
+Same session, task finished while the phone was in my pocket. The work was never on the phone. The phone is just a window to the Pi, and closing the window doesn't stop the work.
+
+## The Mac gets the same treatment
+
+The Mac's SSH sessions used to die on every lid close. Now it connects with `mosh` instead of `ssh` and a session survives the lid, the commute, and the coffee shop wifi. Same herdr sessions on the other end. The laptop and the phone are just different sized windows onto the same always-on machine.
+
+Worth saying: development didn't move to the Pi. The Mac is several times faster and iOS builds need Xcode. GitHub stays the source of truth for everything. What lives on the Pi is a handful of clones of things I might plausibly want to poke at while away from the desk. First one in: this blog.
+
+## What it's actually for
+
+Not big builds. It's for the small itch at the wrong moment: the typo in a published post, the config tweak, the "did that cron job actually run" check, kicking off something slow before walking home. From the sofa, from the train, from bed at 11pm against all advice.
+
+Fittingly, any typos in this post can now be fixed from the sofa. Termius, herdr, "fix it", pocket the phone.

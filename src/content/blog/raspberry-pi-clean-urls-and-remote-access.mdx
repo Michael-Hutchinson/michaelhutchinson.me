@@ -1,0 +1,68 @@
+---
+title: 'Clean URLs on the LAN, HTTPS from Anywhere, No Open Ports'
+description: 'Giving every service a proper name with Pi-hole and Caddy, remote access over Tailscale with real certificates, and the reverse proxy bug my own tests kept telling me was fine.'
+date: '2026-08-23'
+tags: ['Raspberry Pi', 'Self-Hosted']
+published: true
+---
+
+By this point the Pi runs [Pi-hole](/blog/raspberry-pi-os-setup-docker-pihole), [Home Assistant](/blog/raspberry-pi-home-assistant-hive-alerts), Uptime Kuma, and a dashboard. All of it addressed like this: `192.168.x.x:8123`, `192.168.x.x:3001`, `192.168.x.x/admin`. Functional, and miserable to type on a phone.
+
+Two jobs in this post: proper names on the LAN, and reaching everything from outside the house without opening a port on the router.
+
+## Names: Pi-hole + Caddy
+
+Pi-hole is already the network's DNS server, and it does local DNS records. So every service gets a name like `ha.hub`, `pihole.hub`, `uptime.hub`, all pointing at the Pi's IP.
+
+DNS alone still leaves the ports. That's what a reverse proxy is for: Caddy listens on port 80 and routes by hostname, so `ha.hub` quietly becomes the Home Assistant container and `uptime.hub` becomes Uptime Kuma. One Caddy container, one config file:
+
+```
+:80 {
+	@ha host ha.hub
+	handle @ha {
+		reverse_proxy 192.168.x.x:8123
+	}
+
+	@uptime host uptime.hub
+	handle @uptime {
+		reverse_proxy uptime-kuma:3001
+	}
+
+	handle {
+		reverse_proxy homepage:3000
+	}
+}
+```
+
+The last block is the fallback: any name that isn't claimed lands on the dashboard. Two details that cost me: Home Assistant only accepts proxied requests from proxies it trusts (`trusted_proxies` in its config, pointing at the Docker subnet), and the dashboard container validates the Host header, so Caddy has to rewrite it (`header_up Host`).
+
+## The bug my own tests said was fine
+
+My first Caddyfile had the fallback as a separate `:80` block alongside the named-host blocks. Caddy treats that as one server where the catch-all shadows everything, so every single hostname served the dashboard. `ha.hub`? Dashboard. `pihole.hub`? Dashboard.
+
+The embarrassing part is how long I believed it worked, because my verification was `curl ha.hub | grep "Home Assistant"`, and that passed. Of course it passed. The dashboard has a tile labelled "Home Assistant" on it. Every string I checked for existed on the page I was accidentally serving.
+
+The fix for the config was restructuring into one `:80` server with `handle` blocks. The fix for me was better tests: check for something that only exists on the right page, or better, check for the absence of something that only exists on the wrong one. A test that can't fail isn't a test.
+
+## Remote access: Tailscale Serve
+
+Nothing on this box will ever be port-forwarded to the internet. Tailscale already connects my devices as a private mesh; Tailscale Serve puts HTTPS in front of services for tailnet devices only, with a real Let's Encrypt certificate for the machine's tailnet name:
+
+```bash
+sudo tailscale serve --bg 3000            # root: the dashboard
+sudo tailscale serve --bg --https=8443 8123   # HA on its own port
+```
+
+From anywhere, `https://homehub.<tailnet>.ts.net` is the dashboard and `:8443` is Home Assistant, green padlock and all. If you're not on the tailnet, none of it exists. The companion app gets the Tailscale URL as its external address and the LAN one as internal, and switches by itself.
+
+Two gotchas for the notes: hitting the Tailscale IP instead of the hostname gives a certificate mismatch, because the cert is for the name. And on Android, the Home Assistant app claims the tailnet domain via app links and hijacks the dashboard URL out of the browser; the fix is buried in Settings, "Open by default", "In your browser".
+
+## One more firewall footnote
+
+The [last networking surprise](/blog/raspberry-pi-os-setup-docker-pihole) was Docker bypassing ufw for published ports. This build added the mirror image: traffic from _inside_ a container to a host-published port goes through ufw's INPUT chain, and my rules only allowed the LAN and the tailnet.
+
+I found out when an Uptime Kuma monitor pointed at another container's published port timed out for exactly 48 seconds a check, forever. Kuma lives in a container; its requests come from the Docker subnet; the Docker subnet wasn't on the allow list. One rule fixed it, and now it's the third entry in a pattern I finally recognise: on this box, every "unreachable" mystery is the firewall being exactly as strict as I told it to be.
+
+## Where that leaves things
+
+Every service has a name you can say out loud. Outside the house, everything is HTTPS behind Tailscale, and the router still has zero ports open. The next post is the fun one: taking the lights off the Hue app and running the Zigbee network myself.
