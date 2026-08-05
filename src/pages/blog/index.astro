@@ -27,7 +27,7 @@ const posts = (await getCollection('blog'))
       <span class="text-text-secondary">blog</span>
     </nav>
     <h1 class="sr-only">Blog</h1>
-    <div class="mb-8 flex items-baseline gap-2.5 text-[0.9375rem]">
+    <div class="mb-2 flex items-baseline gap-2.5 text-[0.9375rem]">
       <span
         class="text-base font-bold select-none"
         style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
@@ -35,6 +35,9 @@ const posts = (await getCollection('blog'))
       >
       <span class="text-text">ls ~/blog/</span>
     </div>
+    <p class="text-text-muted mb-8 font-mono text-sm">
+      # AI-first engineering, technical leadership, and building things that ship
+    </p>
 
     <BlogList posts={posts} client:load />
   </div>

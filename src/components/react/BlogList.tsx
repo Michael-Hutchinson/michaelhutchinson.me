@@ -15,7 +15,7 @@ interface BlogListProps {
   posts: Post[];
 }
 
-const POSTS_PER_PAGE = 5;
+const POSTS_PER_PAGE = 10;
 
 export default function BlogList({ posts }: Readonly<BlogListProps>) {
   const [search, setSearch] = useState('');

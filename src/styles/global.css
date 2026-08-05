@@ -152,6 +152,13 @@
     radial-gradient(ellipse at 50% 80%, rgba(232, 116, 97, 0.04) 0%, transparent 50%) !important;
 }
 
+.prose pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
 /* Section dividers */
 section + section::before {
   content: '';
