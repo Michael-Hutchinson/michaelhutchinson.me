@@ -1,4 +1,4 @@
-# michael-hutchinson.me
+# michaelhutchinson.me
 
 Portfolio and blog built with Astro, React, and Tailwind CSS. Claude Code terminal-inspired design with typing animations, thinking indicators, and a full-featured blog platform.
 

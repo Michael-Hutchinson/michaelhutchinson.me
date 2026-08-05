@@ -131,7 +131,7 @@ export async function GET({ props }: APIContext) {
                 type: 'span',
                 props: {
                   style: { fontFamily: 'JetBrains Mono', fontSize: '14px', color: '#b197fc' },
-                  children: 'michael-hutchinson.me',
+                  children: 'michaelhutchinson.me',
                 },
               },
             ],
