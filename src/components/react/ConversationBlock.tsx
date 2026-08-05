@@ -33,7 +33,7 @@ export default function ConversationBlock({
   children,
 }: Readonly<ConversationBlockProps>) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-15% 0px' });
+  const inView = useInView(ref, { once: true, margin: '-15% 0px -48px 0px' });
   const [phase, setPhase] = useState(autoStart ? PHASE.TYPING : PHASE.WAITING);
 
   const cmd = useTypingEffect({
