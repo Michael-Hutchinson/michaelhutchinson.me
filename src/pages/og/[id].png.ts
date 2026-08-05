@@ -2,9 +2,10 @@ import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
 import satori from 'satori';
 import sharp from 'sharp';
+import { isLive } from '../../lib/posts';
 
 export async function getStaticPaths() {
-  const posts = (await getCollection('blog')).filter((p) => p.data.published);
+  const posts = (await getCollection('blog')).filter(isLive);
   return posts.map((post) => ({
     params: { id: post.id },
     props: { title: post.data.title, date: post.data.date, tags: post.data.tags },

@@ -1,10 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { isLive, readingTimeMinutes } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const allPosts = (await getCollection('blog'))
-    .filter((p) => p.data.published)
+    .filter(isLive)
     .sort((a, b) => new Date(a.data.date).valueOf() - new Date(b.data.date).valueOf());
 
   return allPosts.map((post, i) => ({
@@ -25,9 +26,7 @@ export async function getStaticPaths() {
 const { post, allPosts, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
 
-// Reading time
-const words = post.body?.split(/\s+/).length || 0;
-const readingTime = Math.max(1, Math.ceil(words / 250));
+const readingTime = readingTimeMinutes(post.body);
 
 // Related posts: score by shared tags, exclude self, take top 3
 const related = allPosts

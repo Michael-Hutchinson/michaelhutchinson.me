@@ -2,17 +2,18 @@
 import Layout from '../../layouts/Layout.astro';
 import BlogList from '../../components/react/BlogList.tsx';
 import { getCollection } from 'astro:content';
+import { isLive, byDateDesc, readingTimeMinutes } from '../../lib/posts';
 
 const posts = (await getCollection('blog'))
-  .filter((p) => p.data.published)
-  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .filter(isLive)
+  .sort(byDateDesc)
   .map((p) => ({
     id: p.id,
     title: p.data.title,
     description: p.data.description,
     date: p.data.date,
     tags: p.data.tags,
-    readingTime: Math.max(1, Math.ceil((p.body?.split(/\s+/).length || 0) / 250)),
+    readingTime: readingTimeMinutes(p.body),
   }));
 ---
 
