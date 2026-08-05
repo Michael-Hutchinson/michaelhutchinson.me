@@ -1,0 +1,80 @@
+---
+title: 'One Kettle, Three Clients: Home Assistant, Open Source, and a Beta'
+description: 'The dead AppKettle is now a Home Assistant device, a public repo with a Docker image, and a phone app in closed beta. The interesting part was teaching three clients to share one TCP connection.'
+date: '2026-08-09'
+tags: ['Raspberry Pi', 'Smart Home', 'TypeScript', 'MCP']
+published: true
+---
+
+This is part three of the kettle saga. [Part one](/blog/reverse-engineering-a-dead-smart-kettle) decoded the protocol after the manufacturer's cloud died. [Part two](/blog/building-the-appkettle-app) turned it into a phone app. Part two ended with two loose ends: run the MCP server on a Raspberry Pi for remote access, and work out what "ready for other people" looks like.
+
+Both are done. And a third thing happened that I didn't plan: the kettle joined [the smart home hub](/blog/building-a-raspberry-pi-smart-home-hub).
+
+## The one-connection problem, now with three clients
+
+The kettle accepts one usable TCP connection at a time. In part two that meant the app disconnects after 60 seconds idle so another phone can get in. Manageable.
+
+Then the Pi wanted a connection too, permanently, because Home Assistant needs to know the kettle's temperature. And my laptop wanted one whenever I asked Claude about the kettle. Three clients, one slot, and the phone app is the one in other people's hands, so it must never lose.
+
+The answer was to make the Pi's bridge the only long-term client and make it polite:
+
+```typescript
+private async tick(): Promise<void> {
+  try {
+    const kettle = await this.source.ensure();
+    await kettle.pollStatus();
+    await this.publishState(false);
+    if (!this.active) this.source.release();   // give the kettle back
+  } catch (e) {
+    // most likely a phone holds the kettle: serve stale, retry later
+    await this.safePublishState(true);
+  }
+  this.schedule(this.active ? 5_000 : 90_000);
+}
+```
+
+Idle, it connects for about a second every 90 seconds and releases in between. While the kettle is heating it holds on and polls every 5 seconds, because that's how the boiled notification works. If a phone has the kettle, the bridge shrugs, marks its data stale, and tries again next tick. Home Assistant shows slightly old numbers while someone uses the app. That's not a bug, it's the contract.
+
+My laptop stopped being a client entirely. Claude now talks to the bridge's HTTP MCP endpoint over Tailscale, so the bridge does the kettle talking for everyone.
+
+## The kettle is a Home Assistant device now
+
+The bridge publishes MQTT discovery messages, so Home Assistant just finds a device called AppKettle: temperature, water volume, state, a target dial, boil and stop buttons, a keep warm switch. The dashboard got preset chips that mirror the app: coffee 95°, green tea 75°, full boil.
+
+The bit I actually wanted: an automation that watches the state flip from Heating to Ready and sends a push notification. The kettle reports Ready itself, no temperature guessing. I tap a chip on the dashboard, go do something else, and my phone tells me when the water's ready.
+
+## The shutdown bug worth writing down
+
+The bridge publishes a retained availability message so Home Assistant knows if it's up. On shutdown it should publish "offline" before exiting. Code review caught that it almost never would: the HTTP server's signal handler and the MQTT bridge's signal handler raced on SIGTERM, and the HTTP one calls `process.exit` with basically no async work in front of it. The offline publish needs a network round trip. It loses the race every time.
+
+So every `docker restart` would leave Home Assistant believing the bridge was alive. The fix was boring in the best way: one coordinated shutdown that awaits the MQTT goodbye before letting the process die, verified against a live broker that logged the offline message arriving before the exit.
+
+## Going public
+
+[The repo is public now](https://github.com/Michael-Hutchinson/appkettle), with a multi-arch Docker image on GHCR. If you have a stranded AppKettle, this is the whole setup:
+
+```bash
+docker run -d \
+  -e KETTLE_IP=<your-kettle-ip> \
+  -e KETTLE_IMEI=<your-kettle-imei> \
+  -e MQTT_URL=mqtt://your-broker:1883 \
+  ghcr.io/michael-hutchinson/appkettle:latest
+```
+
+Point it at your MQTT broker and the kettle appears in Home Assistant on its own. No cloud, no account, nothing leaves your house. The kettle that died because of a cloud service now works without one.
+
+Going public also meant the usual pass over the details: making sure the startup log doesn't print your MQTT password, pinning down what happens when a boil is refused because the water's low, that sort of thing. Small stuff, but it's the difference between "works on my Pi" and something you'd hand to a stranger.
+
+## The app is in beta
+
+The phone app from part two is in closed beta: a testing group on Google Play, and TestFlight on iOS. Part two said "Android-only for now" and the React Native bet paid off, the iOS build came from the same codebase.
+
+One of my testers was so excited to test the app that they found a kettle on eBay and bought it just for this.
+
+Store review for a kettle app is its own adventure, and the reviewers understandably don't have an AppKettle to test with. That's a story for when it's over.
+
+## Where this ends up
+
+Three posts ago this was a dead kettle and a hex dump. Now it's a library, a CLI, an MCP server, a Home Assistant integration, a public Docker image, and an app two store reviews away from anyone being able to download it.
+
+The stack on the Pi keeps growing around it. But the morning routine is unchanged: tap, wait for the notification, tea.
