@@ -6,10 +6,15 @@ import Footer from '../components/react/Footer.tsx';
 interface Props {
   title: string;
   description: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: string;
+  tags?: string[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogImage, ogType = 'website', publishedTime, tags = [] } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage ?? '/og-default.png', Astro.site).href;
 ---
 
 <!doctype html>
@@ -25,17 +30,24 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalUrl.href} />
 
     <!-- Open Graph -->
+    <meta property="og:site_name" content="Michael Hutchinson" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl.href} />
-    <meta property="og:image" content={new URL('/og-default.png', Astro.site).href} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {ogType === 'article' && <meta property="article:author" content="Michael Hutchinson" />}
+    {tags.map((tag) => <meta property="article:tag" content={tag} />)}
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL('/og-default.png', Astro.site).href} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Fonts: preconnect + preload critical weights -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

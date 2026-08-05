@@ -83,13 +83,16 @@ const jsonLd = {
 };
 ---
 
-<Layout title={`${title} - Michael Hutchinson`} description={description}>
+<Layout
+  title={`${title} - Michael Hutchinson`}
+  description={description}
+  ogImage={ogImage}
+  ogType="article"
+  publishedTime={isoDate}
+  tags={tags}
+>
   <!-- JSON-LD -->
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
-
-  <!-- OG Image override -->
-  {fullOgUrl && <meta property="og:image" content={fullOgUrl} slot="head" />}
-  {fullOgUrl && <meta name="twitter:image" content={fullOgUrl} slot="head" />}
 
   <ReadingProgress />
 
