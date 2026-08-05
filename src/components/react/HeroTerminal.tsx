@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import useTypingEffect from './hooks/useTypingEffect';
+import useHydrated from './hooks/useHydrated';
 import withErrorBoundary from './withErrorBoundary';
 import { ease } from './ui/constants';
 
@@ -54,21 +55,26 @@ const statusRows = [
 
 function HeroTerminal() {
   const [phase, setPhase] = useState(PHASE.TYPING_CMD1);
+  const hydrated = useHydrated();
+  const reduceMotion = useReducedMotion();
+  const animated = hydrated && !reduceMotion;
+  const p = animated ? phase : PHASE.IDLE;
 
   const cmd1 = useTypingEffect({
     text: 'whoami',
     speed: 70,
     delay: 800,
-    enabled: phase >= PHASE.TYPING_CMD1,
+    enabled: animated && phase >= PHASE.TYPING_CMD1,
   });
   const cmd2 = useTypingEffect({
     text: 'cat status.yml',
     speed: 55,
     delay: 200,
-    enabled: phase >= PHASE.TYPING_CMD2,
+    enabled: animated && phase >= PHASE.TYPING_CMD2,
   });
 
   useEffect(() => {
+    if (!animated) return;
     if (cmd1.isDone && phase === PHASE.TYPING_CMD1) {
       const id = setTimeout(() => setPhase(PHASE.THINKING), 250);
       return () => clearTimeout(id);
@@ -77,17 +83,19 @@ function HeroTerminal() {
       const id = setTimeout(() => setPhase(PHASE.STATUS), 350);
       return () => clearTimeout(id);
     }
-  }, [cmd1.isDone, cmd2.isDone, phase]);
+  }, [animated, cmd1.isDone, cmd2.isDone, phase]);
 
   useEffect(() => {
+    if (!animated) return;
     const delay = phaseDelays[phase];
     if (delay == null) return;
     const id = setTimeout(() => setPhase(phase + 1), delay);
     return () => clearTimeout(id);
-  }, [phase]);
+  }, [animated, phase]);
 
   // OUTPUT → TYPING_CMD2 after name reveals
   useEffect(() => {
+    if (!animated) return;
     if (phase === PHASE.OUTPUT) {
       const id = setTimeout(() => setPhase(PHASE.TYPING_CMD2), 800);
       return () => clearTimeout(id);
@@ -96,15 +104,10 @@ function HeroTerminal() {
       const id = setTimeout(() => setPhase(PHASE.IDLE), 600);
       return () => clearTimeout(id);
     }
-  }, [phase]);
+  }, [animated, phase]);
 
   return (
-    <motion.div
-      className="relative max-w-208"
-      initial={{ opacity: 0, y: 20, scale: 0.98, filter: 'blur(4px)' }}
-      animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-      transition={{ duration: 0.8, ease, delay: 0.15 }}
-    >
+    <div className="relative max-w-208">
       {/* Rotating gradient border */}
       <div
         className="absolute -inset-px rounded-lg opacity-60 transition-opacity duration-300 hover:opacity-100"
@@ -126,14 +129,11 @@ function HeroTerminal() {
           className="border-border flex items-center gap-1.5 border-b px-4 py-2.5"
           style={{ background: 'var(--color-bg-card)' }}
         >
-          {['#ff5f57', '#ffbd2e', '#28c840'].map((color, i) => (
-            <motion.span
+          {['#ff5f57', '#ffbd2e', '#28c840'].map((color) => (
+            <span
               key={color}
-              className="h-3 w-3 rounded-full"
+              className="h-3 w-3 rounded-full opacity-70"
               style={{ background: color }}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 0.7, y: 0 }}
-              transition={{ duration: 0.3, ease, delay: 0.9 + i * 0.08 }}
             />
           ))}
           <span className="text-text-muted mx-auto text-[0.6875rem] tracking-wide">
@@ -149,14 +149,14 @@ function HeroTerminal() {
               ❯
             </span>
             <span className="text-text">
-              {cmd1.displayText}
-              {!cmd1.isDone && phase === PHASE.TYPING_CMD1 && <BlinkingCursor />}
+              {animated ? cmd1.displayText : 'whoami'}
+              {animated && !cmd1.isDone && phase === PHASE.TYPING_CMD1 && <BlinkingCursor />}
             </span>
           </div>
 
           {/* Thinking */}
           <AnimatePresence>
-            {phase === PHASE.THINKING && (
+            {p === PHASE.THINKING && (
               <motion.div
                 initial={{
                   opacity: 0,
@@ -204,26 +204,28 @@ function HeroTerminal() {
 
           {/* Name + role output */}
           <motion.div
-            animate={phase >= PHASE.OUTPUT ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-            transition={{ duration: 0.5, ease }}
+            animate={p >= PHASE.OUTPUT ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={p >= PHASE.OUTPUT ? { duration: 0.5, ease } : { duration: 0 }}
           >
             <motion.h1
               className="mt-3 mb-1 font-sans text-[clamp(2.25rem,6vw,3.75rem)] font-extrabold tracking-[-0.04em]"
               style={nameGradientStyle}
               animate={
-                phase >= PHASE.OUTPUT
+                p >= PHASE.OUTPUT
                   ? { opacity: 1, y: 0, filter: 'blur(0px)' }
                   : { opacity: 0, y: 8, filter: 'blur(3px)' }
               }
-              transition={{ duration: 0.6, ease }}
+              transition={p >= PHASE.OUTPUT ? { duration: 0.6, ease } : { duration: 0 }}
             >
               Michael Hutchinson
             </motion.h1>
             <motion.p
               className="mb-4 text-base leading-relaxed"
               style={{ color: 'var(--color-text-secondary)' }}
-              animate={phase >= PHASE.OUTPUT ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-              transition={{ duration: 0.5, ease, delay: 0.15 }}
+              animate={p >= PHASE.OUTPUT ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+              transition={
+                p >= PHASE.OUTPUT ? { duration: 0.5, ease, delay: 0.15 } : { duration: 0 }
+              }
             >
               Staff Engineer building AI-powered engineering cultures.
               <br />
@@ -233,9 +235,9 @@ function HeroTerminal() {
 
           {/* cat status.yml command */}
           <AnimatePresence>
-            {phase >= PHASE.TYPING_CMD2 && (
+            {p >= PHASE.TYPING_CMD2 && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
+                initial={animated ? { opacity: 0, height: 0 } : false}
                 animate={{ opacity: 1, height: 'auto' }}
                 transition={{ duration: 0.3, ease }}
                 className="mb-1 flex items-baseline gap-2.5 text-[0.9375rem]"
@@ -244,8 +246,8 @@ function HeroTerminal() {
                   ❯
                 </span>
                 <span className="text-text">
-                  {cmd2.displayText}
-                  {phase === PHASE.TYPING_CMD2 && !cmd2.isDone && <BlinkingCursor />}
+                  {animated ? cmd2.displayText : 'cat status.yml'}
+                  {animated && phase === PHASE.TYPING_CMD2 && !cmd2.isDone && <BlinkingCursor />}
                 </span>
               </motion.div>
             )}
@@ -253,29 +255,33 @@ function HeroTerminal() {
 
           {/* Status grid */}
           <motion.div
-            animate={phase >= PHASE.STATUS ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-            transition={{ duration: 0.5, ease }}
+            animate={p >= PHASE.STATUS ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={p >= PHASE.STATUS ? { duration: 0.5, ease } : { duration: 0 }}
           >
             <motion.div
               className="my-4 h-px origin-left"
               style={{ background: 'var(--color-border)' }}
-              animate={{ scaleX: phase >= PHASE.STATUS ? 1 : 0 }}
-              transition={{ duration: 0.5, ease }}
+              animate={{ scaleX: p >= PHASE.STATUS ? 1 : 0 }}
+              transition={p >= PHASE.STATUS ? { duration: 0.5, ease } : { duration: 0 }}
             />
             <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[0.8125rem]">
               {statusRows.map((row, i) => (
                 <React.Fragment key={row.key}>
                   <motion.span
                     className="text-text-muted"
-                    animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                    transition={{ duration: 0.4, ease, delay: i * 0.07 }}
+                    animate={p >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={
+                      p >= PHASE.STATUS ? { duration: 0.4, ease, delay: i * 0.07 } : { duration: 0 }
+                    }
                   >
                     {row.key}
                   </motion.span>
                   <motion.span
                     className="text-text"
-                    animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                    transition={{ duration: 0.4, ease, delay: i * 0.07 }}
+                    animate={p >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={
+                      p >= PHASE.STATUS ? { duration: 0.4, ease, delay: i * 0.07 } : { duration: 0 }
+                    }
                   >
                     {row.value}
                   </motion.span>
@@ -283,15 +289,19 @@ function HeroTerminal() {
               ))}
               <motion.span
                 className="text-text-muted"
-                animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                transition={{ duration: 0.4, ease, delay: 0.28 }}
+                animate={p >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                transition={
+                  p >= PHASE.STATUS ? { duration: 0.4, ease, delay: 0.28 } : { duration: 0 }
+                }
               >
                 status:
               </motion.span>
               <motion.span
                 className="text-text"
-                animate={phase >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                transition={{ duration: 0.4, ease, delay: 0.28 }}
+                animate={p >= PHASE.STATUS ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                transition={
+                  p >= PHASE.STATUS ? { duration: 0.4, ease, delay: 0.28 } : { duration: 0 }
+                }
               >
                 <span
                   className="mr-1.5 inline-block h-[7px] w-[7px] rounded-full align-middle"
@@ -308,8 +318,8 @@ function HeroTerminal() {
           {/* Idle cursor */}
           <motion.div
             className="mt-5 flex items-center gap-2.5 text-[0.9375rem]"
-            animate={phase >= PHASE.IDLE ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-            transition={{ duration: 0.4, ease }}
+            animate={p >= PHASE.IDLE ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+            transition={p >= PHASE.IDLE ? { duration: 0.4, ease } : { duration: 0 }}
           >
             <span className="text-base font-bold select-none" style={gradientStyle}>
               ❯
@@ -318,7 +328,7 @@ function HeroTerminal() {
           </motion.div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

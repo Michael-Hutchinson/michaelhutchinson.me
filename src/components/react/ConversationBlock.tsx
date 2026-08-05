@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, type ReactNode } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useInView, useReducedMotion } from 'framer-motion';
 import useTypingEffect from './hooks/useTypingEffect';
+import useHydrated from './hooks/useHydrated';
 import { ease } from './ui/constants';
 
 const chevronStyle: React.CSSProperties = {
@@ -35,31 +36,36 @@ export default function ConversationBlock({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-15% 0px -48px 0px' });
   const [phase, setPhase] = useState(autoStart ? PHASE.TYPING : PHASE.WAITING);
+  const hydrated = useHydrated();
+  const reduceMotion = useReducedMotion();
+  const animated = hydrated && !reduceMotion;
 
   const cmd = useTypingEffect({
     text: prompt,
     speed: typingSpeed,
     delay: 200,
-    enabled: phase >= PHASE.TYPING,
+    enabled: animated && phase >= PHASE.TYPING,
   });
 
   // Phase advancement
   useEffect(() => {
+    if (!animated) return;
     if (inView && phase === PHASE.WAITING) setPhase(PHASE.TYPING);
     if (cmd.isDone && phase === PHASE.TYPING) {
       const id = setTimeout(() => setPhase(PHASE.THINKING), 300);
       return () => clearTimeout(id);
     }
-  }, [inView, cmd.isDone, phase]);
+  }, [animated, inView, cmd.isDone, phase]);
 
   useEffect(() => {
-    if (phase === PHASE.THINKING) {
+    if (animated && phase === PHASE.THINKING) {
       const id = setTimeout(() => setPhase(PHASE.RESPONSE), thinkingDuration);
       return () => clearTimeout(id);
     }
-  }, [phase, thinkingDuration]);
+  }, [animated, phase, thinkingDuration]);
 
-  const showContent = phase >= PHASE.RESPONSE;
+  const showContent = animated ? phase >= PHASE.RESPONSE : true;
+  const promptText = animated ? cmd.displayText : prompt;
 
   return (
     <div ref={ref}>
@@ -69,8 +75,8 @@ export default function ConversationBlock({
           ❯
         </span>
         <span className="text-text">
-          {cmd.displayText}
-          {phase === PHASE.TYPING && !cmd.isDone && (
+          {promptText}
+          {animated && phase === PHASE.TYPING && !cmd.isDone && (
             <span
               className="ml-px inline-block h-4.5 w-2 align-text-bottom"
               style={{
@@ -120,9 +126,9 @@ export default function ConversationBlock({
 
       {/* Response content */}
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={false}
         animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-        transition={{ duration: 0.5, ease }}
+        transition={showContent ? { duration: 0.5, ease } : { duration: 0 }}
       >
         {children(showContent)}
       </motion.div>
@@ -133,8 +139,10 @@ export default function ConversationBlock({
 /** Stagger helper for children - returns motion props */
 export function staggerItem(visible: boolean, index: number, baseDelay = 0.1) {
   return {
-    initial: { opacity: 0, y: 16 },
+    initial: false as const,
     animate: visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
-    transition: { duration: 0.5, ease, delay: baseDelay + index * 0.08 },
+    transition: visible
+      ? { duration: 0.5, ease, delay: baseDelay + index * 0.08 }
+      : { duration: 0 },
   };
 }

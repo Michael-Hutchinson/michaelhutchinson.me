@@ -45,36 +45,36 @@ const latestPosts = (await getCollection('blog'))
 
   <!-- About -->
   <section id="about" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
-    <AboutSection client:visible />
+    <AboutSection client:visible={{ rootMargin: '200px' }} />
   </section>
 
   <!-- Expertise -->
   <section id="expertise" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
-    <ExpertiseSection client:visible />
+    <ExpertiseSection client:visible={{ rootMargin: '200px' }} />
   </section>
 
   <!-- Impact -->
   <section id="impact" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
-    <ImpactSection client:visible />
+    <ImpactSection client:visible={{ rootMargin: '200px' }} />
   </section>
 
   <!-- Projects -->
   <section id="projects" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
-    <ProjectsSection client:visible />
+    <ProjectsSection client:visible={{ rootMargin: '200px' }} />
   </section>
 
   <!-- Writing -->
   <section id="writing" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
-    <WritingSection posts={latestPosts} client:visible />
+    <WritingSection posts={latestPosts} client:visible={{ rootMargin: '200px' }} />
   </section>
 
   <!-- Experience -->
   <section id="experience" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
-    <ExperienceSection client:visible />
+    <ExperienceSection client:visible={{ rootMargin: '200px' }} />
   </section>
 
   <!-- Contact -->
   <section id="contact" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
-    <ContactSection client:visible />
+    <ContactSection client:visible={{ rootMargin: '200px' }} />
   </section>
 </Layout>
