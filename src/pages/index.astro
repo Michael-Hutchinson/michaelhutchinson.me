@@ -5,8 +5,23 @@ import AboutSection from '../components/react/AboutSection.tsx';
 import ExpertiseSection from '../components/react/ExpertiseSection.tsx';
 import ImpactSection from '../components/react/ImpactSection.tsx';
 import ProjectsSection from '../components/react/ProjectsSection.tsx';
+import WritingSection from '../components/react/WritingSection.tsx';
 import ExperienceSection from '../components/react/ExperienceSection.tsx';
 import ContactSection from '../components/react/ContactSection.tsx';
+import { getCollection } from 'astro:content';
+import { isLive, byDateDesc, readingTimeMinutes } from '../lib/posts';
+
+const latestPosts = (await getCollection('blog'))
+  .filter(isLive)
+  .sort(byDateDesc)
+  .slice(0, 3)
+  .map((p) => ({
+    id: p.id,
+    title: p.data.title,
+    description: p.data.description,
+    date: p.data.date,
+    readingTime: readingTimeMinutes(p.body),
+  }));
 ---
 
 <Layout
@@ -46,6 +61,11 @@ import ContactSection from '../components/react/ContactSection.tsx';
   <!-- Projects -->
   <section id="projects" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
     <ProjectsSection client:visible />
+  </section>
+
+  <!-- Writing -->
+  <section id="writing" class="mx-auto max-w-4xl px-6 py-20 md:px-10 md:py-28 lg:px-12">
+    <WritingSection posts={latestPosts} client:visible />
   </section>
 
   <!-- Experience -->

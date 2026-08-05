@@ -4,6 +4,7 @@ import ConversationBlock, { staggerItem } from './ConversationBlock';
 import withErrorBoundary from './withErrorBoundary';
 import Card from './ui/Card';
 import FileTab from './ui/FileTab';
+import LinkButton from './ui/LinkButton';
 import { ease } from './ui/constants';
 
 const career = [
@@ -129,15 +130,9 @@ function ExperienceSection() {
             animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, ease, delay: 0.6 }}
           >
-            <a
-              href="/CV.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-border hover:border-border-hover inline-flex items-center gap-2 rounded border px-4 py-2 font-mono text-[0.8125rem] transition-colors duration-200"
-              style={{ color: 'var(--color-accent)' }}
-            >
+            <LinkButton href="/CV.pdf" external>
               view full cv.pdf
-            </a>
+            </LinkButton>
           </motion.div>
         </>
       )}
