@@ -3,6 +3,7 @@ import Layout from './Layout.astro';
 import CopyCodeButton from '../components/CopyCodeButton.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import ShareLinks from '../components/react/ShareLinks.tsx';
+import { tagSlug } from '../lib/posts';
 
 interface Heading {
   depth: number;
@@ -24,6 +25,7 @@ interface RelatedPost {
 }
 
 interface Props {
+  id: string;
   title: string;
   description: string;
   date: string;
@@ -38,6 +40,7 @@ interface Props {
 }
 
 const {
+  id,
   title,
   description,
   date,
@@ -127,14 +130,7 @@ const jsonLd = {
         <span>/</span>
         <a href="/blog" class="hover:text-text transition-colors">blog</a>
         <span>/</span>
-        <span class="text-text-secondary max-w-[20rem] truncate"
-          >{
-            title
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')
-              .replace(/(^-|-$)/g, '')
-          }</span
-        >
+        <span class="text-text-secondary max-w-[20rem] truncate">{id}</span>
       </nav>
 
       <!-- Header -->
@@ -166,12 +162,13 @@ const jsonLd = {
             tags.length > 0 && (
               <div class="flex gap-1.5">
                 {tags.map((tag) => (
-                  <span
-                    class="rounded px-2 py-0.5 font-mono text-[0.6875rem]"
+                  <a
+                    href={`/blog/tag/${tagSlug(tag)}`}
+                    class="rounded px-2 py-0.5 font-mono text-[0.6875rem] transition-opacity hover:opacity-80"
                     style={`background: color-mix(in srgb, var(--color-accent) 8%, transparent); color: var(--color-accent);`}
                   >
                     {tag}
-                  </span>
+                  </a>
                 ))}
               </div>
             )

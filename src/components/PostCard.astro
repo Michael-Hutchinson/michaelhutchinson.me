@@ -1,0 +1,58 @@
+---
+import type { PostPreview } from '../lib/posts';
+
+interface Props {
+  post: PostPreview;
+}
+
+const { post } = Astro.props;
+---
+
+<a
+  href={`/blog/${post.id}`}
+  class="group bg-bg-terminal border-border hover:border-border-hover relative block overflow-hidden rounded-lg border transition-all duration-200 hover:-translate-y-0.5"
+>
+  <div
+    class="absolute top-0 right-0 left-0 h-[2px] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+    style="background: var(--color-accent);"
+  >
+  </div>
+  <div class="p-5">
+    <div class="text-text-muted mb-2.5 flex items-center gap-2 font-mono text-[0.6875rem]">
+      <span
+        class="rounded px-1.5 py-0.5 font-medium"
+        style="background: color-mix(in srgb, var(--color-accent) 10%, transparent); color: var(--color-accent);"
+      >
+        Read
+      </span>
+      {
+        new Date(post.date).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        })
+      }
+      <span>· {post.readingTime} min read</span>
+    </div>
+    <h2
+      class="text-text group-hover:text-accent mb-1.5 font-sans text-lg font-semibold transition-colors"
+    >
+      {post.title}
+    </h2>
+    <p class="text-text-secondary mb-3 text-sm leading-relaxed">
+      {post.description}
+    </p>
+    <div class="flex flex-wrap gap-1.5">
+      {
+        post.tags.map((tag) => (
+          <span
+            class="rounded px-2 py-0.5 text-[0.6875rem]"
+            style="background: color-mix(in srgb, var(--color-accent) 8%, transparent); color: var(--color-accent);"
+          >
+            {tag}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</a>

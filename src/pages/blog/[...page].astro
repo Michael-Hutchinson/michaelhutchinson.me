@@ -1,24 +1,32 @@
 ---
+import type { GetStaticPaths, Page } from 'astro';
 import Layout from '../../layouts/Layout.astro';
-import BlogList from '../../components/react/BlogList.tsx';
+import BlogListing from '../../components/BlogListing.astro';
 import { getCollection } from 'astro:content';
-import { isLive, byDateDesc, readingTimeMinutes } from '../../lib/posts';
+import { isLive, byDateDesc, toPreview, type PostPreview } from '../../lib/posts';
 
-const posts = (await getCollection('blog'))
-  .filter(isLive)
-  .sort(byDateDesc)
-  .map((p) => ({
-    id: p.id,
-    title: p.data.title,
-    description: p.data.description,
-    date: p.data.date,
-    tags: p.data.tags,
-    readingTime: readingTimeMinutes(p.body),
-  }));
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('blog')).filter(isLive).sort(byDateDesc).map(toPreview);
+  return paginate(posts, { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<PostPreview>;
+}
+
+const { page } = Astro.props;
+
+const allPosts = (await getCollection('blog')).filter(isLive).sort(byDateDesc).map(toPreview);
+const allTags = [...new Set(allPosts.flatMap((p) => p.tags))].sort((a, b) => a.localeCompare(b));
+
+const title =
+  page.currentPage === 1
+    ? 'Blog - Michael Hutchinson'
+    : `Blog - Page ${page.currentPage} - Michael Hutchinson`;
 ---
 
 <Layout
-  title="Blog - Michael Hutchinson"
+  title={title}
   description="Thoughts on AI-powered engineering, technical leadership, and building great software."
 >
   <div class="mx-auto max-w-3xl px-6 py-24 md:py-32">
@@ -40,6 +48,14 @@ const posts = (await getCollection('blog'))
       # AI-first engineering, technical leadership, and building things that ship
     </p>
 
-    <BlogList posts={posts} client:load />
+    <BlogListing
+      pagePosts={page.data}
+      allPosts={allPosts}
+      allTags={allTags}
+      currentPage={page.currentPage}
+      totalPages={page.lastPage}
+      prevUrl={page.url.prev}
+      nextUrl={page.url.next}
+    />
   </div>
 </Layout>

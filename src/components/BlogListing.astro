@@ -1,0 +1,120 @@
+---
+import PostCard from './PostCard.astro';
+import BlogSearch from './react/BlogSearch.tsx';
+import { tagSlug, type PostPreview } from '../lib/posts';
+
+interface Props {
+  pagePosts: PostPreview[];
+  allPosts: PostPreview[];
+  allTags: string[];
+  activeTag?: string | null;
+  currentPage?: number;
+  totalPages?: number;
+  prevUrl?: string | undefined;
+  nextUrl?: string | undefined;
+}
+
+const {
+  pagePosts,
+  allPosts,
+  allTags,
+  activeTag = null,
+  currentPage = 1,
+  totalPages = 1,
+  prevUrl,
+  nextUrl,
+} = Astro.props;
+
+const postCount = activeTag ? pagePosts.length : allPosts.length;
+const activeTagStyle =
+  'background: color-mix(in srgb, var(--color-accent) 10%, transparent); color: var(--color-accent); border-color: var(--color-border-hover);';
+const searchPosts = allPosts.map(({ id, title, description, tags }) => ({
+  id,
+  title,
+  description,
+  tags,
+}));
+---
+
+<BlogSearch posts={searchPosts} client:idle />
+
+<nav aria-label="Post tags" class="mb-8 flex flex-wrap gap-2">
+  <a
+    href="/blog"
+    aria-current={activeTag === null ? 'page' : undefined}
+    class:list={[
+      'rounded-md border px-3 py-1 font-mono text-xs transition-all duration-150',
+      activeTag === null
+        ? 'border-border-hover'
+        : 'border-border text-text-muted hover:border-border-hover hover:text-text',
+    ]}
+    style={activeTag === null ? activeTagStyle : undefined}
+  >
+    all
+  </a>
+  {
+    allTags.map((tag) => (
+      <a
+        href={`/blog/tag/${tagSlug(tag)}`}
+        aria-current={activeTag === tag ? 'page' : undefined}
+        class:list={[
+          'rounded-md border px-3 py-1 font-mono text-xs transition-all duration-150',
+          activeTag === tag
+            ? 'border-border-hover'
+            : 'border-border text-text-muted hover:border-border-hover hover:text-text',
+        ]}
+        style={activeTag === tag ? activeTagStyle : undefined}
+      >
+        {tag.toLowerCase()}
+      </a>
+    ))
+  }
+</nav>
+
+<div id="blog-static">
+  <div class="flex flex-col gap-4">
+    {pagePosts.map((post) => <PostCard post={post} />)}
+  </div>
+
+  {
+    totalPages > 1 && (
+      <nav
+        aria-label="Pagination"
+        class="mt-8 flex items-center justify-center gap-3 font-mono text-sm"
+      >
+        {prevUrl ? (
+          <a
+            href={prevUrl}
+            class="border-border text-text-muted hover:border-border-hover hover:text-text flex items-center gap-1 rounded-md border px-3 py-1.5 transition-all duration-150"
+          >
+            ← prev
+          </a>
+        ) : (
+          <span class="border-border text-text-muted flex items-center gap-1 rounded-md border px-3 py-1.5 opacity-30">
+            ← prev
+          </span>
+        )}
+        <span class="text-text-muted">
+          <span class="text-text">{currentPage}</span> / {totalPages}
+        </span>
+        {nextUrl ? (
+          <a
+            href={nextUrl}
+            class="border-border text-text-muted hover:border-border-hover hover:text-text flex items-center gap-1 rounded-md border px-3 py-1.5 transition-all duration-150"
+          >
+            next →
+          </a>
+        ) : (
+          <span class="border-border text-text-muted flex items-center gap-1 rounded-md border px-3 py-1.5 opacity-30">
+            next →
+          </span>
+        )}
+      </nav>
+    )
+  }
+
+  <p class="text-text-muted mt-4 text-center font-mono text-xs">
+    {postCount} post{postCount === 1 ? '' : 's'}
+    {activeTag ? ` tagged "${activeTag}"` : ''}
+  </p>
+</div>

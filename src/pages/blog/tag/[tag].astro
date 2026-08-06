@@ -1,0 +1,50 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../../layouts/Layout.astro';
+import BlogListing from '../../../components/BlogListing.astro';
+import { getCollection } from 'astro:content';
+import { isLive, byDateDesc, toPreview, tagSlug } from '../../../lib/posts';
+
+export const getStaticPaths = (async () => {
+  const posts = (await getCollection('blog')).filter(isLive).sort(byDateDesc).map(toPreview);
+  const tags = [...new Set(posts.flatMap((p) => p.tags))];
+  return tags.map((tag) => ({
+    params: { tag: tagSlug(tag) },
+    props: { tag, posts: posts.filter((p) => p.tags.includes(tag)) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag, posts } = Astro.props;
+
+const allPosts = (await getCollection('blog')).filter(isLive).sort(byDateDesc).map(toPreview);
+const allTags = [...new Set(allPosts.flatMap((p) => p.tags))].sort((a, b) => a.localeCompare(b));
+---
+
+<Layout
+  title={`${tag} posts - Michael Hutchinson`}
+  description={`Blog posts about ${tag}: AI-powered engineering, technical leadership, and building great software.`}
+>
+  <div class="mx-auto max-w-3xl px-6 py-24 md:py-32">
+    <nav class="text-text-muted mb-8 flex items-center gap-1.5 font-mono text-xs">
+      <a href="/" class="hover:text-text transition-colors">~</a>
+      <span>/</span>
+      <a href="/blog" class="hover:text-text transition-colors">blog</a>
+      <span>/</span>
+      <span class="text-text-secondary">{tagSlug(tag)}</span>
+    </nav>
+    <h1 class="sr-only">Posts tagged {tag}</h1>
+    <div class="mb-2 flex items-baseline gap-2.5 text-[0.9375rem]">
+      <span
+        class="text-base font-bold select-none"
+        style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2), var(--color-accent-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+        >❯</span
+      >
+      <span class="text-text">ls ~/blog/ | grep -i "{tag}"</span>
+    </div>
+    <p class="text-text-muted mb-8 font-mono text-sm">
+      # AI-first engineering, technical leadership, and building things that ship
+    </p>
+
+    <BlogListing pagePosts={posts} allPosts={allPosts} allTags={allTags} activeTag={tag} />
+  </div>
+</Layout>
