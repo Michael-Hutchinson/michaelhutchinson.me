@@ -107,7 +107,7 @@ function HeroTerminal() {
   }, [animated, phase]);
 
   return (
-    <div className="relative max-w-208">
+    <div className="relative max-w-208" {...(hydrated ? {} : { 'data-prehide': '' })}>
       {/* Rotating gradient border */}
       <div
         className="absolute -inset-px rounded-lg opacity-60 transition-opacity duration-300 hover:opacity-100"

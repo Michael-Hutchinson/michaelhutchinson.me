@@ -68,7 +68,7 @@ export default function ConversationBlock({
   const promptText = animated ? cmd.displayText : prompt;
 
   return (
-    <div ref={ref}>
+    <div ref={ref} {...(hydrated ? {} : { 'data-prehide': '' })}>
       {/* Prompt line */}
       <div className="mb-5 flex items-baseline gap-2.5 text-[0.9375rem]">
         <span className="shrink-0 text-base font-bold select-none" style={chevronStyle}>

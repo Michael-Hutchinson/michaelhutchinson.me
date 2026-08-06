@@ -82,6 +82,13 @@ const ogImageUrl = new URL(ogImage ?? '/og-default.png', Astro.site).href;
       document.documentElement.setAttribute('data-theme', theme);
     </script>
 
+    <!-- Animated blocks are hidden pre-paint only when JS is available; the timeout reveals
+         them if hydration never completes -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      setTimeout(() => document.documentElement.classList.remove('js'), 4000);
+    </script>
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-44KVZWRR3C"></script>
     <script is:inline>

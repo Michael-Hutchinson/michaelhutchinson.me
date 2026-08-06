@@ -322,3 +322,13 @@ section + section::before {
     transition-duration: 0.01ms !important;
   }
 }
+
+html.js [data-prehide] {
+  opacity: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-prehide] {
+    opacity: 1 !important;
+  }
+}
