@@ -46,11 +46,22 @@ const projects = [
     stat: '0',
     statLabel: 'servers involved',
     description:
-      'Reverse-engineered a smart kettle whose manufacturer went under, then built the app to replace theirs. Decoded the protocol from the Android APK; the phone app finds, pairs and boils entirely over your own Wi-Fi, with no account and no cloud.',
-    tags: ['Reverse Engineering', 'IoT', 'React Native', 'TypeScript'],
+      'The phone app for a smart kettle whose manufacturer went under. Finds, pairs and boils entirely over your own Wi-Fi, with no account and no cloud, and politely shares the kettle’s single connection between phones.',
+    tags: ['React Native', 'iOS & Android', 'IoT', 'TypeScript'],
     url: 'https://kettle.michaelhutchinson.me',
     file: 'kettle-remote/src/setup/machine.ts',
     accent: 'var(--color-accent-green)',
+  },
+  {
+    name: 'appkettle',
+    stat: '3',
+    statLabel: 'clients, one TCP socket',
+    description:
+      'The reverse-engineered protocol behind Kettle Remote, open-sourced. Decoded from the vendor’s Android APK and rebuilt in TypeScript as a library, CLI and MCP server, with a Raspberry Pi bridge feeding Home Assistant.',
+    tags: ['Reverse Engineering', 'MCP', 'IoT', 'TypeScript'],
+    url: 'https://github.com/Michael-Hutchinson/appkettle',
+    file: 'appkettle/src/mcp-tools.ts',
+    accent: 'var(--color-accent-cyan)',
   },
   {
     name: 'ukrunner.com',
