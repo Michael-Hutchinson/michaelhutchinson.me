@@ -46,7 +46,7 @@ const projects = [
     stat: '0',
     statLabel: 'servers involved',
     description:
-      'The phone app for a smart kettle whose manufacturer went under. Finds, pairs and boils entirely over your own Wi-Fi, with no account and no cloud, and politely shares the kettle’s single connection between phones.',
+      'The phone app for a smart kettle whose manufacturer went under, now live on the App Store. Finds, pairs and boils entirely over your own Wi-Fi, with no account and no cloud, and politely shares the kettle’s single connection between phones.',
     tags: ['React Native', 'iOS & Android', 'IoT', 'TypeScript'],
     url: 'https://kettle.michaelhutchinson.me',
     file: 'kettle-remote/src/setup/machine.ts',
